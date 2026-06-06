@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  Users, Store, Tag, FolderKanban, ShieldCheck, ShieldAlert, Check, X,
-  Plus, Trash2, ArrowRight, TrendingUp, DollarSign, Activity, AlertTriangle
+  Users, Store, Trash2, DollarSign, Activity, AlertTriangle
 } from 'lucide-react';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell 
 } from 'recharts';
-import { useAppDispatch, useAppSelector } from '../redux/store';
-import { 
-  toggleUserStatus, promoteUserToRole, approveSeller, toggleSellerStatus, 
-  addAdminCoupon, deleteAdminCoupon 
-} from '../redux/adminSlice';
-import { apiService } from '../services/api';
-import { Coupon, categories } from '../services/mockDb';
+import { Coupon } from '../types';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
+import { 
+  useAdminStats, 
+  useCoupons, 
+  useCategories,
+  useBanUserMutation, 
+  useApproveSellerMutation, 
+  useToggleSellerMutation, 
+  useAddCouponMutation, 
+  useDeleteCouponMutation 
+} from '../hooks/useQueries';
 
 type TabType = 'overview' | 'users' | 'sellers' | 'categories' | 'coupons';
 
 export const AdminDashboard: React.FC = () => {
-  const dispatch = useAppDispatch();
   const { showToast } = useToast();
-
-  // Redux Selectors
-  const { usersList, sellersList, couponsList } = useAppSelector(state => state.admin);
 
   // States
   const [activeTab, setActiveTab] = useState<TabType>('overview');
-  const [adminStats, setAdminStats] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
   // Coupon Form
   const [couponCode, setCouponCode] = useState('');
@@ -37,16 +34,21 @@ export const AdminDashboard: React.FC = () => {
   const [couponMin, setCouponMin] = useState(50);
   const [couponType, setCouponType] = useState<'percentage' | 'fixed'>('percentage');
 
-  // Load Admin Stats
-  useEffect(() => {
-    const fetchStats = async () => {
-      setLoading(true);
-      const data = await apiService.getAdminStatistics();
-      setAdminStats(data);
-      setLoading(false);
-    };
-    fetchStats();
-  }, []);
+  // React Query Hooks
+  const { data: adminStats, isLoading: loadingStats } = useAdminStats();
+  const { data: couponsList = [], isLoading: loadingCoupons } = useCoupons();
+  const { data: categoriesRes = [] } = useCategories();
+
+  const banUserMutation = useBanUserMutation();
+  const approveSellerMutation = useApproveSellerMutation();
+  const toggleSellerMutation = useToggleSellerMutation();
+  const addCouponMutation = useAddCouponMutation();
+  const deleteCouponMutation = useDeleteCouponMutation();
+
+  const loading = loadingStats || loadingCoupons;
+
+  const usersList = adminStats?.users || [];
+  const sellersList = adminStats?.sellers || [];
 
   const handleAddCoupon = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,9 +64,15 @@ export const AdminDashboard: React.FC = () => {
         : `Flat $${couponVal} off on orders above $${couponMin}`
     };
 
-    dispatch(addAdminCoupon(newCoupon));
-    showToast(`Coupon ${newCoupon.code} created!`, "success");
-    setCouponCode('');
+    addCouponMutation.mutate(newCoupon, {
+      onSuccess: () => {
+        showToast(`Coupon ${newCoupon.code} created!`, "success");
+        setCouponCode('');
+      },
+      onError: () => {
+        showToast("Failed to create coupon", "error");
+      }
+    });
   };
 
   const colors = ['#6366f1', '#a855f7', '#ec4899', '#3b82f6', '#10b981'];
@@ -77,7 +85,7 @@ export const AdminDashboard: React.FC = () => {
         {['overview', 'users', 'sellers', 'categories', 'coupons'].map(tab => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab as any)}
+            onClick={() => setActiveTab(tab as TabType)}
             className={`text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer capitalize ${
               activeTab === tab 
                 ? 'bg-purple-600 text-white shadow-md' 
@@ -92,7 +100,7 @@ export const AdminDashboard: React.FC = () => {
       {/* TABS: SYSTEM OVERVIEW */}
       {activeTab === 'overview' && (
         <div className="space-y-8">
-          {loading ? (
+          {loading || !adminStats ? (
             <div className="py-20 text-center text-xs text-gray-400">Loading stats...</div>
           ) : (
             <>
@@ -179,7 +187,7 @@ export const AdminDashboard: React.FC = () => {
                           outerRadius={70}
                           dataKey="value"
                         >
-                          {adminStats.categorySales.map((entry: any, index: number) => (
+                          {adminStats.categorySales.map((entry: { name: string; value: number }, index: number) => (
                             <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                           ))}
                         </Pie>
@@ -188,7 +196,7 @@ export const AdminDashboard: React.FC = () => {
                     </ResponsiveContainer>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-[10px] font-bold text-gray-500 pt-4 border-t border-gray-100 dark:border-gray-800/50">
-                    {adminStats.categorySales.map((c: any, idx: number) => (
+                    {adminStats.categorySales.map((c: { name: string; value: number }, idx: number) => (
                       <div key={c.name} className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: colors[idx % colors.length] }} />
                         <span>{c.name} ({c.value}%)</span>
@@ -204,7 +212,7 @@ export const AdminDashboard: React.FC = () => {
                   <AlertTriangle className="w-4.5 h-4.5 text-amber-500 animate-pulse" /> Active System Notices
                 </h4>
                 <div className="space-y-2">
-                  {adminStats.systemAlerts.map((alert: any) => (
+                  {adminStats.systemAlerts.map((alert: { id: string; type: string; text: string }) => (
                     <div key={alert.id} className="p-3 bg-gray-100 dark:bg-slate-800/50 rounded-xl flex items-center gap-2 border border-transparent dark:border-gray-850">
                       <span className={`w-2 h-2 rounded-full ${
                         alert.type === 'warning' ? 'bg-amber-500' :
@@ -258,8 +266,14 @@ export const AdminDashboard: React.FC = () => {
                     <td className="p-3.5 text-center">
                       <button
                         onClick={() => {
-                          dispatch(toggleUserStatus(u.id));
-                          showToast(`User status toggled!`, "info");
+                          banUserMutation.mutate(u.id, {
+                            onSuccess: () => {
+                              showToast(`User status toggled!`, "info");
+                            },
+                            onError: () => {
+                              showToast("Failed to toggle user status", "error");
+                            }
+                          });
                         }}
                         className={`text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer ${
                           u.status === 'Active' 
@@ -317,8 +331,14 @@ export const AdminDashboard: React.FC = () => {
                         {s.status === 'Pending' && (
                           <button
                             onClick={() => {
-                              dispatch(approveSeller(s.id));
-                              showToast(`${s.name} Approved!`, "success");
+                              approveSellerMutation.mutate(s.id, {
+                                onSuccess: () => {
+                                  showToast(`${s.name} Approved!`, "success");
+                                },
+                                onError: () => {
+                                  showToast("Failed to approve merchant", "error");
+                                }
+                              });
                             }}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer"
                           >
@@ -327,8 +347,14 @@ export const AdminDashboard: React.FC = () => {
                         )}
                         <button
                           onClick={() => {
-                            dispatch(toggleSellerStatus(s.id));
-                            showToast("Merchant status toggled", "info");
+                            toggleSellerMutation.mutate(s.id, {
+                              onSuccess: () => {
+                                showToast("Merchant status toggled", "info");
+                              },
+                              onError: () => {
+                                showToast("Failed to toggle merchant status", "error");
+                              }
+                            });
                           }}
                           className={`text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer ${
                             s.status === 'Active' 
@@ -357,7 +383,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {categories.map(cat => (
+            {categoriesRes.map(cat => (
               <div 
                 key={cat.id} 
                 className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white/40 dark:bg-slate-900/40 flex items-center justify-between"
@@ -425,7 +451,7 @@ export const AdminDashboard: React.FC = () => {
                   <label className="text-[10px] font-bold text-gray-400 uppercase">Type *</label>
                   <select
                     value={couponType}
-                    onChange={e => setCouponType(e.target.value as any)}
+                    onChange={e => setCouponType(e.target.value as 'percentage' | 'fixed')}
                     className="bg-gray-100 dark:bg-slate-800 text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-indigo-500 outline-none font-bold"
                   >
                     <option value="percentage">Percentage (%)</option>
@@ -470,8 +496,14 @@ export const AdminDashboard: React.FC = () => {
                   
                   <button
                     onClick={() => {
-                      dispatch(deleteAdminCoupon(c.code));
-                      showToast(`Coupon ${c.code} deleted`, "info");
+                      deleteCouponMutation.mutate(c.code, {
+                        onSuccess: () => {
+                          showToast(`Coupon ${c.code} deleted`, "info");
+                        },
+                        onError: () => {
+                          showToast("Failed to delete coupon", "error");
+                        }
+                      });
                     }}
                     className="p-2 text-gray-400 hover:text-rose-500 rounded-lg cursor-pointer"
                   >

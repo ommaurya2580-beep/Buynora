@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Trash2, ShoppingBag, ArrowRight, Bookmark, MoveRight, 
-  Tag, Gift, X, AlertCircle
+  Tag, Gift, X
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { 
@@ -12,7 +12,7 @@ import {
 } from '../redux/cartSlice';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
-import { apiService } from '../services/api';
+import { adminService } from '../services/admin.service';
 
 export const Cart: React.FC = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const Cart: React.FC = () => {
     if (!couponCode.trim()) return;
     setVerifyingCoupon(true);
     try {
-      const coupon = await apiService.verifyCoupon(couponCode);
+      const coupon = await adminService.verifyCoupon(couponCode);
       if (subtotal < coupon.minOrderValue) {
         showToast(`This coupon requires a minimum purchase of ${formatCurrency(coupon.minOrderValue)}`, 'error');
         return;
@@ -61,8 +61,9 @@ export const Cart: React.FC = () => {
       dispatch(applyCartCoupon(coupon));
       showToast("Coupon applied successfully!", "success");
       setCouponCode('');
-    } catch (err: any) {
-      showToast(err.message || "Invalid coupon", "error");
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Invalid coupon";
+      showToast(errorMessage, "error");
     } finally {
       setVerifyingCoupon(false);
     }

@@ -1,26 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Product, Coupon } from '../services/mockDb';
-
-export interface CartItem {
-  product: Product;
-  quantity: number;
-  selectedColor?: string;
-  selectedSize?: string;
-}
+import { Product, Coupon, CartItem } from '../types';
 
 export interface CartState {
   cartItems: CartItem[];
-  wishlistItems: Product[];
   savedForLater: CartItem[];
   comparedItems: Product[];
   appliedCoupon: Coupon | null;
-  pointsDiscount: number; // USD amount subtracted due to reward points
-  pointsApplied: number; // Number of reward points applied
+  pointsDiscount: number;
+  pointsApplied: number;
 }
 
 const initialState: CartState = {
   cartItems: [],
-  wishlistItems: [],
   savedForLater: [],
   comparedItems: [],
   appliedCoupon: null,
@@ -94,31 +85,6 @@ const cartSlice = createSlice({
         item => !(item.product.id === id && item.selectedColor === color && item.selectedSize === size)
       );
     },
-    // Wishlist actions
-    addToWishlist(state, action: PayloadAction<Product>) {
-      if (!state.wishlistItems.some(item => item.id === action.payload.id)) {
-        state.wishlistItems.push(action.payload);
-      }
-    },
-    removeFromWishlist(state, action: PayloadAction<string>) {
-      state.wishlistItems = state.wishlistItems.filter(item => item.id !== action.payload);
-    },
-    moveToCartFromWishlist(state, action: PayloadAction<{ product: Product; color?: string; size?: string }>) {
-      const { product, color, size } = action.payload;
-      state.wishlistItems = state.wishlistItems.filter(item => item.id !== product.id);
-      
-      const existing = state.cartItems.find(item => item.product.id === product.id);
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        state.cartItems.push({
-          product,
-          quantity: 1,
-          selectedColor: color,
-          selectedSize: size
-        });
-      }
-    },
     // Coupon actions
     applyCartCoupon(state, action: PayloadAction<Coupon>) {
       state.appliedCoupon = action.payload;
@@ -167,9 +133,6 @@ export const {
   saveForLaterItem,
   moveToCartFromSaved,
   removeSavedItem,
-  addToWishlist,
-  removeFromWishlist,
-  moveToCartFromWishlist,
   applyCartCoupon,
   removeCartCoupon,
   applyCartPoints,

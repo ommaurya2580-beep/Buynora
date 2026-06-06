@@ -1,49 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface Address {
-  id: string;
-  name: string;
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string;
-  isDefault: boolean;
-}
-
-export interface PaymentMethod {
-  id: string;
-  cardNumber: string;
-  cardHolder: string;
-  expiry: string;
-  brand: 'Visa' | 'Mastercard' | 'Amex';
-}
-
-export interface UserNotification {
-  id: string;
-  type: 'order' | 'price_drop' | 'system' | 'promo';
-  title: string;
-  message: string;
-  date: string;
-  isRead: boolean;
-}
-
-export interface UserProfile {
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  referralCode: string;
-  points: number;
-}
+import { Address, PaymentMethod, UserProfile } from '../types';
 
 export interface AuthState {
   isAuthenticated: boolean;
   user: UserProfile | null;
   addresses: Address[];
   paymentMethods: PaymentMethod[];
-  notifications: UserNotification[];
   loginHistory: { date: string; device: string; ip: string }[];
 }
 
@@ -88,33 +50,6 @@ const initialPayments: PaymentMethod[] = [
   }
 ];
 
-const initialNotifications: UserNotification[] = [
-  {
-    id: "n_1",
-    type: "order",
-    title: "Order Delivered!",
-    message: "Your shipment for Sony WH-1000XM5 has been delivered to your front door.",
-    date: "2026-06-04",
-    isRead: false
-  },
-  {
-    id: "n_2",
-    type: "price_drop",
-    title: "Price Drop Alert",
-    message: "An item in your wishlist (Air Max 270 SE) dropped in price by $20!",
-    date: "2026-06-03",
-    isRead: true
-  },
-  {
-    id: "n_3",
-    type: "promo",
-    title: "Exclusive Discount Inside",
-    message: "Use code BIGNORA30 to get an extra 30% off on premium listings.",
-    date: "2026-06-01",
-    isRead: false
-  }
-];
-
 const initialState: AuthState = {
   isAuthenticated: true,
   user: {
@@ -123,11 +58,11 @@ const initialState: AuthState = {
     phone: "+1 (555) 019-2834",
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150",
     referralCode: "NORA-JD99",
-    points: 350
+    points: 350,
+    role: "CUSTOMER"
   },
   addresses: initialAddresses,
   paymentMethods: initialPayments,
-  notifications: initialNotifications,
   loginHistory: [
     { date: "2026-06-06 10:00 AM", device: "Chrome / Windows 11", ip: "192.168.1.42" },
     { date: "2026-06-05 02:30 PM", device: "Safari / iPhone 15", ip: "172.56.21.99" }
@@ -181,17 +116,6 @@ const authSlice = createSlice({
     deletePayment(state, action: PayloadAction<string>) {
       state.paymentMethods = state.paymentMethods.filter(card => card.id !== action.payload);
     },
-    markAllNotificationsRead(state) {
-      state.notifications.forEach(n => n.isRead = true);
-    },
-    addNotification(state, action: PayloadAction<Omit<UserNotification, 'id' | 'date' | 'isRead'>>) {
-      state.notifications.unshift({
-        ...action.payload,
-        id: `n_${Date.now()}`,
-        date: new Date().toISOString().split('T')[0],
-        isRead: false
-      });
-    },
     addPoints(state, action: PayloadAction<number>) {
       if (state.user) {
         state.user.points += action.payload;
@@ -214,8 +138,6 @@ export const {
   deleteAddress,
   addPayment,
   deletePayment,
-  markAllNotificationsRead,
-  addNotification,
   addPoints,
   usePoints
 } = authSlice.actions;

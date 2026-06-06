@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  User, MapPin, CreditCard, History, Heart, Bell, Shield, Gift, Plus, Trash2, Edit2, AlertCircle, ShoppingCart, Key
+  User, MapPin, CreditCard, History, Heart, Shield, Gift, Plus, Trash2
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { 
-  updateProfile, addAddress, deleteAddress, addPayment, deletePayment, usePoints 
+  updateProfile, addAddress, deleteAddress, addPayment, deletePayment
 } from '../redux/authSlice';
-import { addToCart, removeFromWishlist, moveToCartFromWishlist } from '../redux/cartSlice';
+import { addToCart } from '../redux/cartSlice';
+import { removeFromWishlist } from '../redux/wishlistSlice';
+import { Product } from '../types';
 import { cancelOrder } from '../redux/orderSlice';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency, formatDate } from '../utils/formatters';
@@ -22,7 +24,7 @@ export const Dashboard: React.FC = () => {
   // Redux Selectors
   const { user, addresses, paymentMethods, loginHistory } = useAppSelector(state => state.auth);
   const { orders } = useAppSelector(state => state.order);
-  const { wishlistItems } = useAppSelector(state => state.cart);
+  const wishlistItems = useAppSelector(state => state.wishlist.wishlistItems);
 
   // States
   const [activeTab, setActiveTab] = useState<TabType>('profile');
@@ -100,8 +102,9 @@ export const Dashboard: React.FC = () => {
     setShowCardForm(false);
   };
 
-  const handleMoveWishlistToCart = (prod: any) => {
-    dispatch(moveToCartFromWishlist({ product: prod }));
+  const handleMoveWishlistToCart = (prod: Product) => {
+    dispatch(addToCart({ product: prod, quantity: 1 }));
+    dispatch(removeFromWishlist(prod.id));
     showToast(`${prod.name} moved to cart!`, "success");
   };
 
@@ -414,7 +417,7 @@ export const Dashboard: React.FC = () => {
                   />
                   <select
                     value={cardBrand}
-                    onChange={e => setCardBrand(e.target.value as any)}
+                    onChange={e => setCardBrand(e.target.value as 'Visa' | 'Mastercard' | 'Amex')}
                     className="bg-gray-100 dark:bg-slate-800 text-xs px-3 py-2 rounded-xl border border-transparent focus:border-indigo-500 outline-none font-bold"
                   >
                     <option value="Visa">Visa</option>
@@ -506,7 +509,7 @@ export const Dashboard: React.FC = () => {
               {wishlistItems.length === 0 ? (
                 <p className="text-xs text-gray-400">Your wishlist is empty.</p>
               ) : (
-                wishlistItems.map(item => (
+                wishlistItems.map((item: Product) => (
                   <div 
                     key={item.id} 
                     className="p-4 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between h-full bg-white/20 dark:bg-slate-900/20"

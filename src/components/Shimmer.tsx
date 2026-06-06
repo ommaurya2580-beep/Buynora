@@ -55,3 +55,13 @@ export const ShimmerPDP: React.FC = () => {
     </div>
   );
 };
+
+export const PageLoader: React.FC = () => {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center flex-col gap-4">
+      <div className="w-12 h-12 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin" />
+      <p className="text-xs font-bold text-gray-400">Loading premium catalog...</p>
+    </div>
+  );
+};
+

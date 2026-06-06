@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRightLeft, Star, ShoppingCart, Trash2 } from 'lucide-react';
-import { Product } from '../services/mockDb';
+import { Product } from '../types';
 import { useAppDispatch } from '../redux/store';
 import { addToCart } from '../redux/cartSlice';
 import { useToast } from '../hooks/useToast';

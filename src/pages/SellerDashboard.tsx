@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  Plus, Edit2, Trash2, Box, Sparkles, RefreshCw, BarChart3, TrendingUp,
-  DollarSign, PackageCheck, ListOrdered, Check, X, Eye
+  Plus, Edit2, Trash2, Box, TrendingUp,
+  DollarSign, PackageCheck
 } from 'lucide-react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, Legend 
+  Legend 
 } from 'recharts';
-import { useAppDispatch, useAppSelector } from '../redux/store';
-import { addCatalogProduct, updateCatalogProduct, deleteCatalogProduct } from '../redux/adminSlice';
-import { apiService } from '../services/api';
-import { Product } from '../services/mockDb';
+import { Product } from '../types';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
 import { Modal } from '../components/Modal';
+import { 
+  useProducts, 
+  useSellerAnalytics, 
+  useAddProductMutation, 
+  useUpdateProductMutation, 
+  useDeleteProductMutation 
+} from '../hooks/useQueries';
 
 export const SellerDashboard: React.FC = () => {
-  const dispatch = useAppDispatch();
   const { showToast } = useToast();
-
-  // Redux Selectors
-  const catalog = useAppSelector(state => state.admin.catalog);
 
   // States
   const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'orders'>('analytics');
-  const [analyticsData, setAnalyticsData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
   // Modal form states
   const [showProductModal, setShowProductModal] = useState(false);
@@ -42,16 +40,17 @@ export const SellerDashboard: React.FC = () => {
   const [prodImg, setProdImg] = useState('');
   const [prodDesc, setProdDesc] = useState('');
 
-  // Load analytics
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      setLoading(true);
-      const data = await apiService.getSellerAnalytics();
-      setAnalyticsData(data);
-      setLoading(false);
-    };
-    fetchAnalytics();
-  }, []);
+  // React Query hooks
+  const { data: productsRes, isLoading: loadingProducts } = useProducts({ limit: 100 });
+  const catalog = productsRes?.products || [];
+
+  const { data: analyticsData, isLoading: loadingAnalytics } = useSellerAnalytics();
+
+  const addProductMutation = useAddProductMutation();
+  const updateProductMutation = useUpdateProductMutation();
+  const deleteProductMutation = useDeleteProductMutation();
+
+  const loading = loadingProducts || loadingAnalytics;
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -83,8 +82,14 @@ export const SellerDashboard: React.FC = () => {
 
   const handleDeleteProduct = (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
-      dispatch(deleteCatalogProduct(id));
-      showToast("Product deleted from catalog", "info");
+      deleteProductMutation.mutate(id, {
+        onSuccess: () => {
+          showToast("Product deleted from catalog", "info");
+        },
+        onError: () => {
+          showToast("Failed to delete product", "error");
+        }
+      });
     }
   };
 
@@ -101,8 +106,7 @@ export const SellerDashboard: React.FC = () => {
 
     if (editingProduct) {
       // Edit
-      const updated: Product = {
-        ...editingProduct,
+      const updated: Partial<Product> = {
         name: prodName,
         brand: prodBrand,
         category: prodCat,
@@ -115,12 +119,18 @@ export const SellerDashboard: React.FC = () => {
         description: prodDesc,
         availabilityStatus: prodStock === 0 ? 'Out of Stock' : (prodStock < 5 ? 'Low Stock' : 'In Stock')
       };
-      dispatch(updateCatalogProduct(updated));
-      showToast("Product updated successfully!", "success");
+      updateProductMutation.mutate({ id: editingProduct.id, product: updated }, {
+        onSuccess: () => {
+          showToast("Product updated successfully!", "success");
+          setShowProductModal(false);
+        },
+        onError: () => {
+          showToast("Failed to update product", "error");
+        }
+      });
     } else {
       // Add New
-      const newProd: Product = {
-        id: `p_${Date.now()}`,
+      const newProd: Omit<Product, 'id' | 'reviews' | 'qna'> = {
         name: prodName,
         brand: prodBrand,
         category: prodCat,
@@ -131,8 +141,6 @@ export const SellerDashboard: React.FC = () => {
         stock: prodStock,
         images: [prodImg],
         specs: { "Model Year": "2026", "Warranty": "1-Year Warranty" },
-        reviews: [],
-        qna: [],
         rating: 5,
         ratingCount: 0,
         description: prodDesc,
@@ -146,10 +154,16 @@ export const SellerDashboard: React.FC = () => {
         returnPolicy: "30-day standard return policy.",
         deliveryDays: 3
       };
-      dispatch(addCatalogProduct(newProd));
-      showToast("New product added to catalog!", "success");
+      addProductMutation.mutate(newProd, {
+        onSuccess: () => {
+          showToast("New product added to catalog!", "success");
+          setShowProductModal(false);
+        },
+        onError: () => {
+          showToast("Failed to add product", "error");
+        }
+      });
     }
-    setShowProductModal(false);
   };
 
   return (
@@ -160,7 +174,7 @@ export const SellerDashboard: React.FC = () => {
         {['analytics', 'products', 'orders'].map(tab => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab as any)}
+            onClick={() => setActiveTab(tab as 'analytics' | 'products' | 'orders')}
             className={`text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer capitalize ${
               activeTab === tab 
                 ? 'bg-indigo-600 text-white' 
@@ -175,7 +189,7 @@ export const SellerDashboard: React.FC = () => {
       {/* TABS: ANALYTICS OVERVIEW */}
       {activeTab === 'analytics' && (
         <div className="space-y-8">
-          {loading ? (
+          {loading || !analyticsData ? (
             <div className="py-20 text-center text-xs text-gray-400">Loading analytics...</div>
           ) : (
             <>
@@ -337,7 +351,7 @@ export const SellerDashboard: React.FC = () => {
             <p className="text-[11px] text-gray-400">View customer purchases containing your listed items</p>
           </div>
 
-          {loading ? (
+          {loading || !analyticsData ? (
             <div className="py-20 text-center text-xs text-gray-400">Loading order list...</div>
           ) : (
             <div className="border border-gray-150 dark:border-gray-800 rounded-2xl overflow-hidden bg-white/20 dark:bg-slate-900/20">
@@ -352,7 +366,7 @@ export const SellerDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                  {analyticsData?.recentOrders.map((ord: any) => (
+                  {analyticsData?.recentOrders.map((ord: { id: string; customer: string; date: string; amount: number; status: string }) => (
                     <tr key={ord.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/10">
                       <td className="p-3.5 font-bold font-mono text-gray-800 dark:text-white">{ord.id}</td>
                       <td className="p-3.5">{ord.customer}</td>

@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { Bell, ShoppingBag, Percent, TrendingDown, Info, Circle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { markAllNotificationsRead } from '../redux/authSlice';
+import { markAllNotificationsRead } from '../redux/notificationSlice';
 import { formatDate } from '../utils/formatters';
+import { UserNotification } from '../types';
 
 interface NotificationCenterProps {
   isOpen: boolean;
@@ -11,7 +12,7 @@ interface NotificationCenterProps {
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, onClose }) => {
   const dispatch = useAppDispatch();
-  const notifications = useAppSelector(state => state.auth.notifications);
+  const notifications = useAppSelector(state => state.notification.notifications);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Close when clicking outside
@@ -70,7 +71,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
             No notifications yet.
           </div>
         ) : (
-          notifications.map(n => (
+          notifications.map((n: UserNotification) => (
             <div 
               key={n.id} 
               className={`p-4 flex gap-3 hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors ${

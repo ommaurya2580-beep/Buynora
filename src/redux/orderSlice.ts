@@ -1,24 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Address, PaymentMethod } from './authSlice';
-import { CartItem } from './cartSlice';
-
-export interface Order {
-  id: string;
-  items: CartItem[];
-  subtotal: number;
-  discount: number;
-  tax: number;
-  shipping: number;
-  total: number;
-  shippingAddress: Address;
-  paymentMethod: PaymentMethod;
-  date: string;
-  expectedDelivery: string;
-  status: 'Processing' | 'Shipped' | 'Out for Delivery' | 'Delivered' | 'Cancelled';
-  trackingStep: number; // 1: Ordered, 2: Shipped, 3: Out for Delivery, 4: Delivered
-  carrier?: string;
-  trackingNumber?: string;
-}
+import { Order } from '../types';
 
 export interface OrderState {
   orders: Order[];

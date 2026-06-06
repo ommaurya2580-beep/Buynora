@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from './redux/store';
 import { ToastProvider } from './hooks/useToast';
 import { AppRoutes } from './routes';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -21,9 +22,11 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ToastProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
+          <ErrorBoundary>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ErrorBoundary>
         </ToastProvider>
       </QueryClientProvider>
     </Provider>

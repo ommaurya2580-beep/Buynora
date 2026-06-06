@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Star, ShoppingCart, BarChart3 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { addToCart, addToWishlist, removeFromWishlist } from '../redux/cartSlice';
-import { Product } from '../services/mockDb';
+import { addToCart } from '../redux/cartSlice';
+import { addToWishlist, removeFromWishlist } from '../redux/wishlistSlice';
+import { Product } from '../types';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
 
@@ -20,8 +21,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { showToast } = useToast();
-  const wishlistItems = useAppSelector(state => state.cart.wishlistItems);
-  const isInWishlist = wishlistItems.some(item => item.id === product.id);
+  const wishlistItems = useAppSelector(state => state.wishlist.wishlistItems);
+  const isInWishlist = wishlistItems.some((item: Product) => item.id === product.id);
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();

@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mic, X, Music } from 'lucide-react';
+import { Mic, Music } from 'lucide-react';
 import { Modal } from './Modal';
 
 interface VoiceSearchProps {

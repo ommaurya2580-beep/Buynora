@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
-  Package, Truck, CheckCircle, Clock, Calendar, ArrowLeft,
-  MapPin, User, ChevronRight, RefreshCcw, Check, RefreshCw
+  Package, Truck, CheckCircle, Clock, ArrowLeft,
+  MapPin, Check, RefreshCw
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { updateTracking } from '../redux/orderSlice';
 import { useToast } from '../hooks/useToast';
-import { formatCurrency, formatDate } from '../utils/formatters';
+import { formatDate } from '../utils/formatters';
 
 export const TrackOrder: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +31,7 @@ export const TrackOrder: React.FC = () => {
 
   // Simulated live status advancement for manual testing!
   const advanceStatus = () => {
-    let nextStep = order.trackingStep + 1;
+    const nextStep = order.trackingStep + 1;
     let nextStatus = order.status;
 
     if (nextStep > 4) {
@@ -92,8 +92,6 @@ export const TrackOrder: React.FC = () => {
             {steps.map((s, idx) => {
               const stepIndex = idx + 1;
               const isDone = order.trackingStep >= stepIndex;
-              const isCurrent = order.trackingStep === stepIndex;
-              const StepIcon = s.icon;
 
               return (
                 <div key={idx} className="relative flex gap-4">

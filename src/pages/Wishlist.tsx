@@ -1,20 +1,22 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { removeFromWishlist, moveToCartFromWishlist } from '../redux/cartSlice';
+import { removeFromWishlist } from '../redux/wishlistSlice';
+import { addToCart } from '../redux/cartSlice';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
+import { Product } from '../types';
 
 export const Wishlist: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showToast } = useToast();
 
-  const wishlistItems = useAppSelector(state => state.cart.wishlistItems);
+  const wishlistItems = useAppSelector(state => state.wishlist.wishlistItems);
 
-  const handleMoveToCart = (product: any) => {
-    dispatch(moveToCartFromWishlist({ product }));
+  const handleMoveToCart = (product: Product) => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    dispatch(removeFromWishlist(product.id));
     showToast(`${product.name} moved to cart!`, "success");
   };
 
@@ -41,7 +43,7 @@ export const Wishlist: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {wishlistItems.map(product => (
+          {wishlistItems.map((product: Product) => (
             <div 
               key={product.id}
               className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 flex flex-col justify-between h-full bg-white dark:bg-slate-900/20 hover:shadow-xl transition-all group"

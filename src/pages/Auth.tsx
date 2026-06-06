@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { 
-  Mail, Lock, User, Phone, CheckCircle, ShieldCheck, 
-  ArrowRight, KeyRound, ArrowLeft
+  Mail, Lock, User, Phone
 } from 'lucide-react';
 import { useAppDispatch } from '../redux/store';
 import { loginUser } from '../redux/authSlice';
@@ -33,13 +32,19 @@ export const Auth: React.FC = () => {
       return;
     }
     // Dispatch mock login
+    const role = email === 'admin@buynora.com' ? 'ADMIN' : (email === 'seller@buynora.com' ? 'SELLER' : 'CUSTOMER');
     dispatch(loginUser({
-      name: "John Doe",
+      name: email === 'admin@buynora.com' ? 'Alice Admin' : (email === 'seller@buynora.com' ? 'Bob Seller' : 'John Doe'),
       email: email,
       phone: "+1 (555) 019-2834",
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100",
-      referralCode: "NORA-JD99",
-      points: 350
+      avatar: email === 'admin@buynora.com' 
+        ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" 
+        : (email === 'seller@buynora.com' 
+          ? "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" 
+          : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100"),
+      referralCode: email === 'admin@buynora.com' ? 'NORA-ADMIN' : (email === 'seller@buynora.com' ? 'NORA-SELLER' : 'NORA-JD99'),
+      points: 350,
+      role
     }));
     showToast("Logged in successfully!", "success");
     navigate('/');
@@ -75,7 +80,8 @@ export const Auth: React.FC = () => {
       phone,
       avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100",
       referralCode: `NORA-${name.slice(0, 2).toUpperCase()}${Math.floor(10 + Math.random() * 90)}`,
-      points: 100 // Welcome points!
+      points: 100, // Welcome points!
+      role: 'CUSTOMER'
     }));
     showToast("OTP Verified! Welcome to Buynora.", "success");
     navigate('/');

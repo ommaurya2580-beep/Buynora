@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
-  BarChart3, Box, ShoppingCart, UserCheck, LogOut, ArrowLeft,
-  LayoutDashboard, Menu, X, Sun, Moon, Sparkles, Store
+  Box, ShoppingCart, LogOut, ArrowLeft,
+  LayoutDashboard, Menu, X, Sun, Moon, Store
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../hooks/useTheme';

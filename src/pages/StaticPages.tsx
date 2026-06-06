@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { 
   Info, Mail, Phone, MapPin, Send, HelpCircle, ChevronDown, 
-  ChevronUp, ShieldCheck, FileText, Sparkles
+  ChevronUp, ShieldCheck, FileText
 } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 

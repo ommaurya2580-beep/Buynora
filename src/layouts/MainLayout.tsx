@@ -1,91 +1,50 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { 
-  ShoppingBag, Heart, Bell, User, Search, Mic, Sun, Moon, 
-  Menu, X, Sparkles, LogOut, Shield, Briefcase, ChevronDown, Check, Globe
+  ShoppingBag, Heart, Bell, Sun, Moon, 
+  Menu, X, Sparkles, Globe, ChevronDown, Check
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { logoutUser } from '../redux/authSlice';
 import { useTheme } from '../hooks/useTheme';
 import { useToast } from '../hooks/useToast';
-import { formatCurrency } from '../utils/formatters';
-import { apiService } from '../services/api';
 import { VoiceSearch } from '../components/VoiceSearch';
 import { NotificationCenter } from '../components/NotificationCenter';
 import { ChatWidget } from '../components/ChatWidget';
-import { categories } from '../services/mockDb';
+import { useCategories } from '../hooks/useQueries';
+import { UserNotification } from '../types';
+
+// Navbar subcomponents
+import { SearchBar } from '../components/navbar/SearchBar';
+import { ProfileMenu } from '../components/navbar/ProfileMenu';
+import { MegaMenu } from '../components/navbar/MegaMenu';
+import { ThemeToggle } from '../components/navbar/ThemeToggle';
 
 export const MainLayout: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useAppDispatch();
   const { showToast } = useToast();
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
+
+  const { data: categories = [] } = useCategories();
 
   // State
-  const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isVoiceSearchOpen, setIsVoiceSearchOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const [selectedLang, setSelectedLang] = useState('English');
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
-  
-  const searchContainerRef = useRef<HTMLDivElement>(null);
-  const profileContainerRef = useRef<HTMLDivElement>(null);
 
   // Redux Selectors
-  const { cartItems, wishlistItems } = useAppSelector(state => state.cart);
-  const { user, isAuthenticated, notifications } = useAppSelector(state => state.auth);
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const { cartItems } = useAppSelector(state => state.cart);
+  const wishlistItems = useAppSelector(state => state.wishlist.wishlistItems);
+  const { user, isAuthenticated } = useAppSelector(state => state.auth);
+  const notifications = useAppSelector(state => state.notification.notifications);
+  const unreadCount = notifications.filter((n: UserNotification) => !n.isRead).length;
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Search recommendations hook
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (searchQuery.trim().length > 1) {
-        const list = await apiService.getSearchSuggestions(searchQuery);
-        setSuggestions(list);
-      } else {
-        setSuggestions([]);
-      }
-    };
-    const debounceTimer = setTimeout(fetchSuggestions, 150);
-    return () => clearTimeout(debounceTimer);
-  }, [searchQuery]);
-
-  // Click outside hooks
-  useEffect(() => {
-    const clickOutside = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-        setShowSuggestions(false);
-      }
-      if (profileContainerRef.current && !profileContainerRef.current.contains(e.target as Node)) {
-        setIsProfileOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', clickOutside);
-    return () => document.removeEventListener('mousedown', clickOutside);
-  }, []);
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-    setShowSuggestions(false);
-    navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
-  };
-
-  const handleSuggestionClick = (text: string) => {
-    setSearchQuery(text);
-    setShowSuggestions(false);
-    navigate(`/products?search=${encodeURIComponent(text)}`);
-  };
-
   const handleVoiceSearchResult = (result: string) => {
-    setSearchQuery(result);
     showToast(`Voice Search recognized: "${result}"`, 'success');
     navigate(`/products?search=${encodeURIComponent(result)}`);
   };
@@ -156,12 +115,7 @@ export const MainLayout: React.FC = () => {
             </div>
 
             {/* Theme Toggler */}
-            <button 
-              onClick={toggleTheme}
-              className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
-            >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
-            </button>
+            <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
           </div>
         </div>
 
@@ -176,68 +130,11 @@ export const MainLayout: React.FC = () => {
             </Link>
 
             {/* Mega Menu Categories (Desktop) */}
-            <div className="hidden lg:flex items-center gap-6 text-sm font-bold text-gray-700 dark:text-gray-300">
-              <Link to="/products" className="hover:text-indigo-500 transition-colors">Shop All</Link>
-              {categories.slice(0, 4).map(cat => (
-                <Link
-                  key={cat.id}
-                  to={`/products?category=${encodeURIComponent(cat.name)}`}
-                  className="hover:text-indigo-500 transition-colors"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
+            <MegaMenu categories={categories} />
           </div>
 
           {/* Search bar with Recommendations */}
-          <div ref={searchContainerRef} className="hidden md:block flex-1 max-w-lg mx-6 relative">
-            <form onSubmit={handleSearchSubmit} className="relative w-full">
-              <input
-                type="text"
-                placeholder="Search premium electronics, footwear, apparel..."
-                value={searchQuery}
-                onFocus={() => setShowSuggestions(true)}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-slate-800/80 text-gray-900 dark:text-white pl-4 pr-16 py-2.5 rounded-full text-xs border border-transparent focus:border-indigo-500/50 focus:bg-white dark:focus:bg-slate-900 outline-none transition-all duration-200 shadow-inner"
-              />
-              
-              <div className="absolute right-3 top-1.5 flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setIsVoiceSearchOpen(true)}
-                  className="p-1 text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 cursor-pointer transition-colors"
-                  title="Voice Search"
-                >
-                  <Mic className="w-4 h-4" />
-                </button>
-                <button
-                  type="submit"
-                  className="p-1 text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 cursor-pointer transition-colors"
-                >
-                  <Search className="w-4 h-4" />
-                </button>
-              </div>
-            </form>
-
-            {/* Suggestions Box */}
-            {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute left-0 right-0 mt-2 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900 overflow-hidden z-50">
-                <div className="p-2.5 space-y-1">
-                  {suggestions.map((sug, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleSuggestionClick(sug)}
-                      className="w-full text-left text-xs font-semibold px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg flex items-center gap-2.5 transition-colors cursor-pointer"
-                    >
-                      <Search className="w-3.5 h-3.5 text-gray-400" />
-                      {sug}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          <SearchBar onVoiceSearchClick={() => setIsVoiceSearchOpen(true)} />
 
           {/* Action Icons Panel */}
           <div className="flex items-center gap-4">
@@ -296,81 +193,7 @@ export const MainLayout: React.FC = () => {
             </Link>
 
             {/* User Profile / Dashboard Selector */}
-            <div ref={profileContainerRef} className="relative">
-              <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="p-1 rounded-full border-2 border-transparent hover:border-indigo-500/30 overflow-hidden cursor-pointer h-9 w-9"
-              >
-                <img
-                  src={isAuthenticated && user?.avatar ? user.avatar : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100"}
-                  alt="avatar"
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </button>
-
-              {/* Profile Dropdown */}
-              {isProfileOpen && (
-                <div className="absolute right-0 mt-3 w-56 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900 overflow-hidden z-50">
-                  <div className="p-4 border-b border-gray-100 dark:border-gray-800/50">
-                    <h5 className="text-xs font-bold text-gray-900 dark:text-white">
-                      {isAuthenticated ? user?.name : "Welcome Guest"}
-                    </h5>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 truncate">
-                      {isAuthenticated ? user?.email : "Sign in to manage orders"}
-                    </p>
-                  </div>
-                  
-                  <div className="p-2.5 space-y-1">
-                    {isAuthenticated ? (
-                      <>
-                        <Link
-                          to="/dashboard"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                        >
-                          <User className="w-4 h-4 text-gray-400" />
-                          User Dashboard
-                        </Link>
-                        
-                        <Link
-                          to="/seller"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                        >
-                          <Briefcase className="w-4 h-4 text-gray-400" />
-                          Seller Dashboard
-                        </Link>
-
-                        <Link
-                          to="/admin"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                        >
-                          <Shield className="w-4 h-4 text-gray-400" />
-                          Admin Dashboard
-                        </Link>
-
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 rounded-lg transition-colors cursor-pointer"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          Logout
-                        </button>
-                      </>
-                    ) : (
-                      <Link
-                        to="/auth/login"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-2.5 text-xs font-bold px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-center justify-center transition-all"
-                      >
-                        Sign In / Register
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+            <ProfileMenu user={user} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
 
             {/* Mobile Hamburger menu */}
             <button
@@ -385,16 +208,25 @@ export const MainLayout: React.FC = () => {
         {/* Mobile Search/Categories Drawer */}
         {isMobileMenuOpen && (
           <div className="lg:hidden glass border-b border-gray-200 dark:border-gray-800 p-4 bg-white dark:bg-slate-900 space-y-4">
-            <form onSubmit={handleSearchSubmit} className="relative w-full">
+            <form 
+              onSubmit={e => {
+                e.preventDefault();
+                const fd = new FormData(e.currentTarget);
+                const q = fd.get('q') as string;
+                if (!q?.trim()) return;
+                setIsMobileMenuOpen(false);
+                navigate(`/products?search=${encodeURIComponent(q.trim())}`);
+              }} 
+              className="relative w-full"
+            >
               <input
                 type="text"
+                name="q"
                 placeholder="Search..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-100 dark:bg-slate-800 text-gray-900 dark:text-white pl-4 pr-12 py-2 rounded-xl text-xs border border-transparent focus:border-indigo-500 focus:bg-white outline-none"
               />
               <button type="submit" className="absolute right-3 top-2.5 text-gray-400">
-                <Search className="w-4 h-4" />
+                <ShoppingBag className="w-4 h-4" />
               </button>
             </form>
 

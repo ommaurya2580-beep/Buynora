@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
-  ShieldAlert, Users, Store, Tag, Settings, ArrowLeft, LogOut,
-  LayoutDashboard, Menu, X, Sun, Moon, Sparkles, FolderKanban
+  ShieldAlert, Users, Store, Tag, ArrowLeft, LogOut,
+  LayoutDashboard, Menu, X, Sun, Moon, FolderKanban
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useToast } from '../hooks/useToast';
