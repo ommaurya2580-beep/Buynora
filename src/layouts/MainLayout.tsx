@@ -32,7 +32,7 @@ export const MainLayout: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isVoiceSearchOpen, setIsVoiceSearchOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [selectedCurrency, setSelectedCurrency] = useState(() => localStorage.getItem('currency') || 'INR');
   const [selectedLang, setSelectedLang] = useState('English');
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
@@ -121,18 +121,18 @@ export const MainLayout: React.FC = () => {
 
             {/* Currency Selector */}
             <div className="flex gap-2">
-              {['USD', 'EUR', 'GBP', 'INR'].map(cur => (
+              {['INR', 'USD', 'EUR', 'GBP'].map(cur => (
                 <button
                   key={cur}
                   onClick={() => {
                     setSelectedCurrency(cur);
                     localStorage.setItem('currency', cur);
-                    // Dispatch custom event to tell pages to re-render currency
                     window.dispatchEvent(new Event('currencyChange'));
+                    window.location.reload();
                   }}
                   className={`hover:text-text-inverted cursor-pointer font-bold ${selectedCurrency === cur ? 'text-indigo-400' : ''}`}
                 >
-                  {cur}
+                  {selectedCurrency === cur ? (cur === 'INR' ? '₹ INR' : `${cur === 'USD' ? '$' : cur === 'EUR' ? '€' : '£'} ${cur}`) : cur}
                 </button>
               ))}
             </div>

@@ -1,22 +1,23 @@
-export const formatCurrency = (amount: number, currency: string = 'INR'): string => {
+export const formatCurrency = (amount: number, currency?: string): string => {
+  const activeCurrency = currency || localStorage.getItem('currency') || 'INR';
   const symbolMap: Record<string, string> = {
+    INR: '₹',
     USD: '$',
     EUR: '€',
     GBP: '£',
-    INR: '₹',
     JPY: '¥'
   };
 
-  const symbol = symbolMap[currency.toUpperCase()] || '$';
+  const symbol = symbolMap[activeCurrency.toUpperCase()] || '₹';
   let convertedAmount = amount;
 
-  // Simple hardcoded mock exchange rates (relative to base USD)
-  if (currency.toUpperCase() === 'EUR') convertedAmount = amount * 0.92;
-  else if (currency.toUpperCase() === 'GBP') convertedAmount = amount * 0.78;
-  else if (currency.toUpperCase() === 'INR') convertedAmount = amount * 83.5;
-  else if (currency.toUpperCase() === 'JPY') convertedAmount = amount * 155.0;
+  // Base amounts are now assumed to be in INR.
+  if (activeCurrency.toUpperCase() === 'USD') convertedAmount = amount / 83.5;
+  else if (activeCurrency.toUpperCase() === 'EUR') convertedAmount = amount / 90.5;
+  else if (activeCurrency.toUpperCase() === 'GBP') convertedAmount = amount / 105.2;
+  else if (activeCurrency.toUpperCase() === 'JPY') convertedAmount = amount * 1.8;
 
-  return `${symbol}${convertedAmount.toLocaleString(undefined, {
+  return `${symbol}${convertedAmount.toLocaleString('en-IN', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   })}`;
