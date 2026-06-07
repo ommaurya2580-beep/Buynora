@@ -124,7 +124,7 @@ export const MainLayout: React.FC = () => {
           <div className="flex items-center gap-8">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl font-black bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent tracking-tight">
+              <span className="text-2xl font-black text-primary tracking-tight">
                 Buynora
               </span>
             </Link>
@@ -186,7 +186,7 @@ export const MainLayout: React.FC = () => {
             >
               <ShoppingBag className="w-5 h-5" />
               {cartCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-indigo-600 text-white text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
+                <span className="absolute top-1.5 right-1.5 bg-primary text-white text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
                   {cartCount}
                 </span>
               )}
@@ -310,7 +310,7 @@ export const MainLayout: React.FC = () => {
               />
               <button
                 type="submit"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer shadow transition-all hover:scale-105 active:scale-95"
+                className="bg-accent hover:bg-accent-hover text-white text-xs font-bold px-4 py-2 rounded-md cursor-pointer shadow transition-all hover:scale-105 active:scale-95"
               >
                 Join
               </button>

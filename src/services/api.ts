@@ -2,6 +2,8 @@ import axios, { InternalAxiosRequestConfig } from 'axios';
 import { environment } from '../config/environment';
 import { products, categories, coupons } from './mockDb';
 import { Review, QnA, Order, UserAccount, Seller } from '../types';
+import { TokenManager } from '../features/auth/services/tokenManager';
+import { RefreshTokenManager } from '../features/auth/services/refreshTokenManager';
 
 const api = axios.create({
   baseURL: environment.apiBaseUrl,
@@ -14,7 +16,7 @@ const api = axios.create({
 // Request Interceptor: Inject JWT and Log Requests
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('token');
+    const token = TokenManager.getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -35,12 +37,26 @@ api.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
     if (environment.isDev) {
       console.error(`[HTTP Error]`, error.response || error.message);
     }
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token');
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const newAccessToken = await RefreshTokenManager.refreshAccessToken();
+        if (newAccessToken) {
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          }
+          return api(originalRequest);
+        }
+      } catch (refreshError) {
+        TokenManager.clearAll();
+        return Promise.reject(refreshError);
+      }
+      TokenManager.clearAll();
     }
     return Promise.reject(error);
   }

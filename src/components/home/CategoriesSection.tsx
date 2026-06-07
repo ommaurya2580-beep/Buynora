@@ -21,7 +21,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
           <h2 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white">Shop by Category</h2>
           <p className="text-xs text-gray-500">Discover premium collections tailored to your lifestyle</p>
         </div>
-        <Link to="/products" className="text-xs font-bold text-indigo-500 hover:text-indigo-600 flex items-center gap-1">
+        <Link to="/products" className="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-1">
           See All <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -31,7 +31,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
           <Link
             key={cat.id}
             to={`/products?category=${encodeURIComponent(cat.name)}`}
-            className="group relative h-40 rounded-2xl overflow-hidden glass border border-gray-200/50 dark:border-gray-800/50 hover:shadow-lg transition-all"
+            className="group relative h-40 rounded-md overflow-hidden bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all"
           >
             <img
               src={cat.image}

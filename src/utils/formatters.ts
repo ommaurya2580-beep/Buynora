@@ -1,4 +1,4 @@
-export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
+export const formatCurrency = (amount: number, currency: string = 'INR'): string => {
   const symbolMap: Record<string, string> = {
     USD: '$',
     EUR: '€',

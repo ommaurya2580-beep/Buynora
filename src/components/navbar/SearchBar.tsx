@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Mic } from 'lucide-react';
-import { productService } from '../../services/product.service';
+import { useSearchSuggestions } from '../../hooks/useQueries';
 
 interface SearchBarProps {
   onVoiceSearchClick: () => void;
@@ -10,22 +10,18 @@ interface SearchBarProps {
 export const SearchBar: React.FC<SearchBarProps> = ({ onVoiceSearchClick }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (searchQuery.trim().length > 1) {
-        const list = await productService.getSearchSuggestions(searchQuery);
-        setSuggestions(list);
-      } else {
-        setSuggestions([]);
-      }
-    };
-    const debounceTimer = setTimeout(fetchSuggestions, 150);
+    const debounceTimer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 150);
     return () => clearTimeout(debounceTimer);
   }, [searchQuery]);
+
+  const { data: suggestions = [] } = useSearchSuggestions(debouncedQuery);
 
   useEffect(() => {
     const clickOutside = (e: MouseEvent) => {
@@ -59,31 +55,31 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onVoiceSearchClick }) => {
           value={searchQuery}
           onFocus={() => setShowSuggestions(true)}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full bg-slate-100 dark:bg-slate-800/80 text-gray-900 dark:text-white pl-4 pr-16 py-2.5 rounded-full text-xs border border-transparent focus:border-indigo-500/50 focus:bg-white dark:focus:bg-slate-900 outline-none transition-all duration-200 shadow-inner"
+          className="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white pl-4 pr-16 py-2.5 rounded-md text-xs border border-gray-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200"
         />
         
-        <div className="absolute right-3 top-1.5 flex items-center gap-1.5">
+        <div className="absolute right-2 top-1.5 flex items-center gap-1.5">
           <button
             type="button"
             onClick={onVoiceSearchClick}
-            className="p-1 text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 cursor-pointer transition-colors"
+            className="p-1 text-gray-400 hover:text-primary cursor-pointer transition-colors"
             title="Voice Search"
           >
             <Mic className="w-4 h-4" />
           </button>
           <button
             type="submit"
-            className="p-1 text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 cursor-pointer transition-colors"
+            className="p-1 bg-accent hover:bg-accent-hover text-white rounded text-sm cursor-pointer transition-colors"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-5 h-5 p-0.5" />
           </button>
         </div>
       </form>
 
       {/* Suggestions Box */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute left-0 right-0 mt-2 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900 overflow-hidden z-50">
-          <div className="p-2.5 space-y-1">
+        <div className="absolute left-0 right-0 mt-1 rounded-md shadow-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 overflow-hidden z-50">
+          <div className="p-2 space-y-1">
             {suggestions.map((sug, idx) => (
               <button
                 key={idx}

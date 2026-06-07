@@ -6,6 +6,8 @@ import { store } from './redux/store';
 import { ToastProvider } from './hooks/useToast';
 import { AppRoutes } from './routes';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { AuthProvider } from './features/auth/providers/AuthProvider';
+import { PermissionProvider } from './features/auth/providers/PermissionProvider';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -22,11 +24,15 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ToastProvider>
-          <ErrorBoundary>
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
-          </ErrorBoundary>
+          <AuthProvider>
+            <PermissionProvider>
+              <ErrorBoundary>
+                <BrowserRouter>
+                  <AppRoutes />
+                </BrowserRouter>
+              </ErrorBoundary>
+            </PermissionProvider>
+          </AuthProvider>
         </ToastProvider>
       </QueryClientProvider>
     </Provider>

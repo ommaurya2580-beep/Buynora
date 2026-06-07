@@ -9,17 +9,17 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { AuthLayout } from '../layouts/AuthLayout';
 
 // Dynamic / Lazy Loaded Pages
-const Home = lazy(() => import('../pages/Home').then(m => ({ default: m.Home })));
-const ProductListing = lazy(() => import('../pages/ProductListing').then(m => ({ default: m.ProductListing })));
-const ProductDetail = lazy(() => import('../pages/ProductDetail').then(m => ({ default: m.ProductDetail })));
-const Cart = lazy(() => import('../pages/Cart').then(m => ({ default: m.Cart })));
-const Checkout = lazy(() => import('../pages/Checkout').then(m => ({ default: m.Checkout })));
-const Dashboard = lazy(() => import('../pages/Dashboard').then(m => ({ default: m.Dashboard })));
-const TrackOrder = lazy(() => import('../pages/TrackOrder').then(m => ({ default: m.TrackOrder })));
-const Wishlist = lazy(() => import('../pages/Wishlist').then(m => ({ default: m.Wishlist })));
-const SellerDashboard = lazy(() => import('../pages/SellerDashboard').then(m => ({ default: m.SellerDashboard })));
-const AdminDashboard = lazy(() => import('../pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
-const Auth = lazy(() => import('../pages/Auth').then(m => ({ default: m.Auth })));
+const Home = lazy(() => import('../features/products/pages/Home').then(m => ({ default: m.Home })));
+const ProductListing = lazy(() => import('../features/products/pages/ProductListing').then(m => ({ default: m.ProductListing })));
+const ProductDetail = lazy(() => import('../features/products/pages/ProductDetail').then(m => ({ default: m.ProductDetail })));
+const Cart = lazy(() => import('../features/cart/pages/Cart').then(m => ({ default: m.Cart })));
+const Checkout = lazy(() => import('../features/orders/pages/Checkout').then(m => ({ default: m.Checkout })));
+const Dashboard = lazy(() => import('../features/auth/pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const TrackOrder = lazy(() => import('../features/orders/pages/TrackOrder').then(m => ({ default: m.TrackOrder })));
+const Wishlist = lazy(() => import('../features/wishlist/pages/Wishlist').then(m => ({ default: m.Wishlist })));
+const SellerDashboard = lazy(() => import('../features/seller/pages/SellerDashboard').then(m => ({ default: m.SellerDashboard })));
+const AdminDashboard = lazy(() => import('../features/admin/pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+const Auth = lazy(() => import('../features/auth/pages/Auth').then(m => ({ default: m.Auth })));
 const StaticPages = lazy(() => import('../pages/StaticPages').then(m => ({ default: m.StaticPages })));
 const NotFound = lazy(() => import('../pages/NotFound').then(m => ({ default: m.NotFound })));
 const Unauthorized = lazy(() => import('../pages/Unauthorized').then(m => ({ default: m.Unauthorized })));

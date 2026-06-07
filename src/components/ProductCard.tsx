@@ -56,7 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="group relative glass rounded-2xl overflow-hidden border border-gray-200/50 dark:border-gray-800/50 hover:border-indigo-500/30 dark:hover:border-indigo-400/30 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 flex flex-col h-full bg-white dark:bg-slate-900/40">
+    <div className="group relative rounded-md overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-white dark:bg-slate-900">
       
       {/* Wishlist Button */}
       <button
@@ -76,10 +76,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {onCompareToggle && (
         <button
           onClick={handleCompareClick}
-          className={`absolute top-3 left-3 z-10 p-2 rounded-full glass cursor-pointer shadow-md transition-all duration-200 hover:scale-110 active:scale-95 ${
+          className={`absolute top-3 left-3 z-10 p-2 rounded-full bg-white dark:bg-slate-900 cursor-pointer shadow-md transition-all duration-200 hover:scale-110 active:scale-95 ${
             isCompared 
-              ? 'bg-indigo-500 text-white border-indigo-500 hover:bg-indigo-600' 
-              : 'hover:bg-white/90 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 hover:text-indigo-500'
+              ? 'bg-primary text-white border-primary hover:bg-primary-hover' 
+              : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 hover:text-primary'
           }`}
           title="Add to Compare"
         >
@@ -119,11 +119,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Information */}
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
-          <span className="text-xs font-semibold text-indigo-500 dark:text-indigo-400 tracking-wide uppercase">
+          <span className="text-xs font-semibold text-primary tracking-wide uppercase">
             {product.brand}
           </span>
           <Link to={`/product/${product.id}`}>
-            <h4 className="font-bold text-gray-800 dark:text-gray-100 hover:text-indigo-500 dark:hover:text-indigo-400 mt-1 line-clamp-1 transition-colors">
+            <h4 className="font-bold text-gray-800 dark:text-gray-100 hover:text-primary mt-1 line-clamp-1 transition-colors">
               {product.name}
             </h4>
           </Link>
@@ -157,13 +157,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <button
             onClick={handleAddToCart}
             disabled={product.stock <= 0}
-            className={`p-2.5 rounded-xl flex items-center justify-center cursor-pointer shadow-md transition-all duration-200 hover:scale-105 active:scale-95 ${
+            className={`px-3 py-2 rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all duration-200 hover:scale-105 active:scale-95 ${
               product.stock <= 0
                 ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-600/15'
+                : 'bg-accent text-white hover:bg-accent-hover'
             }`}
           >
-            <ShoppingCart className="w-4 h-4" />
+            <ShoppingCart className="w-3.5 h-3.5" />
+            <span className="text-xs font-bold">Add</span>
           </button>
         </div>
       </div>
