@@ -20,9 +20,9 @@ export const TrackOrder: React.FC = () => {
   if (!order) {
     return (
       <div className="py-20 text-center space-y-4 text-left">
-        <h3 className="font-bold text-gray-800 dark:text-white">Order not found</h3>
+        <h3 className="font-bold text-text-primary">Order not found</h3>
         <p className="text-xs text-gray-400">Please verify your order tracking ID and try again.</p>
-        <Link to="/dashboard" className="inline-flex items-center gap-1.5 bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow">
+        <Link to="/dashboard" className="inline-flex items-center gap-1.5 bg-indigo-600 text-text-inverted px-5 py-2.5 rounded-xl text-xs font-bold shadow">
           <ArrowLeft className="w-4 h-4" /> Go To Dashboard
         </Link>
       </div>
@@ -62,7 +62,7 @@ export const TrackOrder: React.FC = () => {
         <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-indigo-500 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to Orders
         </Link>
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-3">Track Shipment</h1>
+        <h1 className="text-2xl sm:text-3xl font-black text-text-primary mt-3">Track Shipment</h1>
         <p className="text-xs text-gray-500">Live logistics tracking details for {order.id}</p>
       </div>
 
@@ -74,7 +74,7 @@ export const TrackOrder: React.FC = () => {
         </div>
         <button
           onClick={advanceStatus}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4.5 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95 flex-shrink-0"
+          className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs px-4.5 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95 flex-shrink-0"
         >
           <RefreshCw className="w-3.5 h-3.5" /> Advance Status
         </button>
@@ -83,7 +83,7 @@ export const TrackOrder: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
         
         {/* Left Side: Steps timeline */}
-        <div className="md:col-span-2 glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40">
+        <div className="md:col-span-2 glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40">
           <div className="relative pl-6 space-y-8">
             
             {/* Center line */}
@@ -98,14 +98,14 @@ export const TrackOrder: React.FC = () => {
                   {/* Indicator Dot */}
                   <div className={`absolute left-[-18px] top-1.5 p-1 rounded-full border-2 transition-all ${
                     isDone 
-                      ? 'bg-indigo-600 border-indigo-600 text-white' 
-                      : 'bg-white dark:bg-slate-950 border-gray-200 dark:border-gray-800 text-gray-400'
+                      ? 'bg-indigo-600 border-indigo-600 text-text-inverted' 
+                      : 'bg-bg-surface border-gray-200 dark:border-gray-800 text-gray-400'
                   }`}>
                     <Check className="w-3.5 h-3.5 stroke-[3]" />
                   </div>
 
                   <div className="pl-6 space-y-1">
-                    <h4 className={`text-sm font-bold ${isDone ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
+                    <h4 className={`text-sm font-bold ${isDone ? 'text-text-primary' : 'text-gray-400'}`}>
                       {s.label}
                     </h4>
                     <p className="text-xs text-gray-500 leading-relaxed pr-2">
@@ -121,7 +121,7 @@ export const TrackOrder: React.FC = () => {
 
         {/* Right Side: Shipping coordinates info */}
         <div className="space-y-6">
-          <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-xs space-y-3.5">
+          <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 text-xs space-y-3.5">
             <h4 className="font-bold uppercase tracking-wider text-gray-400 text-[10px]">Shipment Details</h4>
             
             <div>
@@ -131,7 +131,7 @@ export const TrackOrder: React.FC = () => {
 
             <div>
               <span className="text-gray-400">Tracking Number:</span>
-              <p className="font-mono font-bold mt-0.5 text-gray-700 dark:text-gray-300">{order.trackingNumber || "NORA-PENDING"}</p>
+              <p className="font-mono font-bold mt-0.5 text-text-secondary">{order.trackingNumber || "NORA-PENDING"}</p>
             </div>
 
             <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex justify-between items-baseline">
@@ -140,12 +140,12 @@ export const TrackOrder: React.FC = () => {
             </div>
           </div>
 
-          <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-xs space-y-3">
+          <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 text-xs space-y-3">
             <h4 className="font-bold uppercase tracking-wider text-gray-400 text-[10px] flex items-center gap-1">
               <MapPin className="w-4.5 h-4.5" /> Destination Address
             </h4>
             <div className="text-left font-medium space-y-1">
-              <span className="font-bold block text-gray-900 dark:text-white">{order.shippingAddress.name}</span>
+              <span className="font-bold block text-text-primary">{order.shippingAddress.name}</span>
               <p className="text-gray-500">{order.shippingAddress.line1}, {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.zip}</p>
               <span className="text-gray-400 block pt-1">Phone: {order.shippingAddress.phone}</span>
             </div>

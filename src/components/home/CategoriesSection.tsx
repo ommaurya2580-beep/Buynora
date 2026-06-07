@@ -18,7 +18,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
     <section className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white">Shop by Category</h2>
+          <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary">Shop by Category</h2>
           <p className="text-xs text-gray-500">Discover premium collections tailored to your lifestyle</p>
         </div>
         <Link to="/products" className="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-1">
@@ -31,7 +31,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
           <Link
             key={cat.id}
             to={`/products?category=${encodeURIComponent(cat.name)}`}
-            className="group relative h-40 rounded-md overflow-hidden bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all"
+            className="group relative h-40 rounded-md overflow-hidden bg-bg-surface border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all"
           >
             <img
               src={cat.image}
@@ -40,7 +40,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent flex flex-col justify-end p-4" />
             <div className="absolute bottom-4 left-4 text-left">
-              <span className="text-white font-bold text-sm tracking-wide block">{cat.name}</span>
+              <span className="text-text-inverted font-bold text-sm tracking-wide block">{cat.name}</span>
               <span className="text-slate-300 text-[10px]">{cat.itemCount}+ Items</span>
             </div>
           </Link>

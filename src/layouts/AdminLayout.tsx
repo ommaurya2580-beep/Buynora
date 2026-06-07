@@ -24,14 +24,14 @@ export const AdminLayout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-secondary flex text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-secondary flex text-text-secondary">
       
       {/* Sidebar (Desktop) */}
       <aside className="hidden lg:flex flex-col w-64 glass border-r border-gray-200/50 dark:border-gray-800/50 justify-between p-6 bg-white/50 dark:bg-slate-900/50">
         <div className="space-y-8">
           {/* Logo / Title */}
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-purple-600 rounded-xl text-white">
+            <div className="p-2 bg-purple-600 rounded-xl text-text-inverted">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
@@ -51,7 +51,7 @@ export const AdminLayout: React.FC = () => {
                   to={item.path}
                   className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
                     isActive 
-                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/10' 
+                      ? 'bg-purple-600 text-text-inverted shadow-lg shadow-purple-600/10' 
                       : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
                   }`}
                 >
@@ -131,7 +131,7 @@ export const AdminLayout: React.FC = () => {
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              className="fixed top-0 bottom-0 left-0 w-64 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-gray-800 p-6 flex flex-col justify-between"
+              className="fixed top-0 bottom-0 left-0 w-64 bg-bg-surface border-r border-gray-200 dark:border-gray-800 p-6 flex flex-col justify-between"
             >
               <div className="space-y-8">
                 <div className="flex items-center justify-between">
@@ -155,7 +155,7 @@ export const AdminLayout: React.FC = () => {
                         onClick={() => setIsSidebarOpen(false)}
                         className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
                           isActive 
-                            ? 'bg-purple-600 text-white shadow-lg' 
+                            ? 'bg-purple-600 text-text-inverted shadow-lg' 
                             : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
                         }`}
                       >

@@ -182,7 +182,7 @@ export const ProductDetail: React.FC = () => {
       {/* Frequently Bought Together Bundle */}
       {bundleProduct && (
         <section className="glass p-6 rounded-3xl border border-indigo-500/10 bg-indigo-500/[0.01]">
-          <h4 className="text-base font-bold text-gray-900 dark:text-white mb-4 text-left flex items-center gap-2">
+          <h4 className="text-base font-bold text-text-primary mb-4 text-left flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-indigo-500" /> Frequently Bought Together
           </h4>
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -220,13 +220,13 @@ export const ProductDetail: React.FC = () => {
             <div className="flex items-center gap-5">
               <div className="text-right">
                 <span className="text-[10px] text-gray-400 block uppercase">Total Price</span>
-                <span className="text-xl font-black text-gray-900 dark:text-white">
+                <span className="text-xl font-black text-text-primary">
                   {formatCurrency(product.price + (includeBundleItem ? bundleProduct.price : 0))}
                 </span>
               </div>
               <button
                 onClick={handleAddBundle}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2.5 px-5 rounded-xl cursor-pointer"
               >
                 Add Bundle to Cart
               </button>
@@ -257,7 +257,7 @@ export const ProductDetail: React.FC = () => {
       {/* Similar Products */}
       <section className="space-y-6">
         <div className="text-left">
-          <h3 className="text-lg font-black text-gray-900 dark:text-white border-b border-gray-150 dark:border-gray-800 pb-2">
+          <h3 className="text-lg font-black text-text-primary border-b border-gray-150 dark:border-gray-800 pb-2">
             Similar Products You May Like
           </h3>
         </div>

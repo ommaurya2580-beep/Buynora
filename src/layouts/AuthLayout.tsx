@@ -16,7 +16,7 @@ export const AuthLayout: React.FC = () => {
 
       {/* Top Navbar */}
       <header className="p-6 flex items-center justify-between relative z-10 w-full max-w-7xl mx-auto">
-        <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-xs font-bold">
+        <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-text-inverted transition-colors text-xs font-bold">
           <ArrowLeft className="w-4 h-4" />
           Back to Store
         </Link>

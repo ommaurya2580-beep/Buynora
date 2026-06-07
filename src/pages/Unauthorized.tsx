@@ -14,15 +14,15 @@ export const Unauthorized: React.FC = () => {
         </div>
         
         <div className="space-y-2">
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white">Access Denied</h2>
-          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+          <h2 className="text-2xl font-black text-text-primary">Access Denied</h2>
+          <p className="text-xs text-text-secondary leading-relaxed">
             You do not have the required permissions to view this portal. Please check your credentials or log in with an authorized account.
           </p>
         </div>
 
         <button
           onClick={() => navigate(ROUTES.HOME)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 px-6 rounded-xl cursor-pointer shadow transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mx-auto"
+          className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 px-6 rounded-xl cursor-pointer shadow transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mx-auto"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Store
         </button>

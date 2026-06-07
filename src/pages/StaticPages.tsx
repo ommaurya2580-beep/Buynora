@@ -64,14 +64,14 @@ export const StaticPages: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-2">
             <Info className="w-6 h-6 text-indigo-500" />
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">About Buynora</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-text-primary">About Buynora</h1>
           </div>
           <p className="text-xs text-gray-500 leading-relaxed">
             Buynora is a world-class premium e-commerce ecosystem designed to deliver modularity, elegance, and extreme high-speed shopping. We specialize in curate electronics, running gear, and apparel inspired by design pioneers like Apple, Nike, and Sony.
           </p>
           <div className="glass p-6 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4">
-            <h4 className="text-sm font-bold text-gray-800 dark:text-white">Our Architecture Statement</h4>
-            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+            <h4 className="text-sm font-bold text-text-primary">Our Architecture Statement</h4>
+            <p className="text-xs text-text-secondary leading-relaxed">
               We focus on premium visual states, light/dark custom properties, zero loading lag using query pre-caching, and accessible interface layouts. Our tech stack relies on Vite, React 19, Redux Toolkit, and Tailwind CSS v4.
             </p>
           </div>
@@ -83,7 +83,7 @@ export const StaticPages: React.FC = () => {
         <div className="space-y-8">
           <div className="flex items-center gap-2">
             <Mail className="w-6 h-6 text-indigo-500" />
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">Contact Support</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-text-primary">Contact Support</h1>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
@@ -117,7 +117,7 @@ export const StaticPages: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-6 rounded-xl cursor-pointer shadow flex items-center gap-1.5"
+                className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2.5 px-6 rounded-xl cursor-pointer shadow flex items-center gap-1.5"
               >
                 <Send className="w-4 h-4" /> Send Message
               </button>
@@ -128,11 +128,11 @@ export const StaticPages: React.FC = () => {
               <h4 className="font-bold uppercase tracking-wider text-gray-400 text-[10px]">Headquarters</h4>
               <div className="flex gap-2.5">
                 <MapPin className="w-4 h-4 text-indigo-500 flex-shrink-0" />
-                <span className="text-gray-650 dark:text-gray-300">500 Infinite Loop, Cupertino, CA 95014</span>
+                <span className="text-text-secondary">500 Infinite Loop, Cupertino, CA 95014</span>
               </div>
               <div className="flex gap-2.5">
                 <Phone className="w-4 h-4 text-indigo-500 flex-shrink-0" />
-                <span className="text-gray-650 dark:text-gray-300">+1 (555) 019-9988</span>
+                <span className="text-text-secondary">+1 (555) 019-9988</span>
               </div>
             </div>
 
@@ -145,7 +145,7 @@ export const StaticPages: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-2">
             <HelpCircle className="w-6 h-6 text-indigo-500" />
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">Help & FAQs</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-text-primary">Help & FAQs</h1>
           </div>
 
           <div className="space-y-4">
@@ -156,13 +156,13 @@ export const StaticPages: React.FC = () => {
               >
                 <button
                   onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                  className="w-full text-left p-5 flex items-center justify-between text-xs font-bold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-50/50 dark:hover:bg-slate-800/20"
+                  className="w-full text-left p-5 flex items-center justify-between text-xs font-bold text-text-primary cursor-pointer hover:bg-gray-50/50 dark:hover:bg-slate-800/20"
                 >
                   <span>{item.q}</span>
                   {openFaqIndex === idx ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openFaqIndex === idx && (
-                  <div className="p-5 pt-0 border-t border-gray-100 dark:border-gray-800/50 text-xs text-gray-650 dark:text-gray-400 leading-relaxed">
+                  <div className="p-5 pt-0 border-t border-gray-100 dark:border-gray-800/50 text-xs text-text-secondary leading-relaxed">
                     {item.a}
                   </div>
                 )}
@@ -177,12 +177,12 @@ export const StaticPages: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-6 h-6 text-indigo-500" />
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">Privacy Policy</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-text-primary">Privacy Policy</h1>
           </div>
-          <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 text-xs text-gray-650 dark:text-gray-300 leading-relaxed">
-            <h4 className="font-bold text-sm text-gray-900 dark:text-white">1. Information We Collect</h4>
+          <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 text-xs text-text-secondary leading-relaxed">
+            <h4 className="font-bold text-sm text-text-primary">1. Information We Collect</h4>
             <p>We collect details to personalize recommendations, such as name, shipping address, wishlist records, and recently viewed lists. Credit cards are secured and processed using mock token models.</p>
-            <h4 className="font-bold text-sm text-gray-900 dark:text-white">2. Cookies and Custom Preferences</h4>
+            <h4 className="font-bold text-sm text-text-primary">2. Cookies and Custom Preferences</h4>
             <p>Our client uses localStorage to sync light/dark styling mode, shopping cart items, and recent product visits.</p>
           </div>
         </div>
@@ -193,12 +193,12 @@ export const StaticPages: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-2">
             <FileText className="w-6 h-6 text-indigo-500" />
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">Terms & Conditions</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-text-primary">Terms & Conditions</h1>
           </div>
-          <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 text-xs text-gray-650 dark:text-gray-300 leading-relaxed">
-            <h4 className="font-bold text-sm text-gray-900 dark:text-white">1. Merchant Agreement</h4>
+          <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 text-xs text-text-secondary leading-relaxed">
+            <h4 className="font-bold text-sm text-text-primary">1. Merchant Agreement</h4>
             <p>Merchant partners registering on the Seller Dashboard represent that all product details, stock limits, and brand names submitted to our global catalog are authentic and representable.</p>
-            <h4 className="font-bold text-sm text-gray-900 dark:text-white">2. Reward Points Terms</h4>
+            <h4 className="font-bold text-sm text-text-primary">2. Reward Points Terms</h4>
             <p>Rewards points collected are non-transferable, have no direct legal cash equivalence outside checkout discounts, and are cleared from user balances upon point use dispatches.</p>
           </div>
         </div>

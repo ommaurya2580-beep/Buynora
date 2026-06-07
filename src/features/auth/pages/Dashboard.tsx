@@ -142,7 +142,7 @@ export const Dashboard: React.FC = () => {
                 }}
                 className={`flex items-center gap-3 px-4 py-3 text-xs font-bold rounded-xl cursor-pointer transition-all ${
                   isActive 
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10' 
+                    ? 'bg-indigo-600 text-text-inverted shadow-lg shadow-indigo-600/10' 
                     : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
@@ -155,13 +155,13 @@ export const Dashboard: React.FC = () => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full glass p-6 md:p-8 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 min-h-[460px]">
+      <div className="flex-1 w-full glass p-6 md:p-8 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 min-h-[460px]">
         
         {/* TABS: PROFILE EDITOR */}
         {activeTab === 'profile' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Profile Details</h3>
+              <h3 className="text-base font-bold text-text-primary">Profile Details</h3>
               <p className="text-[11px] text-gray-400">Update your account email and personal coordinates</p>
             </div>
             
@@ -198,7 +198,7 @@ export const Dashboard: React.FC = () => {
 
               <button
                 type="submit"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl shadow cursor-pointer transition-all hover:scale-105"
+                className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2.5 px-5 rounded-xl shadow cursor-pointer transition-all hover:scale-105"
               >
                 Save Details
               </button>
@@ -210,7 +210,7 @@ export const Dashboard: React.FC = () => {
         {activeTab === 'orders' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Order History</h3>
+              <h3 className="text-base font-bold text-text-primary">Order History</h3>
               <p className="text-[11px] text-gray-400">Track current shipping status and check previous receipts</p>
             </div>
 
@@ -225,7 +225,7 @@ export const Dashboard: React.FC = () => {
                   >
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-gray-800 dark:text-white">{order.id}</span>
+                        <span className="text-xs font-bold text-text-primary">{order.id}</span>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           order.status === 'Delivered' ? 'bg-emerald-500/10 text-emerald-500' :
                           order.status === 'Cancelled' ? 'bg-rose-500/10 text-rose-500' :
@@ -234,14 +234,14 @@ export const Dashboard: React.FC = () => {
                           {order.status}
                         </span>
                       </div>
-                      <p className="text-[10px] text-gray-400">Placed on {formatDate(order.date)} | Total: <span className="font-bold text-gray-700 dark:text-gray-200">{formatCurrency(order.total)}</span></p>
+                      <p className="text-[10px] text-gray-400">Placed on {formatDate(order.date)} | Total: <span className="font-bold text-text-secondary">{formatCurrency(order.total)}</span></p>
                       <p className="text-[11px] text-gray-500">Items: {order.items.map(item => `${item.product.name} (x${item.quantity})`).join(', ')}</p>
                     </div>
 
                     <div className="flex gap-2">
                       <button
                         onClick={() => navigate(`/track/${order.id}`)}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold px-4 py-2 rounded-lg cursor-pointer"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-[11px] font-bold px-4 py-2 rounded-lg cursor-pointer"
                       >
                         Track Shipment
                       </button>
@@ -266,12 +266,12 @@ export const Dashboard: React.FC = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-base font-bold text-gray-900 dark:text-white">Shipping Addresses</h3>
+                <h3 className="text-base font-bold text-text-primary">Shipping Addresses</h3>
                 <p className="text-[11px] text-gray-400">Manage your shipping coordinates and default options</p>
               </div>
               <button
                 onClick={() => setShowAddressForm(!showAddressForm)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-4 h-4" /> Add New
               </button>
@@ -336,7 +336,7 @@ export const Dashboard: React.FC = () => {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl cursor-pointer"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2.5 px-5 rounded-xl cursor-pointer"
                   >
                     Save Address
                   </button>
@@ -360,7 +360,7 @@ export const Dashboard: React.FC = () => {
                 >
                   <div className="space-y-1 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-gray-900 dark:text-white">{addr.name}</span>
+                      <span className="font-bold text-text-primary">{addr.name}</span>
                       {addr.isDefault && (
                         <span className="bg-indigo-500/10 text-indigo-500 font-extrabold text-[9px] px-2 py-0.5 rounded-full uppercase">
                           Default
@@ -391,12 +391,12 @@ export const Dashboard: React.FC = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-base font-bold text-gray-900 dark:text-white">Credit Cards Wallet</h3>
+                <h3 className="text-base font-bold text-text-primary">Credit Cards Wallet</h3>
                 <p className="text-[11px] text-gray-400">Save and manage your checkout payment cards</p>
               </div>
               <button
                 onClick={() => setShowCardForm(!showCardForm)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-4 h-4" /> Add Card
               </button>
@@ -447,7 +447,7 @@ export const Dashboard: React.FC = () => {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl cursor-pointer"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2.5 px-5 rounded-xl cursor-pointer"
                   >
                     Save Card
                   </button>
@@ -467,7 +467,7 @@ export const Dashboard: React.FC = () => {
               {paymentMethods.map(card => (
                 <div 
                   key={card.id}
-                  className="p-5 border border-gray-150 dark:border-gray-800 rounded-2xl flex items-center justify-between bg-gradient-to-br from-slate-900 to-slate-950 text-white relative shadow-lg overflow-hidden h-36"
+                  className="p-5 border border-gray-150 dark:border-gray-800 rounded-2xl flex items-center justify-between bg-gradient-to-br from-slate-900 to-slate-950 text-text-inverted relative shadow-lg overflow-hidden h-36"
                 >
                   <div className="space-y-4 flex flex-col justify-between h-full">
                     <span className="text-[10px] uppercase font-bold tracking-widest text-indigo-400">{card.brand} Wallet</span>
@@ -475,11 +475,11 @@ export const Dashboard: React.FC = () => {
                     <div className="flex gap-8 text-[9px] uppercase text-slate-400 font-medium">
                       <div>
                         <span>Holder</span>
-                        <p className="font-bold text-white mt-0.5">{card.cardHolder}</p>
+                        <p className="font-bold text-text-inverted mt-0.5">{card.cardHolder}</p>
                       </div>
                       <div>
                         <span>Expiry</span>
-                        <p className="font-bold text-white mt-0.5">{card.expiry}</p>
+                        <p className="font-bold text-text-inverted mt-0.5">{card.expiry}</p>
                       </div>
                     </div>
                   </div>
@@ -501,7 +501,7 @@ export const Dashboard: React.FC = () => {
         {activeTab === 'wishlist' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Wishlist Catalog</h3>
+              <h3 className="text-base font-bold text-text-primary">Wishlist Catalog</h3>
               <p className="text-[11px] text-gray-400">Products saved for purchasing later</p>
             </div>
 
@@ -526,7 +526,7 @@ export const Dashboard: React.FC = () => {
                     <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
                       <button
                         onClick={() => handleMoveWishlistToCart(item)}
-                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg cursor-pointer"
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2 rounded-lg cursor-pointer"
                       >
                         Add to Cart
                       </button>
@@ -548,7 +548,7 @@ export const Dashboard: React.FC = () => {
         {activeTab === 'rewards' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Rewards Hub</h3>
+              <h3 className="text-base font-bold text-text-primary">Rewards Hub</h3>
               <p className="text-[11px] text-gray-400">Redeem points for direct checkout cash discounts</p>
             </div>
 
@@ -561,9 +561,9 @@ export const Dashboard: React.FC = () => {
                   <Gift className="w-5 h-5 text-indigo-500 animate-bounce" />
                 </div>
                 <div className="my-3 text-left">
-                  <span className="text-3xl font-black text-gray-900 dark:text-white">{user?.points || 0}</span>
+                  <span className="text-3xl font-black text-text-primary">{user?.points || 0}</span>
                   <p className="text-[10px] text-gray-400 mt-1">
-                    Equivalent to <span className="font-bold text-gray-600 dark:text-gray-200">${((user?.points || 0) * 0.1).toFixed(2)}</span> cash discount
+                    Equivalent to <span className="font-bold text-text-secondary">${((user?.points || 0) * 0.1).toFixed(2)}</span> cash discount
                   </p>
                 </div>
               </div>
@@ -571,7 +571,7 @@ export const Dashboard: React.FC = () => {
               {/* Referral Card */}
               <div className="p-6 rounded-2xl border border-purple-500/10 bg-purple-500/[0.01] flex flex-col justify-between min-h-[140px]">
                 <span className="text-xs font-bold text-purple-500 uppercase tracking-widest">Your Referral Code</span>
-                <div className="my-2.5 p-2.5 bg-gray-100 dark:bg-slate-800 rounded-xl font-mono text-center font-bold text-sm text-gray-900 dark:text-white border border-gray-200/50 dark:border-gray-700/50 select-all cursor-pointer">
+                <div className="my-2.5 p-2.5 bg-gray-100 dark:bg-slate-800 rounded-xl font-mono text-center font-bold text-sm text-text-primary border border-gray-200/50 dark:border-gray-700/50 select-all cursor-pointer">
                   {user?.referralCode}
                 </div>
                 <p className="text-[10px] text-gray-400">Share with friends to earn 150 points ($15) per signup!</p>
@@ -585,7 +585,7 @@ export const Dashboard: React.FC = () => {
         {activeTab === 'security' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Security & Login Logs</h3>
+              <h3 className="text-base font-bold text-text-primary">Security & Login Logs</h3>
               <p className="text-[11px] text-gray-400">Audit previous browser sessions and access logins</p>
             </div>
 
@@ -602,7 +602,7 @@ export const Dashboard: React.FC = () => {
                   {loginHistory.map((log, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/10">
                       <td className="p-3.5 text-gray-400">{log.date}</td>
-                      <td className="p-3.5 font-semibold text-gray-750 dark:text-gray-300">{log.device}</td>
+                      <td className="p-3.5 font-semibold text-text-secondary">{log.device}</td>
                       <td className="p-3.5 font-mono text-gray-400">{log.ip}</td>
                     </tr>
                   ))}

@@ -47,11 +47,11 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
               className="glass p-4 rounded-t-2xl shadow-2xl border border-indigo-500/20 flex items-center justify-between bg-white/95 dark:bg-slate-900/95"
             >
               <div className="flex items-center gap-3">
-                <div className="bg-indigo-500 p-2 rounded-xl text-white">
+                <div className="bg-indigo-500 p-2 rounded-xl text-text-inverted">
                   <ArrowRightLeft className="w-4 h-4" />
                 </div>
                 <div>
-                  <h5 className="text-sm font-bold text-gray-800 dark:text-white">
+                  <h5 className="text-sm font-bold text-text-primary">
                     Compare Products ({comparedProducts.length}/3)
                   </h5>
                   <p className="text-xs text-gray-500">Compare specifications side-by-side</p>
@@ -67,7 +67,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                 </button>
                 <button
                   onClick={() => setIsOpen(true)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted px-4 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   Compare Now
                 </button>
@@ -86,7 +86,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
               <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800/50 sticky top-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur z-10">
                 <div className="flex items-center gap-2">
                   <ArrowRightLeft className="w-5 h-5 text-indigo-500" />
-                  <h4 className="text-base font-bold text-gray-900 dark:text-white">Product Comparison Matrix</h4>
+                  <h4 className="text-base font-bold text-text-primary">Product Comparison Matrix</h4>
                 </div>
                 <div className="flex items-center gap-4">
                   <button onClick={onClear} className="text-xs text-gray-400 hover:text-rose-500 cursor-pointer">
@@ -106,7 +106,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                 <div className={`grid grid-cols-1 md:grid-cols-${comparedProducts.length + 1} gap-6`}>
                   
                   {/* Labels Column (only visible on desktop md+) */}
-                  <div className="hidden md:flex flex-col gap-6 font-bold text-xs uppercase tracking-wider text-gray-400 dark:text-gray-500 pt-[240px]">
+                  <div className="hidden md:flex flex-col gap-6 font-bold text-xs uppercase tracking-wider text-text-secondary pt-[240px]">
                     <div className="py-2 border-b border-gray-100 dark:border-gray-800/50 h-10 flex items-center">Brand</div>
                     <div className="py-2 border-b border-gray-100 dark:border-gray-800/50 h-10 flex items-center">Price</div>
                     <div className="py-2 border-b border-gray-100 dark:border-gray-800/50 h-10 flex items-center">Rating</div>
@@ -123,7 +123,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                       {/* Close button on column */}
                       <button
                         onClick={() => onRemove(product.id)}
-                        className="absolute top-0 right-0 p-1 bg-gray-100 hover:bg-rose-500 hover:text-white dark:bg-slate-800 dark:hover:bg-rose-500 text-gray-400 rounded-full cursor-pointer transition-colors"
+                        className="absolute top-0 right-0 p-1 bg-gray-100 hover:bg-rose-500 hover:text-text-inverted dark:bg-slate-800 dark:hover:bg-rose-500 text-gray-400 rounded-full cursor-pointer transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -136,12 +136,12 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                           className="w-24 h-24 object-cover rounded-xl"
                         />
                         <div className="mt-2">
-                          <h5 className="font-bold text-sm text-gray-900 dark:text-white line-clamp-1">{product.name}</h5>
+                          <h5 className="font-bold text-sm text-text-primary line-clamp-1">{product.name}</h5>
                           <span className="text-xs text-indigo-500 font-semibold">{product.brand}</span>
                         </div>
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="mt-3 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-4 rounded-xl cursor-pointer w-full"
+                          className="mt-3 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2 px-4 rounded-xl cursor-pointer w-full"
                         >
                           <ShoppingCart className="w-3.5 h-3.5" /> Add to Cart
                         </button>
@@ -156,7 +156,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                       {/* Price */}
                       <div className="py-2 border-b border-gray-100 dark:border-gray-800/50 h-10 flex items-center justify-between md:justify-center">
                         <span className="md:hidden text-xs font-bold text-gray-400 uppercase">Price:</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(product.price)}</span>
+                        <span className="text-sm font-bold text-text-primary">{formatCurrency(product.price)}</span>
                       </div>
 
                       {/* Rating */}
@@ -186,7 +186,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                         return (
                           <div key={key} className="py-2 border-b border-gray-100 dark:border-gray-800/50 h-12 flex flex-col justify-center md:items-center text-left md:text-center">
                             <span className="md:hidden text-xs font-bold text-gray-400 uppercase mb-0.5">{key}:</span>
-                            <span className="text-xs text-gray-700 dark:text-gray-300 font-medium line-clamp-2">{val}</span>
+                            <span className="text-xs text-text-secondary font-medium line-clamp-2">{val}</span>
                           </div>
                         );
                       })}

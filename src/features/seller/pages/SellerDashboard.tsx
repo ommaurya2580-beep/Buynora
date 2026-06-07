@@ -177,7 +177,7 @@ export const SellerDashboard: React.FC = () => {
             onClick={() => setActiveTab(tab as 'analytics' | 'products' | 'orders')}
             className={`text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer capitalize ${
               activeTab === tab 
-                ? 'bg-indigo-600 text-white' 
+                ? 'bg-indigo-600 text-text-inverted' 
                 : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
             }`}
           >
@@ -195,10 +195,10 @@ export const SellerDashboard: React.FC = () => {
             <>
               {/* Top KPI Metrics Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Sales</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {formatCurrency(analyticsData.topMetrics.totalRevenue)}
                     </h3>
                   </div>
@@ -207,10 +207,10 @@ export const SellerDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Products Sold</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {analyticsData.topMetrics.totalSales} units
                     </h3>
                   </div>
@@ -219,10 +219,10 @@ export const SellerDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Average Order</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {formatCurrency(analyticsData.topMetrics.averageOrderValue)}
                     </h3>
                   </div>
@@ -231,10 +231,10 @@ export const SellerDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Active Inventory</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {analyticsData.topMetrics.totalProducts} listings
                     </h3>
                   </div>
@@ -245,8 +245,8 @@ export const SellerDashboard: React.FC = () => {
               </div>
 
               {/* Sales Chart using Recharts */}
-              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40">
-                <h4 className="text-sm font-bold text-gray-800 dark:text-white mb-6">Revenue and Sales Performance</h4>
+              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40">
+                <h4 className="text-sm font-bold text-text-primary mb-6">Revenue and Sales Performance</h4>
                 <div className="h-64 w-full text-xs">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={analyticsData.revenueData}>
@@ -271,12 +271,12 @@ export const SellerDashboard: React.FC = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Active Product Listings</h3>
+              <h3 className="text-base font-bold text-text-primary">Active Product Listings</h3>
               <p className="text-[11px] text-gray-400">Total active listings in global catalog: {catalog.length}</p>
             </div>
             <button
               onClick={openAddModal}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95"
+              className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95"
             >
               <Plus className="w-4 h-4" /> Add Product
             </button>
@@ -301,12 +301,12 @@ export const SellerDashboard: React.FC = () => {
                       <td className="p-3.5">
                         <img src={prod.images[0]} alt="thumb" className="w-10 h-10 object-cover rounded-lg" />
                       </td>
-                      <td className="p-3.5 font-bold text-gray-800 dark:text-white">
+                      <td className="p-3.5 font-bold text-text-primary">
                         {prod.name}
                         <span className="block text-[10px] text-gray-400 font-medium">{prod.brand}</span>
                       </td>
                       <td className="p-3.5 text-gray-500">{prod.category}</td>
-                      <td className="p-3.5 font-bold text-gray-900 dark:text-white">{formatCurrency(prod.price)}</td>
+                      <td className="p-3.5 font-bold text-text-primary">{formatCurrency(prod.price)}</td>
                       <td className="p-3.5">
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
                           prod.stock === 0 ? 'bg-rose-500/15 text-rose-500' :
@@ -347,7 +347,7 @@ export const SellerDashboard: React.FC = () => {
       {activeTab === 'orders' && (
         <div className="space-y-6">
           <div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">Merchant Order Logs</h3>
+            <h3 className="text-base font-bold text-text-primary">Merchant Order Logs</h3>
             <p className="text-[11px] text-gray-400">View customer purchases containing your listed items</p>
           </div>
 
@@ -368,7 +368,7 @@ export const SellerDashboard: React.FC = () => {
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                   {analyticsData?.recentOrders.map((ord: { id: string; customer: string; date: string; amount: number; status: string }) => (
                     <tr key={ord.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/10">
-                      <td className="p-3.5 font-bold font-mono text-gray-800 dark:text-white">{ord.id}</td>
+                      <td className="p-3.5 font-bold font-mono text-text-primary">{ord.id}</td>
                       <td className="p-3.5">{ord.customer}</td>
                       <td className="p-3.5 text-gray-400">{ord.date}</td>
                       <td className="p-3.5 font-bold">{formatCurrency(ord.amount)}</td>
@@ -513,7 +513,7 @@ export const SellerDashboard: React.FC = () => {
             </button>
             <button
               type="submit"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl cursor-pointer"
+              className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold px-5 py-2.5 rounded-xl cursor-pointer"
             >
               {editingProduct ? "Save Changes" : "Create Listing"}
             </button>

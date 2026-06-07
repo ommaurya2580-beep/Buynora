@@ -34,9 +34,9 @@ export const Checkout: React.FC = () => {
   if (cartItems.length === 0 && step !== 4) {
     return (
       <div className="py-20 text-center space-y-4">
-        <ShoppingBag className="w-12 h-12 text-gray-300 dark:text-gray-700 mx-auto" />
-        <h3 className="font-bold text-gray-800 dark:text-white">Checkout is empty</h3>
-        <button onClick={() => navigate('/products')} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer">
+        <ShoppingBag className="w-12 h-12 text-text-secondary mx-auto" />
+        <h3 className="font-bold text-text-primary">Checkout is empty</h3>
+        <button onClick={() => navigate('/products')} className="bg-indigo-600 text-text-inverted px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer">
           Go To Shop
         </button>
       </div>
@@ -124,13 +124,13 @@ export const Checkout: React.FC = () => {
       
       {/* Page Title */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white">Checkout</h1>
+        <h1 className="text-2xl sm:text-3xl font-black text-text-primary">Checkout</h1>
         <p className="text-xs text-gray-500">Secure 256-bit SSL encrypted checkout</p>
       </div>
 
       {/* Progress bar steps */}
       {step !== 4 && (
-        <div className="flex items-center justify-between bg-white dark:bg-slate-900 border border-gray-200/50 dark:border-gray-800/50 p-4 rounded-2xl glass shadow-sm text-xs font-bold">
+        <div className="flex items-center justify-between bg-bg-surface border border-gray-200/50 dark:border-gray-800/50 p-4 rounded-2xl glass shadow-sm text-xs font-bold">
           <button onClick={() => setStep(1)} className={`flex items-center gap-1.5 ${step >= 1 ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400'}`}>
             <span className="w-5 h-5 rounded-full bg-indigo-500/10 flex items-center justify-center text-[10px]">1</span>
             Shipping Address
@@ -157,8 +157,8 @@ export const Checkout: React.FC = () => {
             
             {/* Step 1: Address Builder */}
             {step === 1 && (
-              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-5 bg-white dark:bg-slate-900/40">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-5 bg-bg-surface/40">
+                <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-indigo-500" /> Select Shipping Address
                 </h3>
                 
@@ -181,7 +181,7 @@ export const Checkout: React.FC = () => {
                         className="mt-1 text-indigo-600 border-gray-300 focus:ring-indigo-500"
                       />
                       <div className="text-xs">
-                        <span className="font-bold text-gray-900 dark:text-white">{addr.name}</span>
+                        <span className="font-bold text-text-primary">{addr.name}</span>
                         <p className="text-gray-500 mt-1">{addr.line1}, {addr.line2 ? `${addr.line2}, ` : ''}{addr.city}, {addr.state} - {addr.zip}</p>
                         <span className="text-gray-400 block mt-1">Phone: {addr.phone}</span>
                       </div>
@@ -196,7 +196,7 @@ export const Checkout: React.FC = () => {
                   <button
                     onClick={() => setStep(2)}
                     disabled={!selectedAddressId}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer shadow flex items-center gap-1.5"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer shadow flex items-center gap-1.5"
                   >
                     Next Step <ArrowRight className="w-4 h-4" />
                   </button>
@@ -206,8 +206,8 @@ export const Checkout: React.FC = () => {
 
             {/* Step 2: Shipping Options */}
             {step === 2 && (
-              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-5 bg-white dark:bg-slate-900/40">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-5 bg-bg-surface/40">
+                <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
                   <Truck className="w-5 h-5 text-indigo-500" /> Select Delivery Option
                 </h3>
                 
@@ -225,11 +225,11 @@ export const Checkout: React.FC = () => {
                         className="text-indigo-600 focus:ring-indigo-500"
                       />
                       <div className="text-xs text-left">
-                        <span className="font-bold block text-gray-900 dark:text-white">Standard Delivery (3-5 business days)</span>
+                        <span className="font-bold block text-text-primary">Standard Delivery (3-5 business days)</span>
                         <span className="text-gray-500">Free on orders above $150, otherwise $9.99</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white">
+                    <span className="text-xs font-bold text-text-primary">
                       {baseShippingCost === 0 ? 'FREE' : formatCurrency(9.99)}
                     </span>
                   </label>
@@ -247,11 +247,11 @@ export const Checkout: React.FC = () => {
                         className="text-indigo-600 focus:ring-indigo-500"
                       />
                       <div className="text-xs text-left">
-                        <span className="font-bold block text-gray-900 dark:text-white">Express Delivery (Next Day Air)</span>
+                        <span className="font-bold block text-text-primary">Express Delivery (Next Day Air)</span>
                         <span className="text-gray-500">Expedited package handling and logistics tracking</span>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white">
+                    <span className="text-xs font-bold text-text-primary">
                       {formatCurrency(baseShippingCost + 15)}
                     </span>
                   </label>
@@ -263,7 +263,7 @@ export const Checkout: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setStep(3)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer shadow flex items-center gap-1.5"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer shadow flex items-center gap-1.5"
                   >
                     Next Step <ArrowRight className="w-4 h-4" />
                   </button>
@@ -273,8 +273,8 @@ export const Checkout: React.FC = () => {
 
             {/* Step 3: Payment Card selection */}
             {step === 3 && (
-              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-5 bg-white dark:bg-slate-900/40">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 space-y-5 bg-bg-surface/40">
+                <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-indigo-500" /> Select Payment Wallet
                 </h3>
                 
@@ -296,13 +296,13 @@ export const Checkout: React.FC = () => {
                           className="text-indigo-600 focus:ring-indigo-500"
                         />
                         <div className="text-xs text-left">
-                          <span className="font-bold block text-gray-900 dark:text-white">
+                          <span className="font-bold block text-text-primary">
                             {card.brand} ending in {card.cardNumber.slice(-4)}
                           </span>
                           <span className="text-gray-400">Expires {card.expiry} | Holder: {card.cardHolder}</span>
                         </div>
                       </div>
-                      <span className="text-xl font-bold text-gray-300 dark:text-gray-700">💳</span>
+                      <span className="text-xl font-bold text-text-secondary">💳</span>
                     </label>
                   ))}
                 </div>
@@ -314,7 +314,7 @@ export const Checkout: React.FC = () => {
                   <button
                     onClick={handlePlaceOrder}
                     disabled={!selectedCardId}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-6 py-3 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/15"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs px-6 py-3 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/15"
                   >
                     Confirm & Place Order
                   </button>
@@ -325,21 +325,21 @@ export const Checkout: React.FC = () => {
           </div>
 
           {/* Right Side: Simple Order Summary Breakdown */}
-          <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 bg-white dark:bg-slate-900/40">
+          <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 bg-bg-surface/40">
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Order Totals</h4>
             
             <div className="divide-y divide-gray-100 dark:divide-gray-800/50 max-h-[160px] overflow-y-auto pr-1">
               {cartItems.map((item, idx) => (
                 <div key={idx} className="flex justify-between text-xs py-2">
                   <span className="text-gray-500 truncate max-w-[150px]">{item.product.name}</span>
-                  <span className="font-bold text-gray-900 dark:text-white">
+                  <span className="font-bold text-text-primary">
                     {item.quantity} × {formatCurrency(item.product.price)}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="space-y-2 text-xs pt-3 border-t border-gray-150 dark:border-gray-800 text-gray-600 dark:text-gray-400">
+            <div className="space-y-2 text-xs pt-3 border-t border-gray-150 dark:border-gray-800 text-text-secondary">
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span>{formatCurrency(subtotal)}</span>
@@ -361,7 +361,7 @@ export const Checkout: React.FC = () => {
             </div>
 
             <div className="border-t border-gray-150 dark:border-gray-800 pt-3 flex justify-between items-baseline">
-              <span className="text-xs font-bold text-gray-800 dark:text-white">Grand Total</span>
+              <span className="text-xs font-bold text-text-primary">Grand Total</span>
               <span className="text-lg font-black text-indigo-600 dark:text-indigo-400">
                 {formatCurrency(finalOrderTotal)}
               </span>
@@ -381,16 +381,16 @@ export const Checkout: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-black text-gray-900 dark:text-white">Order Confirmed!</h2>
+            <h2 className="text-2xl font-black text-text-primary">Order Confirmed!</h2>
             <p className="text-xs text-gray-500">
-              Thank you for shopping at Buynora. Your order <span className="font-extrabold font-mono text-gray-800 dark:text-gray-100">{placedOrderId}</span> has been created.
+              Thank you for shopping at Buynora. Your order <span className="font-extrabold font-mono text-text-secondary">{placedOrderId}</span> has been created.
             </p>
           </div>
 
-          <div className="p-5 bg-white dark:bg-slate-900/60 border border-gray-150 dark:border-gray-800 rounded-2xl text-left space-y-3.5 text-xs">
+          <div className="p-5 bg-bg-surface/60 border border-gray-150 dark:border-gray-800 rounded-2xl text-left space-y-3.5 text-xs">
             <div className="flex justify-between">
               <span className="text-gray-400">Total Paid:</span>
-              <span className="font-black text-gray-900 dark:text-white">{formatCurrency(finalOrderTotal)}</span>
+              <span className="font-black text-text-primary">{formatCurrency(finalOrderTotal)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Est. Arrival:</span>
@@ -400,20 +400,20 @@ export const Checkout: React.FC = () => {
             </div>
             <div className="flex justify-between border-t border-gray-100 dark:border-gray-800 pt-2.5">
               <span className="text-gray-400">Tracking Number:</span>
-              <span className="font-mono font-bold text-gray-700 dark:text-gray-300">NORA-TRK-{(Math.floor(10000 + Math.random() * 90000))}</span>
+              <span className="font-mono font-bold text-text-secondary">NORA-TRK-{(Math.floor(10000 + Math.random() * 90000))}</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <button
               onClick={() => navigate(`/track/${placedOrderId}`)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 px-6 rounded-xl cursor-pointer shadow transition-all hover:scale-105"
+              className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 px-6 rounded-xl cursor-pointer shadow transition-all hover:scale-105"
             >
               Track Package Live
             </button>
             <button
               onClick={() => navigate('/products')}
-              className="bg-gray-100 hover:bg-gray-250 dark:bg-slate-800 text-gray-700 dark:text-gray-200 font-bold text-xs py-3 px-6 rounded-xl cursor-pointer transition-all"
+              className="bg-gray-100 hover:bg-gray-250 dark:bg-slate-800 text-text-secondary font-bold text-xs py-3 px-6 rounded-xl cursor-pointer transition-all"
             >
               Continue Shopping
             </button>

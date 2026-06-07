@@ -42,7 +42,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
     <aside className="hidden lg:block w-64 flex-shrink-0 space-y-6">
       <div className="glass rounded-2xl p-5 border border-gray-200/50 dark:border-gray-800/50 bg-white/60 dark:bg-slate-900/60 text-left space-y-6">
         <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-800 pb-3">
-          <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h4 className="text-sm font-bold text-text-primary flex items-center gap-2">
             <SlidersHorizontal className="w-4 h-4 text-indigo-500" /> Filters
           </h4>
           <button
@@ -55,7 +55,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
 
         {/* Categories */}
         <div className="space-y-2.5">
-          <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Categories</h5>
+          <h5 className="text-xs font-bold text-text-secondary uppercase tracking-wider">Categories</h5>
           <div className="flex flex-col gap-1.5">
             {['All', ...categories.map(c => c.name)].map(catName => (
               <button
@@ -63,8 +63,8 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                 onClick={() => setCategory(catName)}
                 className={`text-left text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors cursor-pointer w-full ${
                   category === catName 
-                    ? 'bg-indigo-500 text-white' 
-                    : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-400'
+                    ? 'bg-indigo-500 text-text-inverted' 
+                    : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-text-secondary'
                 }`}
               >
                 {catName}
@@ -75,7 +75,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
 
         {/* Brands */}
         <div className="space-y-2.5">
-          <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Brands</h5>
+          <h5 className="text-xs font-bold text-text-secondary uppercase tracking-wider">Brands</h5>
           <div className="flex flex-col gap-1.5">
             {uniqueBrands.map(brandName => (
               <button
@@ -83,8 +83,8 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                 onClick={() => setBrand(brandName)}
                 className={`text-left text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors cursor-pointer w-full ${
                   brand === brandName 
-                    ? 'bg-indigo-500 text-white' 
-                    : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-400'
+                    ? 'bg-indigo-500 text-text-inverted' 
+                    : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-text-secondary'
                 }`}
               >
                 {brandName}
@@ -95,7 +95,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
 
         {/* Price Range Slider */}
         <div className="space-y-2.5">
-          <div className="flex justify-between text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">
+          <div className="flex justify-between text-xs font-bold text-text-secondary uppercase tracking-wider">
             <span>Price Range</span>
             <span className="text-indigo-500 font-black">{formatCurrency(maxPrice)}</span>
           </div>
@@ -116,7 +116,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
 
         {/* Ratings Filter */}
         <div className="space-y-2.5">
-          <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Min Rating</h5>
+          <h5 className="text-xs font-bold text-text-secondary uppercase tracking-wider">Min Rating</h5>
           <div className="flex gap-1">
             {[0, 3, 4, 4.5].map(rating => (
               <button
@@ -124,8 +124,8 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                 onClick={() => setMinRating(rating)}
                 className={`text-xs px-2.5 py-1.5 rounded-lg font-bold border transition-colors cursor-pointer ${
                   minRating === rating 
-                    ? 'bg-indigo-500 text-white border-indigo-500' 
-                    : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400'
+                    ? 'bg-indigo-500 text-text-inverted border-indigo-500' 
+                    : 'bg-bg-surface border-gray-200 dark:border-gray-800 text-text-secondary'
                 }`}
               >
                 {rating === 0 ? 'Any' : `${rating}★`}
@@ -136,7 +136,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
 
         {/* Toggle Filters */}
         <div className="space-y-2.5 pt-3 border-t border-gray-150 dark:border-gray-800">
-          <label className="flex items-center gap-2.5 text-xs font-semibold text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label className="flex items-center gap-2.5 text-xs font-semibold text-text-secondary cursor-pointer">
             <input
               type="checkbox"
               checked={discountOnly}
@@ -145,7 +145,7 @@ export const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
             />
             Discounted Only
           </label>
-          <label className="flex items-center gap-2.5 text-xs font-semibold text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label className="flex items-center gap-2.5 text-xs font-semibold text-text-secondary cursor-pointer">
             <input
               type="checkbox"
               checked={inStockOnly}

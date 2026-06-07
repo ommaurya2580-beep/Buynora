@@ -88,7 +88,7 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setActiveTab(tab as TabType)}
             className={`text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer capitalize ${
               activeTab === tab 
-                ? 'bg-purple-600 text-white shadow-md' 
+                ? 'bg-purple-600 text-text-inverted shadow-md' 
                 : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
             }`}
           >
@@ -106,10 +106,10 @@ export const AdminDashboard: React.FC = () => {
             <>
               {/* KPI metrics */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Overall Revenue</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {formatCurrency(adminStats.totalRevenue)}
                     </h3>
                   </div>
@@ -118,10 +118,10 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Customers</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {usersList.length} Accounts
                     </h3>
                   </div>
@@ -130,10 +130,10 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Merchants</span>
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mt-1">
+                    <h3 className="text-xl font-black text-text-primary mt-1">
                       {sellersList.length} Registered
                     </h3>
                   </div>
@@ -142,7 +142,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-left flex justify-between items-center">
+                <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-left flex justify-between items-center">
                   <div>
                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">System Load</span>
                     <h3 className="text-xl font-black text-emerald-500 mt-1">
@@ -158,8 +158,8 @@ export const AdminDashboard: React.FC = () => {
               {/* Chart Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Revenue trends chart */}
-                <div className="lg:col-span-2 glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40">
-                  <h4 className="text-sm font-bold text-gray-800 dark:text-white mb-6 font-sans">Monthly Revenue Trends</h4>
+                <div className="lg:col-span-2 glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40">
+                  <h4 className="text-sm font-bold text-text-primary mb-6 font-sans">Monthly Revenue Trends</h4>
                   <div className="h-64 w-full text-xs">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={adminStats.monthlyEarnings}>
@@ -174,8 +174,8 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Category Pie Chart */}
-                <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 flex flex-col justify-between">
-                  <h4 className="text-sm font-bold text-gray-800 dark:text-white mb-4">Category Share</h4>
+                <div className="glass p-6 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 flex flex-col justify-between">
+                  <h4 className="text-sm font-bold text-text-primary mb-4">Category Share</h4>
                   <div className="h-44 w-full text-xs relative flex items-center justify-center">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -207,7 +207,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* System Alerts */}
-              <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 text-xs space-y-3">
+              <div className="glass p-5 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-bg-surface/40 text-xs space-y-3">
                 <h4 className="font-bold uppercase tracking-wider text-gray-400 text-[10px] flex items-center gap-1">
                   <AlertTriangle className="w-4.5 h-4.5 text-amber-500 animate-pulse" /> Active System Notices
                 </h4>
@@ -232,7 +232,7 @@ export const AdminDashboard: React.FC = () => {
       {activeTab === 'users' && (
         <div className="space-y-6">
           <div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">User Accounts Database</h3>
+            <h3 className="text-base font-bold text-text-primary">User Accounts Database</h3>
             <p className="text-[11px] text-gray-400">Total registered user accounts: {usersList.length}</p>
           </div>
 
@@ -251,10 +251,10 @@ export const AdminDashboard: React.FC = () => {
                 {usersList.map(u => (
                   <tr key={u.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/10">
                     <td className="p-3.5">
-                      <span className="font-bold text-gray-800 dark:text-white">{u.name}</span>
+                      <span className="font-bold text-text-primary">{u.name}</span>
                       <p className="text-[10px] text-gray-400 mt-0.5">{u.email}</p>
                     </td>
-                    <td className="p-3.5 font-semibold text-gray-700 dark:text-gray-300">{u.role}</td>
+                    <td className="p-3.5 font-semibold text-text-secondary">{u.role}</td>
                     <td className="p-3.5 text-gray-400">{u.joiningDate}</td>
                     <td className="p-3.5">
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
@@ -296,7 +296,7 @@ export const AdminDashboard: React.FC = () => {
       {activeTab === 'sellers' && (
         <div className="space-y-6">
           <div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">Merchant Partners</h3>
+            <h3 className="text-base font-bold text-text-primary">Merchant Partners</h3>
             <p className="text-[11px] text-gray-400">Approve pending applications or modify statuses</p>
           </div>
 
@@ -314,7 +314,7 @@ export const AdminDashboard: React.FC = () => {
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {sellersList.map(s => (
                   <tr key={s.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/10">
-                    <td className="p-3.5 font-bold text-gray-850 dark:text-white">{s.name}</td>
+                    <td className="p-3.5 font-bold text-text-primary">{s.name}</td>
                     <td className="p-3.5 text-gray-500">{s.email}</td>
                     <td className="p-3.5 text-gray-400">{s.joiningDate}</td>
                     <td className="p-3.5">
@@ -340,7 +340,7 @@ export const AdminDashboard: React.FC = () => {
                                 }
                               });
                             }}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-text-inverted text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer"
                           >
                             Approve
                           </button>
@@ -378,7 +378,7 @@ export const AdminDashboard: React.FC = () => {
       {activeTab === 'categories' && (
         <div className="space-y-6">
           <div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">Global Shop Categories</h3>
+            <h3 className="text-base font-bold text-text-primary">Global Shop Categories</h3>
             <p className="text-[11px] text-gray-400">Inspect categories and counts in Buynora Catalog</p>
           </div>
 
@@ -391,7 +391,7 @@ export const AdminDashboard: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <img src={cat.image} alt={cat.name} className="w-10 h-10 object-cover rounded-xl" />
                   <div className="text-left">
-                    <h5 className="font-bold text-sm text-gray-900 dark:text-white">{cat.name}</h5>
+                    <h5 className="font-bold text-sm text-text-primary">{cat.name}</h5>
                     <span className="text-[10px] text-gray-400">{cat.itemCount} active products</span>
                   </div>
                 </div>
@@ -413,7 +413,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Active Promotion Coupons</h3>
+              <h3 className="text-base font-bold text-text-primary">Active Promotion Coupons</h3>
               <p className="text-[11px] text-gray-400">Total active promotional campaigns: {couponsList.length}</p>
             </div>
           </div>
@@ -473,7 +473,7 @@ export const AdminDashboard: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs py-3 rounded-xl shadow cursor-pointer transition-all"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-text-inverted font-bold text-xs py-3 rounded-xl shadow cursor-pointer transition-all"
               >
                 Create Coupon
               </button>
@@ -490,7 +490,7 @@ export const AdminDashboard: React.FC = () => {
                     <span className="font-mono font-bold text-sm bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-md">
                       {c.code}
                     </span>
-                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-200 mt-1">{c.description}</p>
+                    <p className="text-xs font-semibold text-text-secondary mt-1">{c.description}</p>
                     <span className="text-[10px] text-gray-400 block">Min order: {formatCurrency(c.minOrderValue)}</span>
                   </div>
                   

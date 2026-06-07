@@ -179,10 +179,10 @@ export const ProductListing: React.FC = () => {
       {showFiltersMobile && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowFiltersMobile(false)} />
-          <div className="fixed top-0 bottom-0 left-0 w-80 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between overflow-y-auto">
+          <div className="fixed top-0 bottom-0 left-0 w-80 bg-bg-surface p-6 flex flex-col justify-between overflow-y-auto">
             <div className="space-y-6 text-left">
               <div className="flex items-center justify-between border-b border-gray-150 pb-3">
-                <h4 className="text-sm font-bold text-gray-900 dark:text-white">Filters</h4>
+                <h4 className="text-sm font-bold text-text-primary">Filters</h4>
                 <button onClick={() => setShowFiltersMobile(false)}>
                   <X className="w-5 h-5 text-gray-500" />
                 </button>
@@ -198,7 +198,7 @@ export const ProductListing: React.FC = () => {
                       onClick={() => setCategory(catName)}
                       className={`text-xs px-3 py-1.5 rounded-lg font-bold border transition-colors ${
                         category === catName 
-                          ? 'bg-indigo-500 text-white' 
+                          ? 'bg-indigo-500 text-text-inverted' 
                           : 'bg-gray-150 text-gray-600'
                       }`}
                     >
@@ -218,7 +218,7 @@ export const ProductListing: React.FC = () => {
                       onClick={() => setBrand(brandName)}
                       className={`text-xs px-3 py-1.5 rounded-lg font-bold border transition-colors ${
                         brand === brandName 
-                          ? 'bg-indigo-500 text-white' 
+                          ? 'bg-indigo-500 text-text-inverted' 
                           : 'bg-gray-150 text-gray-600'
                       }`}
                     >
@@ -246,7 +246,7 @@ export const ProductListing: React.FC = () => {
 
             <button
               onClick={() => setShowFiltersMobile(false)}
-              className="w-full bg-indigo-600 text-white text-xs font-bold py-3 rounded-xl mt-6 cursor-pointer"
+              className="w-full bg-indigo-600 text-text-inverted text-xs font-bold py-3 rounded-xl mt-6 cursor-pointer"
             >
               Apply Filters
             </button>

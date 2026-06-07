@@ -38,12 +38,12 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
 
       {/* Profile Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-56 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900 overflow-hidden z-50">
+        <div className="absolute right-0 mt-3 w-56 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface overflow-hidden z-50">
           <div className="p-4 border-b border-gray-100 dark:border-gray-800/50">
-            <h5 className="text-xs font-bold text-gray-900 dark:text-white text-left">
+            <h5 className="text-xs font-bold text-text-primary text-left">
               {isAuthenticated ? user?.name : "Welcome Guest"}
             </h5>
-            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 truncate text-left">
+            <p className="text-[10px] text-text-secondary mt-0.5 truncate text-left">
               {isAuthenticated ? user?.email : "Sign in to manage orders"}
             </p>
           </div>
@@ -54,7 +54,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
                 <Link
                   to="/dashboard"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-left"
+                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
                 >
                   <User className="w-4 h-4 text-gray-400" />
                   User Dashboard
@@ -63,7 +63,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
                 <Link
                   to="/seller"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-left"
+                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
                 >
                   <Briefcase className="w-4 h-4 text-gray-400" />
                   Seller Dashboard
@@ -72,7 +72,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
                 <Link
                   to="/admin"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-left"
+                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
                 >
                   <Shield className="w-4 h-4 text-gray-400" />
                   Admin Dashboard
@@ -93,7 +93,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
               <Link
                 to="/auth/login"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2.5 text-xs font-bold px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-center justify-center transition-all"
+                className="flex items-center gap-2.5 text-xs font-bold px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-text-inverted rounded-lg text-center justify-center transition-all"
               >
                 Sign In / Register
               </Link>

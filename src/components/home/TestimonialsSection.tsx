@@ -6,7 +6,7 @@ export const TestimonialsSection: React.FC = () => {
   return (
     <section className="space-y-6">
       <div className="text-center space-y-1">
-        <h2 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white">Customer Reviews</h2>
+        <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary">Customer Reviews</h2>
         <p className="text-xs text-gray-500">Read verified reviews from our client base</p>
       </div>
 
@@ -22,7 +22,7 @@ export const TestimonialsSection: React.FC = () => {
                   <Star key={i} className="w-3.5 h-3.5 fill-current" />
                 ))}
               </div>
-              <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed italic">
+              <p className="text-[11px] text-text-secondary leading-relaxed italic">
                 "{t.comment}"
               </p>
             </div>
@@ -34,7 +34,7 @@ export const TestimonialsSection: React.FC = () => {
                 className="w-9 h-9 object-cover rounded-full"
               />
               <div>
-                <h5 className="font-bold text-xs text-gray-900 dark:text-white">{t.name}</h5>
+                <h5 className="font-bold text-xs text-text-primary">{t.name}</h5>
                 <span className="text-[10px] text-gray-400">{t.role}</span>
               </div>
             </div>

@@ -19,7 +19,7 @@ export const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
+        <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2">
           <RotateCcw className="w-5 h-5 text-gray-500" /> Recently Viewed
         </h2>
         <p className="text-xs text-gray-500">Pick up right where you left off</p>

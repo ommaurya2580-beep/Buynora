@@ -17,7 +17,7 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-xl md:text-2xl font-black tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
+        <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-indigo-500 animate-pulse" /> AI Recommended for You
         </h2>
         <p className="text-xs text-gray-500">Custom recommendations based on search trends and profiles</p>

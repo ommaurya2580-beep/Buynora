@@ -44,7 +44,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
     <div className="text-left space-y-6">
       <div className="space-y-2">
         <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{product.brand}</span>
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white leading-tight mt-1">{product.name}</h1>
+        <h1 className="text-2xl sm:text-3xl font-black text-text-primary leading-tight mt-1">{product.name}</h1>
         
         <div className="flex items-center gap-3">
           <div className="flex items-center text-amber-400 gap-0.5">
@@ -57,7 +57,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 
       <div className="border-t border-b border-gray-150 dark:border-gray-800 py-4 flex items-center justify-between">
         <div className="space-y-1">
-          <span className="text-3xl font-black text-gray-900 dark:text-white">
+          <span className="text-3xl font-black text-text-primary">
             {formatCurrency(product.price)}
           </span>
           {product.discountPercentage > 0 && (
@@ -85,7 +85,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
       </div>
 
       {/* Description */}
-      <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+      <p className="text-xs text-text-secondary leading-relaxed">
         {product.longDescription || product.description}
       </p>
 
@@ -93,13 +93,13 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button
           onClick={handleAddToCart}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/10 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
+          className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold py-3.5 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/10 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
         >
           <ShoppingCart className="w-4 h-4" /> Add to Cart
         </button>
         <button
           onClick={handleBuyNow}
-          className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold py-3.5 rounded-xl cursor-pointer shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center"
+          className="bg-slate-900 dark:bg-white text-text-inverted dark:text-slate-900 font-bold py-3.5 rounded-xl cursor-pointer shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center"
         >
           Buy Now
         </button>

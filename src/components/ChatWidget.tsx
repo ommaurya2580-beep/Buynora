@@ -84,7 +84,7 @@ export const ChatWidget: React.FC = () => {
             className="w-[350px] sm:w-[380px] h-[500px] rounded-3xl glass shadow-2xl border border-white/10 dark:border-white/5 flex flex-col mb-4 overflow-hidden bg-white/95 dark:bg-slate-900/95"
           >
             {/* Header */}
-            <div className="bg-indigo-600 p-4 text-white flex items-center justify-between shadow-md">
+            <div className="bg-indigo-600 p-4 text-text-inverted flex items-center justify-between shadow-md">
               <div className="flex items-center gap-2.5">
                 <div className="p-1.5 bg-white/15 rounded-xl">
                   <Bot className="w-5 h-5 text-indigo-100" />
@@ -99,7 +99,7 @@ export const ChatWidget: React.FC = () => {
               </div>
               <button 
                 onClick={() => setIsOpen(false)} 
-                className="text-white/80 hover:text-white hover:bg-white/10 p-1.5 rounded-full cursor-pointer transition-colors"
+                className="text-text-inverted/80 hover:text-text-inverted hover:bg-white/10 p-1.5 rounded-full cursor-pointer transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -123,8 +123,8 @@ export const ChatWidget: React.FC = () => {
                   <div className="flex flex-col max-w-[70%]">
                     <div className={`p-3 rounded-2xl text-xs font-medium leading-relaxed ${
                       msg.sender === 'user' 
-                        ? 'bg-indigo-600 text-white rounded-br-none' 
-                        : 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 rounded-bl-none'
+                        ? 'bg-indigo-600 text-text-inverted rounded-br-none' 
+                        : 'bg-gray-100 dark:bg-slate-800 text-text-secondary rounded-bl-none'
                     }`}>
                       {msg.text}
                     </div>
@@ -159,11 +159,11 @@ export const ChatWidget: React.FC = () => {
                 value={inputMessage}
                 onChange={e => setInputMessage(e.target.value)}
                 placeholder="Ask me anything..."
-                className="flex-1 bg-gray-100 dark:bg-slate-800 text-xs text-gray-900 dark:text-white rounded-xl px-4 py-2.5 border border-transparent focus:border-indigo-500 outline-none transition-colors"
+                className="flex-1 bg-gray-100 dark:bg-slate-800 text-xs text-text-primary rounded-xl px-4 py-2.5 border border-transparent focus:border-indigo-500 outline-none transition-colors"
               />
               <button
                 type="submit"
-                className="p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 cursor-pointer shadow transition-all hover:scale-105 active:scale-95"
+                className="p-2.5 bg-indigo-600 text-text-inverted rounded-xl hover:bg-indigo-700 cursor-pointer shadow transition-all hover:scale-105 active:scale-95"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -177,7 +177,7 @@ export const ChatWidget: React.FC = () => {
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-2xl shadow-indigo-600/30 flex items-center justify-center cursor-pointer relative"
+        className="p-4 bg-indigo-600 hover:bg-indigo-700 text-text-inverted rounded-full shadow-2xl shadow-indigo-600/30 flex items-center justify-center cursor-pointer relative"
       >
         <MessageSquare className="w-6 h-6" />
       </motion.button>

@@ -65,7 +65,7 @@ export const HeroSection: React.FC = () => {
             <span className="text-[10px] uppercase bg-indigo-500/20 text-indigo-400 font-extrabold px-3 py-1 rounded-full tracking-widest border border-indigo-500/20">
               Premium Launch
             </span>
-            <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-text-inverted leading-tight tracking-tight">
               {heroSlides[currentSlide].title}
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm max-w-lg leading-relaxed">

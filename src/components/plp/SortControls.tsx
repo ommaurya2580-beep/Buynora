@@ -27,7 +27,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
       
       {/* Header count info */}
       <div className="text-left w-full sm:w-auto">
-        <h3 className="text-sm font-bold text-gray-800 dark:text-white">
+        <h3 className="text-sm font-bold text-text-primary">
           {search ? `Search results for "${search}"` : category !== 'All' ? `${category} Products` : 'All Products'}
         </h3>
         <span className="text-[10px] text-gray-400">{totalCount} premium items found</span>
@@ -65,7 +65,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
           <button
             onClick={() => setViewMode('grid')}
             className={`p-1.5 rounded-lg cursor-pointer ${
-              viewMode === 'grid' ? 'bg-white dark:bg-slate-900 text-indigo-500 shadow-sm' : 'text-gray-400'
+              viewMode === 'grid' ? 'bg-bg-surface text-indigo-500 shadow-sm' : 'text-gray-400'
             }`}
           >
             <Grid className="w-4 h-4" />
@@ -73,7 +73,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
           <button
             onClick={() => setViewMode('list')}
             className={`p-1.5 rounded-lg cursor-pointer ${
-              viewMode === 'list' ? 'bg-white dark:bg-slate-900 text-indigo-500 shadow-sm' : 'text-gray-400'
+              viewMode === 'list' ? 'bg-bg-surface text-indigo-500 shadow-sm' : 'text-gray-400'
             }`}
           >
             <List className="w-4 h-4" />

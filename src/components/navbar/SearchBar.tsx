@@ -55,7 +55,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onVoiceSearchClick }) => {
           value={searchQuery}
           onFocus={() => setShowSuggestions(true)}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white pl-4 pr-16 py-2.5 rounded-md text-xs border border-gray-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200"
+          className="w-full bg-bg-surface text-text-primary pl-4 pr-16 py-2.5 rounded-md text-xs border border-gray-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200"
         />
         
         <div className="absolute right-2 top-1.5 flex items-center gap-1.5">
@@ -69,7 +69,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onVoiceSearchClick }) => {
           </button>
           <button
             type="submit"
-            className="p-1 bg-accent hover:bg-accent-hover text-white rounded text-sm cursor-pointer transition-colors"
+            className="p-1 bg-accent hover:bg-accent-hover text-text-inverted rounded text-sm cursor-pointer transition-colors"
           >
             <Search className="w-5 h-5 p-0.5" />
           </button>
@@ -78,13 +78,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onVoiceSearchClick }) => {
 
       {/* Suggestions Box */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute left-0 right-0 mt-1 rounded-md shadow-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-slate-900 overflow-hidden z-50">
+        <div className="absolute left-0 right-0 mt-1 rounded-md shadow-lg border border-gray-200 dark:border-gray-800 bg-bg-surface overflow-hidden z-50">
           <div className="p-2 space-y-1">
             {suggestions.map((sug, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSuggestionClick(sug)}
-                className="w-full text-left text-xs font-semibold px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-gray-700 dark:text-gray-300 rounded-lg flex items-center gap-2.5 transition-colors cursor-pointer"
+                className="w-full text-left text-xs font-semibold px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg flex items-center gap-2.5 transition-colors cursor-pointer"
               >
                 <Search className="w-3.5 h-3.5 text-gray-400" />
                 {sug}

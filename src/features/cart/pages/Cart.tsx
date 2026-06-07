@@ -89,7 +89,7 @@ export const Cart: React.FC = () => {
   return (
     <div className="space-y-12 pb-16 text-left">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white flex items-center gap-2">
+        <h1 className="text-2xl sm:text-3xl font-black text-text-primary flex items-center gap-2">
           <ShoppingBag className="w-6 h-6 text-indigo-500" /> Shopping Cart
         </h1>
         <p className="text-xs text-gray-500">Review your products before checking out</p>
@@ -101,12 +101,12 @@ export const Cart: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           {cartItems.length === 0 ? (
             <div className="glass p-12 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 text-center space-y-4">
-              <ShoppingBag className="w-12 h-12 text-gray-300 dark:text-gray-700 mx-auto" />
-              <h3 className="font-bold text-gray-800 dark:text-white">Your cart is empty</h3>
+              <ShoppingBag className="w-12 h-12 text-text-secondary mx-auto" />
+              <h3 className="font-bold text-text-primary">Your cart is empty</h3>
               <p className="text-xs text-gray-400">Explore premium shoes, computers and streetwear in our store.</p>
               <Link
                 to="/products"
-                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-6 py-3 rounded-full shadow"
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs px-6 py-3 rounded-full shadow"
               >
                 Browse Shop <MoveRight className="w-4 h-4" />
               </Link>
@@ -116,7 +116,7 @@ export const Cart: React.FC = () => {
               {cartItems.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 flex flex-col sm:flex-row gap-4 items-center justify-between"
+                  className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 flex flex-col sm:flex-row gap-4 items-center justify-between"
                 >
                   <img
                     src={item.product.images[0]}
@@ -125,7 +125,7 @@ export const Cart: React.FC = () => {
                   />
                   <div className="flex-1 text-left space-y-1">
                     <span className="text-[10px] font-bold text-indigo-500 uppercase">{item.product.brand}</span>
-                    <h4 className="font-bold text-sm text-gray-900 dark:text-white line-clamp-1">{item.product.name}</h4>
+                    <h4 className="font-bold text-sm text-text-primary line-clamp-1">{item.product.name}</h4>
                     {item.selectedSize && (
                       <span className="text-[10px] text-gray-500 bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded-full font-bold">
                         Size: {item.selectedSize}
@@ -152,7 +152,7 @@ export const Cart: React.FC = () => {
                     </div>
 
                     <div className="text-right">
-                      <span className="text-sm font-black text-gray-900 dark:text-white">
+                      <span className="text-sm font-black text-text-primary">
                         {formatCurrency(item.product.price * item.quantity)}
                       </span>
                       <p className="text-[10px] text-gray-400">({formatCurrency(item.product.price)} each)</p>
@@ -187,7 +187,7 @@ export const Cart: React.FC = () => {
           <div className="space-y-6">
             
             {/* Coupon Code Input */}
-            <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-3 bg-white dark:bg-slate-900/40">
+            <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-3 bg-bg-surface/40">
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                 <Tag className="w-4 h-4 text-indigo-500" /> Apply Coupon
               </h4>
@@ -202,7 +202,7 @@ export const Cart: React.FC = () => {
                 <button
                   type="submit"
                   disabled={verifyCouponMutation.isPending}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold px-4 py-2 rounded-xl cursor-pointer"
                 >
                   Apply
                 </button>
@@ -220,12 +220,12 @@ export const Cart: React.FC = () => {
 
             {/* Reward Points */}
             {user && user.points > 0 && (
-              <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-3 bg-white dark:bg-slate-900/40">
+              <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-3 bg-bg-surface/40">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
                   <Gift className="w-4 h-4 text-indigo-500 animate-bounce" /> Reward Points
                 </h4>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-600 dark:text-gray-300">
+                  <span className="text-xs text-text-secondary">
                     You have <span className="font-bold">{user.points}</span> points ($${(user.points * 0.1).toFixed(2)})
                   </span>
                   <input
@@ -239,13 +239,13 @@ export const Cart: React.FC = () => {
             )}
 
             {/* Calculations Panel */}
-            <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 bg-white dark:bg-slate-900/40">
+            <div className="glass p-5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 bg-bg-surface/40">
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Order Summary</h4>
               
-              <div className="space-y-2.5 text-xs text-gray-600 dark:text-gray-300">
+              <div className="space-y-2.5 text-xs text-text-secondary">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-bold text-gray-900 dark:text-white">{formatCurrency(subtotal)}</span>
+                  <span className="font-bold text-text-primary">{formatCurrency(subtotal)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-emerald-500 font-semibold">
@@ -261,11 +261,11 @@ export const Cart: React.FC = () => {
                 )}
                 <div className="flex justify-between">
                   <span>Sales Tax (8%)</span>
-                  <span className="font-bold text-gray-900 dark:text-white">{formatCurrency(tax)}</span>
+                  <span className="font-bold text-text-primary">{formatCurrency(tax)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping Cost</span>
-                  <span className="font-bold text-gray-900 dark:text-white">
+                  <span className="font-bold text-text-primary">
                     {shipping === 0 ? 'FREE' : formatCurrency(shipping)}
                   </span>
                 </div>
@@ -275,7 +275,7 @@ export const Cart: React.FC = () => {
               </div>
 
               <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex justify-between items-baseline">
-                <span className="text-sm font-bold text-gray-800 dark:text-white">Estimated Total</span>
+                <span className="text-sm font-bold text-text-primary">Estimated Total</span>
                 <span className="text-xl font-black text-indigo-600 dark:text-indigo-400">
                   {formatCurrency(orderTotal)}
                 </span>
@@ -283,7 +283,7 @@ export const Cart: React.FC = () => {
 
               <button
                 onClick={handleCheckoutRedirect}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/10 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 text-xs"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold py-3.5 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/10 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 text-xs"
               >
                 Proceed to Checkout <ArrowRight className="w-4 h-4" />
               </button>
@@ -297,7 +297,7 @@ export const Cart: React.FC = () => {
       {/* 4. SAVED FOR LATER SECTION */}
       {savedForLater.length > 0 && (
         <section className="space-y-4">
-          <h3 className="text-lg font-black text-gray-900 dark:text-white border-b border-gray-150 dark:border-gray-800 pb-2">
+          <h3 className="text-lg font-black text-text-primary border-b border-gray-150 dark:border-gray-800 pb-2">
             Saved for Later ({savedForLater.length})
           </h3>
           
@@ -305,7 +305,7 @@ export const Cart: React.FC = () => {
             {savedForLater.map((item, idx) => (
               <div 
                 key={idx}
-                className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 flex flex-col justify-between h-full bg-white dark:bg-slate-900/20"
+                className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 flex flex-col justify-between h-full bg-bg-surface/20"
               >
                 <div className="space-y-3">
                   <img
@@ -316,14 +316,14 @@ export const Cart: React.FC = () => {
                   <div className="text-left space-y-1">
                     <span className="text-[10px] font-bold text-indigo-500 uppercase">{item.product.brand}</span>
                     <h5 className="font-bold text-xs line-clamp-1">{item.product.name}</h5>
-                    <span className="text-xs font-black text-gray-900 dark:text-white">{formatCurrency(item.product.price)}</span>
+                    <span className="text-xs font-black text-text-primary">{formatCurrency(item.product.price)}</span>
                   </div>
                 </div>
 
                 <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
                   <button
                     onClick={() => dispatch(moveToCartFromSaved({ id: item.product.id, color: item.selectedColor, size: item.selectedSize }))}
-                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg cursor-pointer"
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2 rounded-lg cursor-pointer"
                   >
                     Move to Cart
                   </button>

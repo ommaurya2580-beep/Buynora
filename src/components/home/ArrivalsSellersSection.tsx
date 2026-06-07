@@ -22,7 +22,7 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
       {/* New Arrivals */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black tracking-tight text-gray-900 dark:text-white flex items-center gap-1.5">
+          <h3 className="text-lg font-black tracking-tight text-text-primary flex items-center gap-1.5">
             <Sparkles className="w-5 h-5 text-indigo-500 animate-spin" /> New Arrivals
           </h3>
           <Link to="/products?sortBy=newest" className="text-xs text-indigo-500 font-semibold hover:underline">
@@ -45,7 +45,7 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
       {/* Best Sellers */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black tracking-tight text-gray-900 dark:text-white flex items-center gap-1.5">
+          <h3 className="text-lg font-black tracking-tight text-text-primary flex items-center gap-1.5">
             <Award className="w-5 h-5 text-amber-500" /> Best Sellers
           </h3>
           <Link to="/products?sortBy=popularity" className="text-xs text-indigo-500 font-semibold hover:underline">

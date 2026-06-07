@@ -50,7 +50,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
 
   return (
     <section className="space-y-6 text-left">
-      <h3 className="text-lg font-black text-gray-900 dark:text-white border-b border-gray-150 dark:border-gray-800 pb-2">
+      <h3 className="text-lg font-black text-text-primary border-b border-gray-150 dark:border-gray-800 pb-2">
         Ratings & Reviews
       </h3>
       
@@ -58,14 +58,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         
         {/* Reviews Scoreboard */}
         <div className="glass p-6 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4">
-          <h4 className="text-sm font-bold text-gray-800 dark:text-white">Customer Rating Summary</h4>
+          <h4 className="text-sm font-bold text-text-primary">Customer Rating Summary</h4>
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-black">{rating}</span>
             <span className="text-sm text-gray-400">/ 5</span>
           </div>
           <div className="flex items-center text-amber-400 gap-0.5">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-4 h-4 ${i < Math.round(rating) ? 'fill-current' : 'text-gray-200 dark:text-gray-700'}`} />
+              <Star key={i} className={`w-4 h-4 ${i < Math.round(rating) ? 'fill-current' : 'text-text-secondary'}`} />
             ))}
           </div>
           <p className="text-[10px] text-gray-400">100% of reviews are verified purchases</p>
@@ -73,7 +73,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
 
         {/* Review Submission Form */}
         <form onSubmit={handleSubmit} className="md:col-span-2 glass p-6 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 space-y-4 bg-white/40 dark:bg-slate-900/40">
-          <h4 className="text-sm font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
+          <h4 className="text-sm font-bold text-text-primary flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-indigo-500" /> Share Your Thoughts
           </h4>
 
@@ -123,7 +123,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           <button
             type="submit"
             disabled={submittingReview}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-5 rounded-xl shadow cursor-pointer transition-all hover:scale-105"
+            className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold py-2.5 px-5 rounded-xl shadow cursor-pointer transition-all hover:scale-105"
           >
             {submittingReview ? "Submitting..." : "Post Review"}
           </button>
@@ -149,8 +149,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
                 ))}
               </div>
             </div>
-            <h6 className="text-xs font-extrabold text-gray-800 dark:text-gray-100">{rev.title}</h6>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{rev.comment}</p>
+            <h6 className="text-xs font-extrabold text-text-secondary">{rev.title}</h6>
+            <p className="text-xs text-text-secondary mt-1">{rev.comment}</p>
           </div>
         ))}
       </div>

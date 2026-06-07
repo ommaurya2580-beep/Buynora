@@ -61,7 +61,7 @@ export const MainLayout: React.FC = () => {
       <header className="sticky top-0 z-50 w-full">
         {/* TOP PANEL: Promo Ticker, Lang, Currency, Dark Mode */}
         <div className="bg-slate-900 text-slate-300 text-[11px] font-medium py-2 px-4 md:px-8 flex items-center justify-between border-b border-slate-800">
-          <div className="flex items-center gap-1.5 text-white/90">
+          <div className="flex items-center gap-1.5 text-text-inverted/90">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
             <span>Summer Sale: Extra 20% off on Nike Air Max! Use code <span className="font-bold text-amber-400">SAVE20</span></span>
           </div>
@@ -71,7 +71,7 @@ export const MainLayout: React.FC = () => {
             <div className="relative">
               <button 
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)} 
-                className="flex items-center gap-1 hover:text-white cursor-pointer select-none"
+                className="flex items-center gap-1 hover:text-text-inverted cursor-pointer select-none"
               >
                 <Globe className="w-3.5 h-3.5" />
                 <span>{selectedLang}</span>
@@ -87,7 +87,7 @@ export const MainLayout: React.FC = () => {
                         setIsLangDropdownOpen(false);
                         showToast(`Language set to ${lang}`, 'info');
                       }}
-                      className="flex items-center justify-between text-left text-[11px] px-2 py-1 hover:bg-slate-800 rounded text-slate-300 hover:text-white cursor-pointer"
+                      className="flex items-center justify-between text-left text-[11px] px-2 py-1 hover:bg-slate-800 rounded text-slate-300 hover:text-text-inverted cursor-pointer"
                     >
                       {lang} {selectedLang === lang && <Check className="w-3 h-3 text-indigo-400" />}
                     </button>
@@ -107,7 +107,7 @@ export const MainLayout: React.FC = () => {
                     // Dispatch custom event to tell pages to re-render currency
                     window.dispatchEvent(new Event('currencyChange'));
                   }}
-                  className={`hover:text-white cursor-pointer font-bold ${selectedCurrency === cur ? 'text-indigo-400' : ''}`}
+                  className={`hover:text-text-inverted cursor-pointer font-bold ${selectedCurrency === cur ? 'text-indigo-400' : ''}`}
                 >
                   {cur}
                 </button>
@@ -142,7 +142,7 @@ export const MainLayout: React.FC = () => {
             {/* Dark Mode Toggle (Mobile) */}
             <button 
               onClick={toggleTheme}
-              className="sm:hidden p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer"
+              className="sm:hidden p-2 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer"
             >
               {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
@@ -151,11 +151,11 @@ export const MainLayout: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
+                className="p-2.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
               >
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 bg-rose-500 text-white text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
+                  <span className="absolute top-1.5 right-1.5 bg-rose-500 text-text-inverted text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
                     {unreadCount}
                   </span>
                 )}
@@ -169,11 +169,11 @@ export const MainLayout: React.FC = () => {
             {/* Wishlist Link */}
             <Link
               to="/wishlist"
-              className="p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 relative hidden sm:block"
+              className="p-2.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative hidden sm:block"
             >
               <Heart className="w-5 h-5" />
               {wishlistItems.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-rose-500 text-white text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
+                <span className="absolute top-1.5 right-1.5 bg-rose-500 text-text-inverted text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
                   {wishlistItems.length}
                 </span>
               )}
@@ -182,11 +182,11 @@ export const MainLayout: React.FC = () => {
             {/* Cart Link */}
             <Link
               to="/cart"
-              className="p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 relative"
+              className="p-2.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative"
             >
               <ShoppingBag className="w-5 h-5" />
               {cartCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-primary text-white text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
+                <span className="absolute top-1.5 right-1.5 bg-primary text-text-inverted text-[9px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white dark:border-slate-900">
                   {cartCount}
                 </span>
               )}
@@ -198,7 +198,7 @@ export const MainLayout: React.FC = () => {
             {/* Mobile Hamburger menu */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer"
+              className="lg:hidden p-2 text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -207,7 +207,7 @@ export const MainLayout: React.FC = () => {
 
         {/* Mobile Search/Categories Drawer */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden glass border-b border-gray-200 dark:border-gray-800 p-4 bg-white dark:bg-slate-900 space-y-4">
+          <div className="lg:hidden glass border-b border-gray-200 dark:border-gray-800 p-4 bg-bg-surface space-y-4">
             <form 
               onSubmit={e => {
                 e.preventDefault();
@@ -223,14 +223,14 @@ export const MainLayout: React.FC = () => {
                 type="text"
                 name="q"
                 placeholder="Search..."
-                className="w-full bg-slate-100 dark:bg-slate-800 text-gray-900 dark:text-white pl-4 pr-12 py-2 rounded-xl text-xs border border-transparent focus:border-indigo-500 focus:bg-white outline-none"
+                className="w-full bg-slate-100 dark:bg-slate-800 text-text-primary pl-4 pr-12 py-2 rounded-xl text-xs border border-transparent focus:border-indigo-500 focus:bg-white outline-none"
               />
               <button type="submit" className="absolute right-3 top-2.5 text-gray-400">
                 <ShoppingBag className="w-4 h-4" />
               </button>
             </form>
 
-            <div className="flex flex-col gap-2.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+            <div className="flex flex-col gap-2.5 text-xs font-bold text-text-secondary">
               <Link to="/products" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-gray-100 dark:border-gray-800/50">Shop All</Link>
               {categories.map(cat => (
                 <Link
@@ -259,7 +259,7 @@ export const MainLayout: React.FC = () => {
           
           {/* About Column */}
           <div className="flex flex-col gap-3">
-            <span className="text-xl font-black text-white tracking-tight">Buynora</span>
+            <span className="text-xl font-black text-text-inverted tracking-tight">Buynora</span>
             <p className="leading-relaxed text-[11px] text-slate-500">
               Providing enterprise-grade modern shopping portals with advanced features, inspired by standard-defining brands like Apple, Nike, and Sony.
             </p>
@@ -268,30 +268,30 @@ export const MainLayout: React.FC = () => {
 
           {/* Quick Links */}
           <div className="flex flex-col gap-3">
-            <h5 className="font-bold text-white text-xs uppercase tracking-wider">Shopping</h5>
+            <h5 className="font-bold text-text-inverted text-xs uppercase tracking-wider">Shopping</h5>
             <div className="flex flex-col gap-2">
-              <Link to="/products" className="hover:text-white transition-colors">Products Catalog</Link>
-              <Link to="/products?discountOnly=true" className="hover:text-white transition-colors">Flash Sales</Link>
-              <Link to="/products?category=Electronics" className="hover:text-white transition-colors">Smart Devices</Link>
-              <Link to="/products?category=Footwear" className="hover:text-white transition-colors">Athletic Shoes</Link>
+              <Link to="/products" className="hover:text-text-inverted transition-colors">Products Catalog</Link>
+              <Link to="/products?discountOnly=true" className="hover:text-text-inverted transition-colors">Flash Sales</Link>
+              <Link to="/products?category=Electronics" className="hover:text-text-inverted transition-colors">Smart Devices</Link>
+              <Link to="/products?category=Footwear" className="hover:text-text-inverted transition-colors">Athletic Shoes</Link>
             </div>
           </div>
 
           {/* Policy Pages */}
           <div className="flex flex-col gap-3">
-            <h5 className="font-bold text-white text-xs uppercase tracking-wider">Information</h5>
+            <h5 className="font-bold text-text-inverted text-xs uppercase tracking-wider">Information</h5>
             <div className="flex flex-col gap-2">
-              <Link to="/about" className="hover:text-white transition-colors">About Us</Link>
-              <Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link>
-              <Link to="/faq" className="hover:text-white transition-colors">FAQ Support</Link>
-              <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link>
+              <Link to="/about" className="hover:text-text-inverted transition-colors">About Us</Link>
+              <Link to="/contact" className="hover:text-text-inverted transition-colors">Contact Us</Link>
+              <Link to="/faq" className="hover:text-text-inverted transition-colors">FAQ Support</Link>
+              <Link to="/privacy" className="hover:text-text-inverted transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-text-inverted transition-colors">Terms & Conditions</Link>
             </div>
           </div>
 
           {/* Newsletter Column */}
           <div className="flex flex-col gap-3">
-            <h5 className="font-bold text-white text-xs uppercase tracking-wider">Join Newsletter</h5>
+            <h5 className="font-bold text-text-inverted text-xs uppercase tracking-wider">Join Newsletter</h5>
             <p className="leading-relaxed text-[11px] text-slate-500">
               Subscribe to receive price drops, flash coupons, and customized product recommendations.
             </p>
@@ -306,11 +306,11 @@ export const MainLayout: React.FC = () => {
                 type="email"
                 required
                 placeholder="Enter email address"
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white outline-none focus:border-indigo-500 flex-1 w-full"
+                className="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-text-inverted outline-none focus:border-indigo-500 flex-1 w-full"
               />
               <button
                 type="submit"
-                className="bg-accent hover:bg-accent-hover text-white text-xs font-bold px-4 py-2 rounded-md cursor-pointer shadow transition-all hover:scale-105 active:scale-95"
+                className="bg-accent hover:bg-accent-hover text-text-inverted text-xs font-bold px-4 py-2 rounded-md cursor-pointer shadow transition-all hover:scale-105 active:scale-95"
               >
                 Join
               </button>

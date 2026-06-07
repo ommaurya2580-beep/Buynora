@@ -36,10 +36,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   if (productsList.length === 0) {
     return (
       <div className="glass p-12 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 text-center space-y-4">
-        <p className="text-sm text-gray-500 dark:text-gray-400">No products match your current filters.</p>
+        <p className="text-sm text-text-secondary">No products match your current filters.</p>
         <button
           onClick={handleClearFilters}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow cursor-pointer transition-all hover:scale-105 active:scale-95"
+          className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs px-5 py-2.5 rounded-xl shadow cursor-pointer transition-all hover:scale-105 active:scale-95"
         >
           Reset All Filters
         </button>
@@ -67,7 +67,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           {productsList.map(prod => (
             <div 
               key={prod.id} 
-              className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900/40 flex flex-col sm:flex-row gap-4 items-center"
+              className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 flex flex-col sm:flex-row gap-4 items-center"
             >
               <img
                 src={prod.images[0]}
@@ -76,11 +76,11 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               />
               <div className="flex-1 text-left space-y-1.5">
                 <span className="text-[10px] font-bold text-indigo-500 uppercase">{prod.brand}</span>
-                <h4 className="font-bold text-gray-900 dark:text-white">{prod.name}</h4>
+                <h4 className="font-bold text-text-primary">{prod.name}</h4>
                 <p className="text-xs text-gray-500 line-clamp-2">{prod.description}</p>
                 
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">
+                  <span className="text-sm font-bold text-text-primary">
                     {formatCurrency(prod.price)}
                   </span>
                   {prod.discountPercentage > 0 && (
@@ -93,7 +93,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               
               <button
                 onClick={() => navigate(`/product/${prod.id}`)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1 cursor-pointer"
               >
                 <Eye className="w-3.5 h-3.5" /> Details
               </button>
@@ -108,7 +108,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           <button
             disabled={loading}
             onClick={() => setPage(prev => prev + 1)}
-            className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-slate-800 px-6 py-3 rounded-2xl text-xs font-bold shadow-md cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+            className="bg-bg-surface border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-slate-800 px-6 py-3 rounded-2xl text-xs font-bold shadow-md cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
           >
             {loading ? (
               <RefreshCw className="w-4 h-4 animate-spin" />

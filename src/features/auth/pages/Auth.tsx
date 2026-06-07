@@ -101,7 +101,7 @@ export const Auth: React.FC = () => {
       {!isRegister && !isForgot && !isVerify && !isReset && (
         <form onSubmit={handleLoginSubmit} className="space-y-6 text-left">
           <div className="space-y-1">
-            <h2 className="text-xl font-black text-white">Sign In</h2>
+            <h2 className="text-xl font-black text-text-inverted">Sign In</h2>
             <p className="text-[11px] text-gray-400">Unlock custom AI suggestions and coupon offers</p>
           </div>
 
@@ -114,7 +114,7 @@ export const Auth: React.FC = () => {
                 placeholder="Email Address"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
               />
             </div>
             <div className="relative">
@@ -125,7 +125,7 @@ export const Auth: React.FC = () => {
                 placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
               />
             </div>
           </div>
@@ -142,7 +142,7 @@ export const Auth: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl cursor-pointer shadow transition-all hover:scale-[1.02] active:scale-95"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 rounded-xl cursor-pointer shadow transition-all hover:scale-[1.02] active:scale-95"
           >
             Access Account
           </button>
@@ -157,7 +157,7 @@ export const Auth: React.FC = () => {
       {isRegister && (
         <form onSubmit={handleRegisterSubmit} className="space-y-6 text-left">
           <div className="space-y-1">
-            <h2 className="text-xl font-black text-white">Create Account</h2>
+            <h2 className="text-xl font-black text-text-inverted">Create Account</h2>
             <p className="text-[11px] text-gray-400">Join our rewards circle and claim welcome points</p>
           </div>
 
@@ -170,7 +170,7 @@ export const Auth: React.FC = () => {
                 placeholder="Full Name"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
               />
             </div>
             <div className="relative">
@@ -181,7 +181,7 @@ export const Auth: React.FC = () => {
                 placeholder="Email Address"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
               />
             </div>
             <div className="relative">
@@ -192,7 +192,7 @@ export const Auth: React.FC = () => {
                 placeholder="Phone Number"
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
-                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
               />
             </div>
             <div className="relative">
@@ -203,14 +203,14 @@ export const Auth: React.FC = () => {
                 placeholder="Choose Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+                className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl cursor-pointer shadow transition-all hover:scale-[1.02] active:scale-95"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 rounded-xl cursor-pointer shadow transition-all hover:scale-[1.02] active:scale-95"
           >
             Send Verification Code
           </button>
@@ -225,7 +225,7 @@ export const Auth: React.FC = () => {
       {isForgot && (
         <form onSubmit={handleForgotSubmit} className="space-y-6 text-left">
           <div className="space-y-1">
-            <h2 className="text-xl font-black text-white">Reset Coordinates</h2>
+            <h2 className="text-xl font-black text-text-inverted">Reset Coordinates</h2>
             <p className="text-[11px] text-gray-400">Enter your email and we'll send a recovery link</p>
           </div>
 
@@ -237,18 +237,18 @@ export const Auth: React.FC = () => {
               placeholder="Email Address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+              className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl cursor-pointer shadow"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 rounded-xl cursor-pointer shadow"
           >
             Send Recovery Email
           </button>
 
-          <Link to="/auth/login" className="block text-center text-[10px] text-gray-400 hover:text-white">
+          <Link to="/auth/login" className="block text-center text-[10px] text-gray-400 hover:text-text-inverted">
             Return to Login
           </Link>
         </form>
@@ -258,7 +258,7 @@ export const Auth: React.FC = () => {
       {isVerify && (
         <form onSubmit={handleVerifySubmit} className="space-y-6 text-left">
           <div className="space-y-1">
-            <h2 className="text-xl font-black text-white">Verify Phone</h2>
+            <h2 className="text-xl font-black text-text-inverted">Verify Phone</h2>
             <p className="text-[11px] text-gray-400">Enter 4-digit code sent to phone number</p>
           </div>
 
@@ -270,13 +270,13 @@ export const Auth: React.FC = () => {
               placeholder="0 0 0 0"
               value={otp}
               onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
-              className="bg-slate-900 text-center font-mono font-black text-xl tracking-[12px] pl-3 py-3 rounded-xl border border-slate-850 focus:border-indigo-500 outline-none w-48 text-white"
+              className="bg-slate-900 text-center font-mono font-black text-xl tracking-[12px] pl-3 py-3 rounded-xl border border-slate-850 focus:border-indigo-500 outline-none w-48 text-text-inverted"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl cursor-pointer shadow"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 rounded-xl cursor-pointer shadow"
           >
             Verify & Create Account
           </button>
@@ -287,7 +287,7 @@ export const Auth: React.FC = () => {
       {isReset && (
         <form onSubmit={handleResetSubmit} className="space-y-6 text-left">
           <div className="space-y-1">
-            <h2 className="text-xl font-black text-white">Create New Password</h2>
+            <h2 className="text-xl font-black text-text-inverted">Create New Password</h2>
             <p className="text-[11px] text-gray-400">Enter your new secure password</p>
           </div>
 
@@ -299,13 +299,13 @@ export const Auth: React.FC = () => {
               placeholder="New Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-white"
+              className="w-full bg-slate-900 text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-indigo-500 outline-none text-text-inverted"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl cursor-pointer shadow"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 rounded-xl cursor-pointer shadow"
           >
             Update Password
           </button>

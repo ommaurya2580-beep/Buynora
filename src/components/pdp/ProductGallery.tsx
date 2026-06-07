@@ -36,7 +36,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, name }) 
       <div 
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="w-full aspect-[4/3] rounded-2xl overflow-hidden glass border border-gray-200/50 dark:border-gray-800/50 relative cursor-zoom-in bg-white dark:bg-slate-950/20"
+        className="w-full aspect-[4/3] rounded-2xl overflow-hidden glass border border-gray-200/50 dark:border-gray-800/50 relative cursor-zoom-in bg-bg-surface/20"
       >
         <img
           src={selectedImage}

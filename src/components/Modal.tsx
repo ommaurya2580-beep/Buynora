@@ -62,7 +62,7 @@ export const Modal: React.FC<ModalProps> = ({
           >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-200/50 dark:border-gray-800/50">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h3>
+              <h3 className="text-lg font-bold text-text-primary">{title}</h3>
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 p-1.5 rounded-full cursor-pointer transition-colors"

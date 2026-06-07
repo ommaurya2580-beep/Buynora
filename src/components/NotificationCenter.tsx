@@ -48,13 +48,13 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
   return (
     <div 
       ref={containerRef}
-      className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-slate-900 overflow-hidden z-[999] pointer-events-auto"
+      className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl glass shadow-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface overflow-hidden z-[999] pointer-events-auto"
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800/50">
         <div className="flex items-center gap-2">
           <Bell className="w-4 h-4 text-indigo-500" />
-          <h4 className="text-sm font-bold text-gray-900 dark:text-white">Notification Hub</h4>
+          <h4 className="text-sm font-bold text-text-primary">Notification Hub</h4>
         </div>
         <button
           onClick={() => dispatch(markAllNotificationsRead())}
@@ -67,7 +67,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
       {/* List */}
       <div className="max-h-[300px] overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800/50">
         {notifications.length === 0 ? (
-          <div className="p-8 text-center text-xs text-gray-400 dark:text-gray-500">
+          <div className="p-8 text-center text-xs text-text-secondary">
             No notifications yet.
           </div>
         ) : (
@@ -83,14 +83,14 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
               </div>
               <div className="flex-1 flex flex-col gap-0.5">
                 <div className="flex items-center justify-between gap-2">
-                  <h5 className={`text-xs font-bold text-gray-900 dark:text-white ${!n.isRead ? 'pr-2' : ''}`}>
+                  <h5 className={`text-xs font-bold text-text-primary ${!n.isRead ? 'pr-2' : ''}`}>
                     {n.title}
                   </h5>
                   {!n.isRead && (
                     <Circle className="w-1.5 h-1.5 fill-indigo-600 text-indigo-600 flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                <p className="text-[11px] text-text-secondary leading-relaxed">
                   {n.message}
                 </p>
                 <span className="text-[9px] text-gray-400 mt-1">

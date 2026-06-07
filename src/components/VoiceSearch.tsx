@@ -79,7 +79,7 @@ export const VoiceSearch: React.FC<VoiceSearchProps> = ({
             </>
           )}
 
-          <div className={`p-6 rounded-full text-white shadow-xl ${
+          <div className={`p-6 rounded-full text-text-inverted shadow-xl ${
             status === 'processing' ? 'bg-amber-500 animate-bounce' : 
             status === 'done' ? 'bg-emerald-500' : 'bg-indigo-600'
           }`}>
@@ -91,7 +91,7 @@ export const VoiceSearch: React.FC<VoiceSearchProps> = ({
           </div>
         </div>
 
-        <h4 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+        <h4 className="text-xl font-bold text-text-primary mb-2">
           {status === 'listening' ? 'Speak now...' : status === 'processing' ? 'Thinking...' : 'Search Term Found'}
         </h4>
         
