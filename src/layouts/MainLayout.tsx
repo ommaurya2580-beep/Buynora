@@ -60,13 +60,36 @@ export const MainLayout: React.FC = () => {
       {/* DOUBLE DECKER NAVBAR */}
       <header className="sticky top-0 z-50 w-full">
         {/* TOP PANEL: Promo Ticker, Lang, Currency, Dark Mode */}
-        <div className="bg-slate-900 text-slate-300 text-[11px] font-medium py-2 px-4 md:px-8 flex items-center justify-between border-b border-slate-800">
-          <div className="flex items-center gap-1.5 text-text-inverted/90">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-            <span>Summer Sale: Extra 20% off on Nike Air Max! Use code <span className="font-bold text-amber-400">SAVE20</span></span>
+        <div className="bg-gradient-to-r from-[#1F2937] to-[#111827] dark:from-[#2874F0] dark:to-[#1A5ED8] text-white text-xs font-semibold h-[40px] px-4 md:px-8 flex items-center justify-between">
+          
+          {/* Marquee Container */}
+          <div className="flex-1 overflow-hidden relative h-full flex items-center group">
+            {/* Left fade gradient */}
+            <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#1F2937] dark:from-[#2874F0] to-transparent z-10"></div>
+            
+            <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap">
+              {/* First set of items */}
+              <div className="flex gap-16 px-8 items-center">
+                <span className="flex items-center gap-2 tracking-wide"><Sparkles className="w-4 h-4 text-amber-400" /> Free Shipping Above ₹499</span>
+                <span className="tracking-wide">Use Code <span className="font-black text-amber-400 uppercase tracking-wider ml-1">SAVE20</span></span>
+                <span className="tracking-wide text-slate-200 dark:text-blue-100">Easy Returns</span>
+                <span className="tracking-wide text-slate-200 dark:text-blue-100">24x7 Support</span>
+              </div>
+              {/* Duplicate set for seamless looping */}
+              <div className="flex gap-16 px-8 items-center" aria-hidden="true">
+                <span className="flex items-center gap-2 tracking-wide"><Sparkles className="w-4 h-4 text-amber-400" /> Free Shipping Above ₹499</span>
+                <span className="tracking-wide">Use Code <span className="font-black text-amber-400 uppercase tracking-wider ml-1">SAVE20</span></span>
+                <span className="tracking-wide text-slate-200 dark:text-blue-100">Easy Returns</span>
+                <span className="tracking-wide text-slate-200 dark:text-blue-100">24x7 Support</span>
+              </div>
+            </div>
+
+            {/* Right fade gradient */}
+            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#111827] dark:from-[#1A5ED8] to-transparent z-10"></div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-5 relative">
+          {/* Right Section */}
+          <div className="hidden sm:flex items-center gap-5 relative z-20 pl-6 border-l border-white/20 ml-4">
             {/* Language Selection */}
             <div className="relative">
               <button 
