@@ -19,6 +19,7 @@ export const Auth: React.FC = () => {
   const isReset = location.pathname.includes('/reset');
 
   // Form States
+  const [selectedRole, setSelectedRole] = useState<'CUSTOMER' | 'SELLER' | 'ADMIN'>('CUSTOMER');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -31,23 +32,26 @@ export const Auth: React.FC = () => {
       showToast("Please enter email and password", "error");
       return;
     }
-    // Dispatch mock login
-    const role = email === 'admin@buynora.com' ? 'ADMIN' : (email === 'seller@buynora.com' ? 'SELLER' : 'CUSTOMER');
+    // Dispatch mock login using selected role
+    const role = selectedRole;
     dispatch(loginUser({
-      name: email === 'admin@buynora.com' ? 'Alice Admin' : (email === 'seller@buynora.com' ? 'Bob Seller' : 'John Doe'),
+      name: role === 'ADMIN' ? 'Alice Admin' : (role === 'SELLER' ? 'Bob Seller' : 'John Doe'),
       email: email,
       phone: "+1 (555) 019-2834",
-      avatar: email === 'admin@buynora.com' 
+      avatar: role === 'ADMIN' 
         ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" 
-        : (email === 'seller@buynora.com' 
+        : (role === 'SELLER' 
           ? "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" 
           : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100"),
-      referralCode: email === 'admin@buynora.com' ? 'NORA-ADMIN' : (email === 'seller@buynora.com' ? 'NORA-SELLER' : 'NORA-JD99'),
+      referralCode: role === 'ADMIN' ? 'NORA-ADMIN' : (role === 'SELLER' ? 'NORA-SELLER' : 'NORA-JD99'),
       points: 350,
       role
     }));
     showToast("Logged in successfully!", "success");
-    navigate('/');
+    
+    if (role === 'ADMIN') navigate('/admin');
+    else if (role === 'SELLER') navigate('/seller');
+    else navigate('/dashboard');
   };
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
@@ -100,8 +104,35 @@ export const Auth: React.FC = () => {
       {/* Login Screen */}
       {!isRegister && !isForgot && !isVerify && !isReset && (
         <form onSubmit={handleLoginSubmit} className="space-y-6 text-left">
+          
+          {/* Role Selection Tabs */}
+          <div className="flex bg-slate-900 rounded-lg p-1 gap-1 border border-slate-800">
+            {(['CUSTOMER', 'SELLER', 'ADMIN'] as const).map(role => (
+              <button
+                key={role}
+                type="button"
+                onClick={() => {
+                  setSelectedRole(role);
+                  if (role === 'CUSTOMER') setEmail('user@buynora.com');
+                  if (role === 'SELLER') setEmail('seller@buynora.com');
+                  if (role === 'ADMIN') setEmail('admin@buynora.com');
+                  setPassword('password123');
+                }}
+                className={`flex-1 py-2 text-[11px] font-bold rounded-md transition-colors cursor-pointer ${
+                  selectedRole === role 
+                    ? 'bg-indigo-600 text-white shadow' 
+                    : 'text-gray-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {role.charAt(0) + role.slice(1).toLowerCase()}
+              </button>
+            ))}
+          </div>
+
           <div className="space-y-1">
-            <h2 className="text-xl font-black text-text-inverted">Sign In</h2>
+            <h2 className="text-xl font-black text-text-inverted">
+              {selectedRole === 'ADMIN' ? 'Admin Login' : selectedRole === 'SELLER' ? 'Seller Login' : 'Customer Login'}
+            </h2>
             <p className="text-[11px] text-gray-400">Unlock custom AI suggestions and coupon offers</p>
           </div>
 
