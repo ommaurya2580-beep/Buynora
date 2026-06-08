@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Shield, Briefcase, LogOut } from 'lucide-react';
+import { User, Shield, Briefcase, LogOut, LayoutDashboard } from 'lucide-react';
 import { UserProfile } from '../../types';
+import { ROLES } from '../../constants';
 
 interface ProfileMenuProps {
   user: UserProfile | null;
@@ -22,6 +23,23 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
     document.addEventListener('mousedown', clickOutside);
     return () => document.removeEventListener('mousedown', clickOutside);
   }, []);
+
+  // Derive dashboard link and label based on user role
+  const getDashboardLink = () => {
+    if (!user) return null;
+
+    switch (user.role) {
+      case ROLES.ADMIN:
+        return { to: '/admin', label: 'Admin Dashboard', icon: <Shield className="w-4 h-4 text-rose-400" /> };
+      case ROLES.SELLER:
+        return { to: '/seller', label: 'Seller Dashboard', icon: <Briefcase className="w-4 h-4 text-amber-400" /> };
+      case ROLES.CUSTOMER:
+      default:
+        return { to: '/dashboard', label: 'My Dashboard', icon: <LayoutDashboard className="w-4 h-4 text-gray-400" /> };
+    }
+  };
+
+  const dashboardLink = getDashboardLink();
 
   return (
     <div ref={containerRef} className="relative">
@@ -46,36 +64,42 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
             <p className="text-[10px] text-text-secondary mt-0.5 truncate text-left">
               {isAuthenticated ? user?.email : "Sign in to manage orders"}
             </p>
+            {isAuthenticated && user?.role && (
+              <span className={`inline-block mt-1.5 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                user.role === ROLES.ADMIN
+                  ? 'bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400'
+                  : user.role === ROLES.SELLER
+                  ? 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400'
+                  : 'bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400'
+              }`}>
+                {user.role}
+              </span>
+            )}
           </div>
           
           <div className="p-2.5 space-y-1">
             {isAuthenticated ? (
               <>
+                {/* Role-specific dashboard only */}
+                {dashboardLink && (
+                  <Link
+                    to={dashboardLink.to}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
+                  >
+                    {dashboardLink.icon}
+                    {dashboardLink.label}
+                  </Link>
+                )}
+
+                {/* Profile page for all roles */}
                 <Link
                   to="/dashboard"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
                 >
                   <User className="w-4 h-4 text-gray-400" />
-                  User Dashboard
-                </Link>
-                
-                <Link
-                  to="/seller"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
-                >
-                  <Briefcase className="w-4 h-4 text-gray-400" />
-                  Seller Dashboard
-                </Link>
-
-                <Link
-                  to="/admin"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-text-secondary rounded-lg transition-colors text-left"
-                >
-                  <Shield className="w-4 h-4 text-gray-400" />
-                  Admin Dashboard
+                  My Profile
                 </Link>
 
                 <button
