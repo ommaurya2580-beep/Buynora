@@ -5,7 +5,8 @@ import {
   ShoppingBag, Heart, MapPin, CreditCard, Tag,
   Star, Bell, Headphones, HelpCircle, Settings,
   ChevronRight, Package, BarChart2, DollarSign,
-  ClipboardList, TrendingUp, Store
+  ClipboardList, TrendingUp, Store,
+  Users, FolderOpen, FileText, Activity, AlertTriangle
 } from 'lucide-react';
 import { UserProfile } from '../../types';
 import { ROLES } from '../../constants';
@@ -76,6 +77,42 @@ const SELLER_MENU = [
     items: [
       { to: '/contact',             label: 'Support',   icon: <Headphones className="w-4 h-4" />,  color: 'text-teal-500' },
       { to: '/seller?tab=settings', label: 'Settings',  icon: <Settings className="w-4 h-4" />,    color: 'text-gray-500' },
+    ],
+  },
+];
+
+// ── ADMIN menu groups ────────────────────────────────────────────────────────
+const ADMIN_MENU = [
+  {
+    group: 'Command Center',
+    items: [
+      { to: '/admin',                  label: 'Admin Dashboard',    icon: <LayoutDashboard className="w-4 h-4" />, color: 'text-rose-500' },
+      { to: '/admin?tab=users',        label: 'Users',              icon: <Users className="w-4 h-4" />,          color: 'text-indigo-500' },
+      { to: '/admin?tab=sellers',      label: 'Sellers',            icon: <Store className="w-4 h-4" />,          color: 'text-amber-500' },
+    ],
+  },
+  {
+    group: 'Catalog Management',
+    items: [
+      { to: '/admin?tab=products',     label: 'Products',           icon: <Package className="w-4 h-4" />,        color: 'text-blue-500' },
+      { to: '/admin?tab=orders',       label: 'Orders',             icon: <ShoppingBag className="w-4 h-4" />,    color: 'text-emerald-500' },
+      { to: '/admin?tab=categories',   label: 'Categories',         icon: <FolderOpen className="w-4 h-4" />,     color: 'text-cyan-500' },
+      { to: '/admin?tab=coupons',      label: 'Coupons',            icon: <Tag className="w-4 h-4" />,            color: 'text-orange-500' },
+    ],
+  },
+  {
+    group: 'Insights',
+    items: [
+      { to: '/admin?tab=reports',      label: 'Reports',            icon: <FileText className="w-4 h-4" />,       color: 'text-violet-500' },
+      { to: '/admin?tab=revenue',      label: 'Revenue Analytics',  icon: <BarChart2 className="w-4 h-4" />,      color: 'text-green-500' },
+      { to: '/admin?tab=activity',     label: 'Audit Logs',         icon: <Activity className="w-4 h-4" />,       color: 'text-teal-500' },
+    ],
+  },
+  {
+    group: 'System',
+    items: [
+      { to: '/admin?tab=settings',     label: 'System Settings',    icon: <Settings className="w-4 h-4" />,       color: 'text-gray-500' },
+      { to: '/contact',                label: 'Support',            icon: <Headphones className="w-4 h-4" />,     color: 'text-sky-500' },
     ],
   },
 ];
@@ -213,38 +250,10 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
                   <MenuGroup key={si} section={section} onClose={() => setIsOpen(false)} hasBorder={si > 0} />
                 ))}
 
-                {/* ADMIN: single hub link */}
-                {isAdmin && (
-                  <div className="px-2 py-2 space-y-0.5">
-                    <Link
-                      to="/admin"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800/50 text-text-secondary hover:text-text-primary transition-colors group"
-                    >
-                      <span className="flex-shrink-0 text-rose-500"><Shield className="w-4 h-4" /></span>
-                      <span className="text-xs font-semibold flex-1">Admin Dashboard</span>
-                      <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-700" />
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800/50 text-text-secondary hover:text-text-primary transition-colors group"
-                    >
-                      <span className="flex-shrink-0 text-indigo-500"><User className="w-4 h-4" /></span>
-                      <span className="text-xs font-semibold flex-1">My Profile</span>
-                      <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-700" />
-                    </Link>
-                    <Link
-                      to="/admin?tab=settings"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800/50 text-text-secondary hover:text-text-primary transition-colors group"
-                    >
-                      <span className="flex-shrink-0 text-gray-500"><Settings className="w-4 h-4" /></span>
-                      <span className="text-xs font-semibold flex-1">Settings</span>
-                      <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-700" />
-                    </Link>
-                  </div>
-                )}
+                {/* ADMIN: full grouped enterprise menu */}
+                {isAdmin && ADMIN_MENU.map((section, si) => (
+                  <MenuGroup key={si} section={section} onClose={() => setIsOpen(false)} hasBorder={si > 0} />
+                ))}
 
                 {/* Logout */}
                 <div className="px-2 pb-2 pt-1 border-t border-gray-100 dark:border-gray-800/50">
