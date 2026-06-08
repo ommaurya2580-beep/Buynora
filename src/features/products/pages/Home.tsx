@@ -15,7 +15,7 @@ import { TrendingSection } from '../../../components/home/TrendingSection';
 import { OffersSection } from '../../../components/home/OffersSection';
 import { ArrivalsSellersSection } from '../../../components/home/ArrivalsSellersSection';
 import { RecommendationsSection } from '../../../components/home/RecommendationsSection';
-import { RecentlyViewedSection } from '../../../components/home/RecentlyViewedSection';
+
 import { TestimonialsSection } from '../../../components/home/TestimonialsSection';
 
 export const Home: React.FC = () => {
@@ -23,7 +23,6 @@ export const Home: React.FC = () => {
   const { showToast } = useToast();
 
   const comparedProducts = useAppSelector(state => state.cart.comparedItems);
-  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
 
   // React Query queries
   const { data: categories = [] } = useCategories();
@@ -45,21 +44,7 @@ export const Home: React.FC = () => {
   const { data: aiRecommendedRes } = useProducts({ isAiRecommended: true, limit: 4 });
   const aiRecommended = aiRecommendedRes?.products || [];
 
-  // Fetch recently viewed items from localStorage matching against fetched products
-  useEffect(() => {
-    if (allProducts.length > 0) {
-      const list = localStorage.getItem('recentlyViewed');
-      if (list) {
-        try {
-          const ids: string[] = JSON.parse(list);
-          const matched = ids.map(id => allProducts.find(p => p.id === id)).filter(Boolean) as Product[];
-          setRecentlyViewed(matched.slice(0, 4));
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-  }, [allProducts]);
+  // Recently viewed section has been moved to Navbar
 
   const handleCompareToggle = (product: Product) => {
     if (comparedProducts.some(p => p.id === product.id)) {
@@ -116,12 +101,7 @@ export const Home: React.FC = () => {
         onCompareToggle={handleCompareToggle}
       />
 
-      {/* 8. RECENTLY VIEWED PRODUCTS */}
-      <RecentlyViewedSection 
-        products={recentlyViewed}
-        comparedProducts={comparedProducts}
-        onCompareToggle={handleCompareToggle}
-      />
+
 
       {/* 9. TESTIMONIALS */}
       <TestimonialsSection />

@@ -58,9 +58,24 @@ export const ProductDetail: React.FC = () => {
   useEffect(() => {
     if (id && product) {
       const viewed = localStorage.getItem('recentlyViewed');
-      let viewedIds: string[] = viewed ? JSON.parse(viewed) : [];
-      viewedIds = [id, ...viewedIds.filter(item => item !== id)].slice(0, 10);
-      localStorage.setItem('recentlyViewed', JSON.stringify(viewedIds));
+      let viewedItems: any[] = viewed ? JSON.parse(viewed) : [];
+      
+      // Clear out if it's the old format (array of strings)
+      if (viewedItems.length > 0 && typeof viewedItems[0] === 'string') {
+        viewedItems = [];
+      }
+      
+      const newItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0],
+        viewedAt: new Date().toISOString()
+      };
+      
+      viewedItems = [newItem, ...viewedItems.filter((item: any) => item.id !== id)].slice(0, 5);
+      localStorage.setItem('recentlyViewed', JSON.stringify(viewedItems));
+      window.dispatchEvent(new Event('recentlyViewedUpdated'));
     }
   }, [id, product]);
 

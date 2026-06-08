@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { 
   ShoppingBag, Heart, Bell, Sun, Moon, 
-  Menu, X, Sparkles, Globe, ChevronDown, Check
+  Menu, X, Sparkles, Globe, ChevronDown, Check,
+  RotateCcw
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { logoutUser } from '../redux/authSlice';
@@ -19,6 +20,7 @@ import { SearchBar } from '../components/navbar/SearchBar';
 import { ProfileMenu } from '../components/navbar/ProfileMenu';
 import { MegaMenu } from '../components/navbar/MegaMenu';
 import { ThemeToggle } from '../components/navbar/ThemeToggle';
+import { RecentlyViewedDropdown } from '../components/navbar/RecentlyViewedDropdown';
 
 export const MainLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +33,7 @@ export const MainLayout: React.FC = () => {
   // State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isRecentlyViewedOpen, setIsRecentlyViewedOpen] = useState(false);
   const [isVoiceSearchOpen, setIsVoiceSearchOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState(() => localStorage.getItem('currency') || 'INR');
   const [selectedLang, setSelectedLang] = useState('English');
@@ -186,6 +189,20 @@ export const MainLayout: React.FC = () => {
               <NotificationCenter 
                 isOpen={isNotificationOpen} 
                 onClose={() => setIsNotificationOpen(false)} 
+              />
+            </div>
+
+            {/* Recently Viewed Trigger */}
+            <div className="relative hidden sm:block">
+              <button
+                onClick={() => setIsRecentlyViewedOpen(!isRecentlyViewedOpen)}
+                className="p-2.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
+              >
+                <RotateCcw className="w-5 h-5" />
+              </button>
+              <RecentlyViewedDropdown
+                isOpen={isRecentlyViewedOpen}
+                onClose={() => setIsRecentlyViewedOpen(false)}
               />
             </div>
 
