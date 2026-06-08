@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { 
   ShoppingBag, Heart, Bell, Sun, Moon, 
   Menu, X, Sparkles, Globe, ChevronDown, Check,
-  RotateCcw
+  RotateCcw, Truck, Tag, RefreshCcw, HeadphonesIcon
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { logoutUser } from '../redux/authSlice';
@@ -63,36 +63,58 @@ export const MainLayout: React.FC = () => {
       {/* DOUBLE DECKER NAVBAR */}
       <header className="sticky top-0 z-50 w-full">
         {/* TOP PANEL: Promo Ticker, Lang, Currency, Dark Mode */}
-        <div className="bg-gradient-to-r from-[#1F2937] to-[#111827] dark:from-[#2874F0] dark:to-[#1A5ED8] text-white text-xs font-semibold h-[40px] px-4 md:px-8 flex items-center justify-between">
-          
+        <div className="bg-[#1F2937] dark:bg-[#131921] text-white h-[40px] px-4 md:px-8 flex items-center justify-between border-b border-white/5">
+
           {/* Marquee Container */}
           <div className="flex-1 overflow-hidden relative h-full flex items-center group">
-            {/* Left fade gradient */}
-            <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#1F2937] dark:from-[#2874F0] to-transparent z-10"></div>
-            
+            {/* Left fade */}
+            <div className="absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
+
             <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap">
-              {/* First set of items */}
-              <div className="flex gap-16 px-8 items-center">
-                <span className="flex items-center gap-2 tracking-wide"><Sparkles className="w-4 h-4 text-amber-400" /> Free Shipping Above ₹499</span>
-                <span className="tracking-wide">Use Code <span className="font-black text-amber-400 uppercase tracking-wider ml-1">SAVE20</span></span>
-                <span className="tracking-wide text-slate-200 dark:text-blue-100">Easy Returns</span>
-                <span className="tracking-wide text-slate-200 dark:text-blue-100">24x7 Support</span>
-              </div>
-              {/* Duplicate set for seamless looping */}
-              <div className="flex gap-16 px-8 items-center" aria-hidden="true">
-                <span className="flex items-center gap-2 tracking-wide"><Sparkles className="w-4 h-4 text-amber-400" /> Free Shipping Above ₹499</span>
-                <span className="tracking-wide">Use Code <span className="font-black text-amber-400 uppercase tracking-wider ml-1">SAVE20</span></span>
-                <span className="tracking-wide text-slate-200 dark:text-blue-100">Easy Returns</span>
-                <span className="tracking-wide text-slate-200 dark:text-blue-100">24x7 Support</span>
-              </div>
+              {[0, 1].map(i => (
+                <div key={i} className="flex items-center gap-0 px-6" aria-hidden={i === 1}>
+
+                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
+                    <Truck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                    Free Shipping above
+                    <span className="text-white font-bold">₹499</span>
+                  </span>
+
+                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
+
+                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
+                    <Tag className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                    Use code
+                    <span className="font-black text-amber-400 tracking-widest uppercase bg-amber-400/10 px-1.5 py-0.5 rounded text-[10px]">SAVE20</span>
+                    for extra 20% off
+                  </span>
+
+                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
+
+                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
+                    <RefreshCcw className="w-3.5 h-3.5 text-sky-400 flex-shrink-0" />
+                    <span className="text-white font-semibold">Easy</span> 30-day Returns
+                  </span>
+
+                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
+
+                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
+                    <HeadphonesIcon className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
+                    <span className="text-white font-semibold">24×7</span> Customer Support
+                  </span>
+
+                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
+
+                </div>
+              ))}
             </div>
 
-            {/* Right fade gradient */}
-            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#111827] dark:from-[#1A5ED8] to-transparent z-10"></div>
+            {/* Right fade */}
+            <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
           </div>
 
           {/* Right Section */}
-          <div className="hidden sm:flex items-center gap-5 relative z-20 pl-6 border-l border-white/20 ml-4">
+          <div className="hidden sm:flex items-center gap-4 relative z-20 pl-5 border-l border-white/10 ml-4 text-[11px] font-medium text-slate-300">
             {/* Language Selection */}
             <div className="relative">
               <button 
