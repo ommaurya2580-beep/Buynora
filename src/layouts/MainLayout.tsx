@@ -321,10 +321,10 @@ export const MainLayout: React.FC = () => {
           {/* About Column */}
           <div className="flex flex-col gap-3">
             <span className="text-xl font-black text-text-inverted tracking-tight">Buynora</span>
-            <p className="leading-relaxed text-[11px] text-slate-500">
+            <p className="leading-relaxed text-[11px] text-slate-400">
               Providing enterprise-grade modern shopping portals with advanced features, inspired by standard-defining brands like Apple, Nike, and Sony.
             </p>
-            <span className="text-[10px] text-slate-600 mt-2">© 2026 Buynora Inc. All rights reserved.</span>
+            <span className="text-[10px] text-slate-400 mt-2">© 2026 Buynora Inc. All rights reserved.</span>
           </div>
 
           {/* Quick Links */}
@@ -353,7 +353,7 @@ export const MainLayout: React.FC = () => {
           {/* Newsletter Column */}
           <div className="flex flex-col gap-3">
             <h5 className="font-bold text-text-inverted text-xs uppercase tracking-wider">Join Newsletter</h5>
-            <p className="leading-relaxed text-[11px] text-slate-500">
+            <p className="leading-relaxed text-[11px] text-slate-400">
               Subscribe to receive price drops, flash coupons, and customized product recommendations.
             </p>
             <form 

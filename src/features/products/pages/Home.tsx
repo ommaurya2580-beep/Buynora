@@ -9,14 +9,13 @@ import { useProducts, useCategories } from '../../../hooks/useQueries';
 
 // Subcomponents
 import { HeroSection } from '../../../components/home/HeroSection';
-import { CategoriesSection } from '../../../components/home/CategoriesSection';
 import { FlashSaleSection } from '../../../components/home/FlashSaleSection';
 import { TrendingSection } from '../../../components/home/TrendingSection';
-import { OffersSection } from '../../../components/home/OffersSection';
 import { ArrivalsSellersSection } from '../../../components/home/ArrivalsSellersSection';
 import { RecommendationsSection } from '../../../components/home/RecommendationsSection';
-
+import { BrandsSection } from '../../../components/home/BrandsSection';
 import { TestimonialsSection } from '../../../components/home/TestimonialsSection';
+import { NewsletterSection } from '../../../components/home/NewsletterSection';
 
 export const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,19 +28,19 @@ export const Home: React.FC = () => {
   const { data: allProductsRes } = useProducts({ limit: 100 });
   const allProducts = useMemo(() => allProductsRes?.products || [], [allProductsRes]);
 
-  const { data: trendingRes } = useProducts({ isTrending: true, limit: 4 });
+  const { data: trendingRes } = useProducts({ isTrending: true, limit: 8 });
   const trending = trendingRes?.products || [];
 
-  const { data: flashSaleRes } = useProducts({ isFlashSale: true, limit: 4 });
+  const { data: flashSaleRes } = useProducts({ isFlashSale: true, limit: 8 });
   const flashSale = flashSaleRes?.products || [];
 
-  const { data: newArrivalsRes } = useProducts({ isNewArrival: true, limit: 4 });
+  const { data: newArrivalsRes } = useProducts({ isNewArrival: true, limit: 8 });
   const newArrivals = newArrivalsRes?.products || [];
 
-  const { data: bestSellersRes } = useProducts({ isBestSeller: true, limit: 4 });
+  const { data: bestSellersRes } = useProducts({ isBestSeller: true, limit: 8 });
   const bestSellers = bestSellersRes?.products || [];
 
-  const { data: aiRecommendedRes } = useProducts({ isAiRecommended: true, limit: 4 });
+  const { data: aiRecommendedRes } = useProducts({ isAiRecommended: true, limit: 8 });
   const aiRecommended = aiRecommendedRes?.products || [];
 
   // Recently viewed section has been moved to Navbar
@@ -66,27 +65,28 @@ export const Home: React.FC = () => {
       {/* 1. HERO CAROUSEL BANNER */}
       <HeroSection />
 
-      {/* 2. FEATURED CATEGORIES */}
-      <CategoriesSection categories={categories} />
-
-      {/* 3. FLASH SALE */}
-      <FlashSaleSection 
-        products={flashSale}
+      {/* 2. AI RECOMMENDED PRODUCTS */}
+      <RecommendationsSection 
+        products={aiRecommended}
         comparedProducts={comparedProducts}
         onCompareToggle={handleCompareToggle}
       />
 
-      {/* 4. TRENDING PRODUCTS */}
+      {/* 3. HOT TRENDING */}
       <TrendingSection 
         products={trending}
         comparedProducts={comparedProducts}
         onCompareToggle={handleCompareToggle}
       />
 
-      {/* 5. DYNAMIC OFFERS / BUNDLES */}
-      <OffersSection />
+      {/* 4. FLASH SALE */}
+      <FlashSaleSection 
+        products={flashSale}
+        comparedProducts={comparedProducts}
+        onCompareToggle={handleCompareToggle}
+      />
 
-      {/* 6. NEW ARRIVALS & BEST SELLERS */}
+      {/* 5. NEW ARRIVALS & BEST SELLERS (stacked full-width internally) */}
       <ArrivalsSellersSection 
         newArrivals={newArrivals}
         bestSellers={bestSellers}
@@ -94,17 +94,14 @@ export const Home: React.FC = () => {
         onCompareToggle={handleCompareToggle}
       />
 
-      {/* 7. AI RECOMMENDED PRODUCTS */}
-      <RecommendationsSection 
-        products={aiRecommended}
-        comparedProducts={comparedProducts}
-        onCompareToggle={handleCompareToggle}
-      />
+      {/* 6. BRANDS */}
+      <BrandsSection />
 
-
-
-      {/* 9. TESTIMONIALS */}
+      {/* 7. TESTIMONIALS */}
       <TestimonialsSection />
+
+      {/* 8. NEWSLETTER */}
+      <NewsletterSection />
 
       {/* Global Product Comparison Drawer */}
       <CompareDrawer

@@ -10,7 +10,7 @@ export const OffersSection: React.FC = () => {
     <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
       
       {/* Apple Bundle */}
-      <div className="glass-premium rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden bg-slate-900 text-text-inverted min-h-[220px]">
+      <div className="rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden bg-slate-900 border border-slate-800/80 shadow-md text-text-inverted min-h-[220px]">
         <div className="space-y-2.5 z-10 max-w-xs text-left">
           <span className="text-[10px] uppercase bg-white/10 text-indigo-200 font-extrabold px-2.5 py-0.5 rounded-full">
             Apple Ecosystem
@@ -39,7 +39,7 @@ export const OffersSection: React.FC = () => {
       </div>
 
       {/* Nike Run Bundle */}
-      <div className="glass-premium rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden bg-rose-950 text-text-inverted min-h-[220px]">
+      <div className="rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden bg-rose-950 border border-rose-900/80 shadow-md text-text-inverted min-h-[220px]">
         <div className="space-y-2.5 z-10 max-w-xs text-left">
           <span className="text-[10px] uppercase bg-white/10 text-rose-200 font-extrabold px-2.5 py-0.5 rounded-full">
             Nike Run Club

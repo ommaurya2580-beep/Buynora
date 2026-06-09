@@ -5,10 +5,10 @@ import { useToast } from '../../hooks/useToast';
 export const NewsletterSection: React.FC = () => {
   const { showToast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     showToast('Thank you for subscribing to our newsletter!', 'success');
-    (e.target as HTMLFormEvent).reset();
+    e.currentTarget.reset();
   };
 
   return (
