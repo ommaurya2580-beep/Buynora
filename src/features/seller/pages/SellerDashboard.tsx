@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Plus, Edit2, Trash2, Box, TrendingUp,
   DollarSign, PackageCheck
@@ -23,7 +24,19 @@ export const SellerDashboard: React.FC = () => {
   const { showToast } = useToast();
 
   // States
-  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'orders'>('analytics');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') || 'analytics';
+  const activeTab = (
+    tabParam === 'inventory' ? 'products' :
+    tabParam === 'revenue' ? 'analytics' :
+    tabParam === 'coupons' ? 'analytics' :
+    tabParam === 'settings' ? 'analytics' :
+    ['analytics', 'products', 'orders'].includes(tabParam) ? tabParam : 'analytics'
+  ) as 'analytics' | 'products' | 'orders';
+
+  const setActiveTab = (tab: 'analytics' | 'products' | 'orders') => {
+    setSearchParams({ tab });
+  };
 
   // Modal form states
   const [showProductModal, setShowProductModal] = useState(false);

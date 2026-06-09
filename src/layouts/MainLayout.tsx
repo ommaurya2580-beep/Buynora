@@ -57,9 +57,8 @@ export const MainLayout: React.FC = () => {
     showToast("Successfully logged out!", "info");
     navigate('/');
   };
-
   return (
-    <div className="min-h-screen bg-secondary flex flex-col justify-between">
+    <div className="min-h-screen bg-bg-secondary flex flex-col justify-between">
       {/* DOUBLE DECKER NAVBAR */}
       <header className="sticky top-0 z-50 w-full">
         {/* TOP PANEL: Promo Ticker, Lang, Currency, Dark Mode */}

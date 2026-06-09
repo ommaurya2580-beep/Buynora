@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   User, MapPin, CreditCard, History, Heart, Shield, Gift, Plus, Trash2
 } from 'lucide-react';
@@ -27,7 +27,19 @@ export const Dashboard: React.FC = () => {
   const wishlistItems = useAppSelector(state => state.wishlist.wishlistItems);
 
   // States
-  const [activeTab, setActiveTab] = useState<TabType>('profile');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') || 'profile';
+  const activeTab: TabType = (
+    tabParam === 'payments' ? 'payment' :
+    tabParam === 'coupons' ? 'rewards' :
+    tabParam === 'settings' ? 'profile' :
+    tabParam === 'notifications' ? 'profile' :
+    tabParam
+  ) as TabType;
+
+  const setActiveTab = (tab: TabType) => {
+    setSearchParams({ tab: tab === 'payment' ? 'payments' : tab });
+  };
 
   // Form States: Profile
   const [name, setName] = useState(user?.name || '');

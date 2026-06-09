@@ -16,15 +16,17 @@ export const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const sidebarItems = [
-    { name: 'System Overview', path: '/admin', icon: LayoutDashboard },
-    { name: 'User Management', path: '/admin/users', icon: Users },
-    { name: 'Seller Management', path: '/admin/sellers', icon: Store },
-    { name: 'Category Settings', path: '/admin/categories', icon: FolderKanban },
-    { name: 'Coupon Settings', path: '/admin/coupons', icon: Tag },
+    { name: 'System Overview', tab: 'overview', path: '/admin?tab=overview', icon: LayoutDashboard },
+    { name: 'User Management', tab: 'users', path: '/admin?tab=users', icon: Users },
+    { name: 'Seller Management', tab: 'sellers', path: '/admin?tab=sellers', icon: Store },
+    { name: 'Category Settings', tab: 'categories', path: '/admin?tab=categories', icon: FolderKanban },
+    { name: 'Coupon Settings', tab: 'coupons', path: '/admin?tab=coupons', icon: Tag },
   ];
 
+  const currentTab = new URLSearchParams(location.search).get('tab') || 'overview';
+
   return (
-    <div className="min-h-screen bg-secondary flex text-text-secondary">
+    <div className="min-h-screen bg-bg-secondary flex text-text-secondary">
       
       {/* Sidebar (Desktop) */}
       <aside className="hidden lg:flex flex-col w-64 glass border-r border-gray-200/50 dark:border-gray-800/50 justify-between p-6 bg-white/50 dark:bg-slate-900/50">
@@ -44,7 +46,7 @@ export const AdminLayout: React.FC = () => {
           <div className="space-y-1.5">
             {sidebarItems.map(item => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+              const isActive = currentTab === item.tab;
               return (
                 <Link
                   key={item.path}
@@ -143,11 +145,10 @@ export const AdminLayout: React.FC = () => {
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-
                 <div className="space-y-1.5">
                   {sidebarItems.map(item => {
                     const Icon = item.icon;
-                    const isActive = location.pathname === item.path;
+                    const isActive = currentTab === item.tab;
                     return (
                       <Link
                         key={item.path}

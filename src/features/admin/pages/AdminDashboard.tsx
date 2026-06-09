@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Users, Store, Trash2, DollarSign, Activity, AlertTriangle
 } from 'lucide-react';
@@ -20,13 +21,23 @@ import {
   useDeleteCouponMutation 
 } from '../../../hooks/useQueries';
 
-type TabType = 'overview' | 'users' | 'sellers' | 'categories' | 'coupons';
+type TabType = 'overview' | 'users' | 'sellers' | 'categories' | 'coupons' | 'products' | 'orders' | 'reports';
 
 export const AdminDashboard: React.FC = () => {
   const { showToast } = useToast();
 
   // States
-  const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') || 'overview';
+  const activeTab = (
+    tabParam === 'activity' ? 'overview' :
+    tabParam === 'settings' ? 'overview' :
+    ['overview', 'users', 'sellers', 'categories', 'coupons', 'products', 'orders', 'reports'].includes(tabParam) ? tabParam : 'overview'
+  ) as TabType;
+
+  const setActiveTab = (tab: TabType) => {
+    setSearchParams({ tab });
+  };
 
   // Coupon Form
   const [couponCode, setCouponCode] = useState('');
@@ -512,7 +523,51 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
 
+      {/* TABS: PRODUCTS */}
+      {activeTab === 'products' && (
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-base font-bold text-text-primary">Product Catalog Administration</h3>
+            <p className="text-[11px] text-gray-400">Products are added and updated by authorized Seller partners</p>
+          </div>
+          <div className="glass p-6 rounded-2xl border border-slate-200 bg-white/40 dark:bg-slate-900/40 text-center py-12">
+            <p className="text-xs text-gray-500">
+              Product listing operations are handled through the merchant portal. System administrators can browse global categories or audit merchant accounts.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* TABS: ORDERS */}
+      {activeTab === 'orders' && (
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-base font-bold text-text-primary">System Order Logs</h3>
+            <p className="text-[11px] text-gray-400">Global customer shipping logs and audit tracking</p>
+          </div>
+          <div className="glass p-6 rounded-2xl border border-slate-200 bg-white/40 dark:bg-slate-900/40 text-center py-12">
+            <p className="text-xs text-gray-500">
+              Order fulfillment and tracking are managed directly by individual merchant partners. Logged system sales data is aggregated under System Overview metrics.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* TABS: REPORTS */}
+      {activeTab === 'reports' && (
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-base font-bold text-text-primary">Business Intelligence & Analytics Reports</h3>
+            <p className="text-[11px] text-gray-400">Monthly earnings details and category performance indicators</p>
+          </div>
+          <div className="glass p-6 rounded-2xl border border-slate-200 bg-white/40 dark:bg-slate-900/40 text-center py-12">
+            <p className="text-xs text-gray-500">
+              Monthly earnings trends and category shares charts are aggregated on the main System Overview dashboard view.
+            </p>
           </div>
         </div>
       )}

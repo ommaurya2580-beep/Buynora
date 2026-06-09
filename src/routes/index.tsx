@@ -29,6 +29,7 @@ import { ProtectedRoute } from './guards/ProtectedRoute';
 import { PublicRoute } from './guards/PublicRoute';
 import { AdminRoute } from './guards/AdminRoute';
 import { SellerRoute } from './guards/SellerRoute';
+import { CustomerRoute } from './guards/CustomerRoute';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -43,7 +44,8 @@ export const AppRoutes: React.FC = () => {
           
           {/* Protected Routes */}
           <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-          <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="dashboard" element={<CustomerRoute><Dashboard /></CustomerRoute>} />
+          <Route path="orders" element={<Navigate to="/dashboard?tab=orders" replace />} />
           <Route path="track/:id" element={<ProtectedRoute><TrackOrder /></ProtectedRoute>} />
           <Route path="wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
           

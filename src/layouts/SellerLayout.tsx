@@ -16,13 +16,15 @@ export const SellerLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const sidebarItems = [
-    { name: 'Analytics Overview', path: '/seller', icon: LayoutDashboard },
-    { name: 'Manage Products', path: '/seller/products', icon: Box },
-    { name: 'Order Logs', path: '/seller/orders', icon: ShoppingCart },
+    { name: 'Analytics Overview', tab: 'analytics', path: '/seller?tab=analytics', icon: LayoutDashboard },
+    { name: 'Manage Products', tab: 'products', path: '/seller?tab=products', icon: Box },
+    { name: 'Order Logs', tab: 'orders', path: '/seller?tab=orders', icon: ShoppingCart },
   ];
 
+  const currentTab = new URLSearchParams(location.search).get('tab') || 'analytics';
+
   return (
-    <div className="min-h-screen bg-secondary flex text-text-secondary">
+    <div className="min-h-screen bg-bg-secondary flex text-text-secondary">
       
       {/* Sidebar (Desktop) */}
       <aside className="hidden lg:flex flex-col w-64 glass border-r border-gray-200/50 dark:border-gray-800/50 justify-between p-6 bg-white/50 dark:bg-slate-900/50">
@@ -37,12 +39,12 @@ export const SellerLayout: React.FC = () => {
               <span className="text-[10px] text-gray-400">Buynora Merchants</span>
             </div>
           </div>
-
+ 
           {/* Navigation Links */}
           <div className="space-y-1.5">
             {sidebarItems.map(item => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+              const isActive = currentTab === item.tab;
               return (
                 <Link
                   key={item.path}
@@ -141,11 +143,10 @@ export const SellerLayout: React.FC = () => {
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-
                 <div className="space-y-1.5">
                   {sidebarItems.map(item => {
                     const Icon = item.icon;
-                    const isActive = location.pathname === item.path;
+                    const isActive = currentTab === item.tab;
                     return (
                       <Link
                         key={item.path}
