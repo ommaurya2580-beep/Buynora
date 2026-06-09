@@ -18,19 +18,22 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
   onCompareToggle
 }) => {
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="space-y-16">
       {/* New Arrivals */}
-      <div className="space-y-6">
+      <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black tracking-tight text-text-primary flex items-center gap-1.5">
-            <Sparkles className="w-5 h-5 text-indigo-500 animate-spin" /> New Arrivals
-          </h3>
-          <Link to="/products?sortBy=newest" className="text-xs text-indigo-500 font-semibold hover:underline">
+          <div>
+            <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
+              <Sparkles className="w-5 h-5 text-indigo-500 animate-pulse" /> New Arrivals
+            </h2>
+            <p className="text-xs text-text-secondary">Explore the latest additions to our store collections</p>
+          </div>
+          <Link to="/products?sortBy=newest" className="text-xs text-indigo-500 font-bold hover:underline">
             View All
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-5">
           {newArrivals.map(prod => (
             <ProductCard
               key={prod.id}
@@ -40,20 +43,23 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
             />
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Best Sellers */}
-      <div className="space-y-6">
+      <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black tracking-tight text-text-primary flex items-center gap-1.5">
-            <Award className="w-5 h-5 text-amber-500" /> Best Sellers
-          </h3>
-          <Link to="/products?sortBy=popularity" className="text-xs text-indigo-500 font-semibold hover:underline">
+          <div>
+            <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
+              <Award className="w-5 h-5 text-amber-500" /> Best Sellers
+            </h2>
+            <p className="text-xs text-text-secondary">Highly-rated and top-performing products by our customers</p>
+          </div>
+          <Link to="/products?sortBy=popularity" className="text-xs text-indigo-500 font-bold hover:underline">
             View All
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-5">
           {bestSellers.map(prod => (
             <ProductCard
               key={prod.id}
@@ -63,7 +69,7 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
             />
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
