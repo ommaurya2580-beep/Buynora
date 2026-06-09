@@ -8,6 +8,12 @@ import { Product } from '../types';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
 
+const getDeliveryDateString = (days: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+};
+
 interface ProductCardProps {
   product: Product;
   onCompareToggle?: (product: Product) => void;
@@ -56,15 +62,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="group relative rounded-md overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-bg-surface">
+    <div className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-bg-surface">
       
       {/* Wishlist Button */}
       <button
         onClick={handleWishlistToggle}
-        className="absolute top-3 right-3 z-10 p-2 rounded-full glass hover:bg-white/90 dark:hover:bg-slate-800 cursor-pointer shadow-md transition-all duration-200 hover:scale-110 active:scale-95"
+        className="absolute top-2.5 right-2.5 z-10 p-2 rounded-full glass hover:bg-white/95 dark:hover:bg-slate-800 cursor-pointer shadow transition-all duration-200 hover:scale-110 active:scale-95"
       >
         <Heart 
-          className={`w-4 h-4 transition-colors ${
+          className={`w-3.5 h-3.5 transition-colors ${
             isInWishlist 
               ? 'fill-rose-500 text-rose-500' 
               : 'text-text-secondary hover:text-rose-500'
@@ -76,95 +82,116 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {onCompareToggle && (
         <button
           onClick={handleCompareClick}
-          className={`absolute top-3 left-3 z-10 p-2 rounded-full bg-bg-surface cursor-pointer shadow-md transition-all duration-200 hover:scale-110 active:scale-95 ${
+          className={`absolute top-2.5 left-2.5 z-10 p-2 rounded-full bg-bg-surface cursor-pointer shadow transition-all duration-200 hover:scale-110 active:scale-95 ${
             isCompared 
               ? 'bg-primary text-text-inverted border-primary hover:bg-primary-hover' 
               : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-text-secondary hover:text-primary'
           }`}
           title="Add to Compare"
         >
-          <BarChart3 className="w-4 h-4" />
+          <BarChart3 className="w-3.5 h-3.5" />
         </button>
       )}
 
       {/* Product Image Link */}
-      <Link to={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-bg-secondary/20">
+      <Link to={`/product/${product.id}`} className="block relative aspect-[4/3] p-4 overflow-hidden bg-white dark:bg-slate-900 flex items-center justify-center border-b border-gray-100 dark:border-gray-800/80">
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+          className="max-h-full max-w-full object-contain transform group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
         
         {/* Badges */}
-        <div className="absolute bottom-3 left-3 flex flex-col gap-1.5 pointer-events-none">
+        <div className="absolute bottom-2 left-2 flex flex-col gap-1 pointer-events-none">
           {product.discountPercentage > 0 && (
-            <span className="bg-rose-500 text-text-inverted text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow">
+            <span className="bg-rose-550 text-white text-[9px] font-extrabold px-2 py-0.5 rounded shadow">
               {product.discountPercentage}% OFF
             </span>
           )}
           {product.isTrending && (
-            <span className="bg-amber-500 text-text-inverted text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow">
+            <span className="bg-amber-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded shadow">
               Trending
             </span>
           )}
           {product.isFlashSale && (
-            <span className="bg-purple-600 text-text-inverted text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow">
-              Flash Sale
+            <span className="bg-purple-600 text-white text-[9px] font-extrabold px-2 py-0.5 rounded shadow">
+              Flash Deal
             </span>
           )}
         </div>
       </Link>
 
       {/* Product Information */}
-      <div className="p-4 flex-1 flex flex-col justify-between">
-        <div>
-          <span className="text-xs font-semibold text-primary tracking-wide uppercase">
-            {product.brand}
-          </span>
-          <Link to={`/product/${product.id}`}>
-            <h4 className="font-bold text-text-secondary hover:text-primary mt-1 line-clamp-1 transition-colors">
+      <div className="p-3 flex-1 flex flex-col justify-between gap-2">
+        <div className="space-y-1 text-left">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] font-semibold text-primary tracking-wide uppercase truncate">
+              {product.brand}
+            </span>
+            {/* Rating */}
+            <div className="flex items-center gap-1">
+              <span className="inline-flex items-center gap-0.5 bg-emerald-600 dark:bg-emerald-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                {product.rating} <Star className="w-2.5 h-2.5 fill-current" />
+              </span>
+              <span className="text-[9px] text-text-secondary font-medium">({product.ratingCount})</span>
+            </div>
+          </div>
+          
+          <Link to={`/product/${product.id}`} className="block">
+            <h4 className="font-bold text-sm text-text-primary hover:text-primary line-clamp-1 transition-colors">
               {product.name}
             </h4>
           </Link>
-          <p className="text-xs text-text-secondary mt-1 line-clamp-2">
-            {product.description}
-          </p>
-
-          {/* Rating */}
-          <div className="flex items-center gap-1.5 mt-2.5">
-            <div className="flex items-center text-amber-400">
-              <Star className="w-3.5 h-3.5 fill-current" />
-            </div>
-            <span className="text-xs font-bold text-text-secondary">{product.rating}</span>
-            <span className="text-[10px] text-text-secondary">({product.ratingCount})</span>
-          </div>
-        </div>
-
-        {/* Pricing and Action */}
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/50">
-          <div className="flex flex-col">
-            <span className="text-lg font-black text-text-primary">
+          
+          {/* Price Hierarchy on One Line */}
+          <div className="flex items-baseline flex-wrap gap-1 pt-0.5">
+            <span className="text-sm sm:text-base font-extrabold text-text-primary">
               {formatCurrency(product.price)}
             </span>
             {product.discountPercentage > 0 && (
-              <span className="text-xs text-gray-400 line-through">
-                {formatCurrency(product.originalPrice)}
-              </span>
+              <>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 line-through">
+                  {formatCurrency(product.originalPrice)}
+                </span>
+                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500">
+                  ({product.discountPercentage}% off)
+                </span>
+              </>
             )}
           </div>
-          
+
+          {/* Delivery & Stock Info */}
+          <div className="flex flex-col gap-0.5 pt-1 border-t border-gray-100 dark:border-gray-800/50">
+            <div className="text-[10px] text-text-secondary">
+              Get it by <span className="font-semibold text-text-primary">{getDeliveryDateString(product.deliveryDays)}</span>
+            </div>
+            
+            <div className="text-[10px] font-semibold">
+              {product.stock <= 0 ? (
+                <span className="text-red-500">Out of Stock</span>
+              ) : product.stock <= 5 ? (
+                <span className="text-amber-600 dark:text-amber-500">Only {product.stock} left!</span>
+              ) : (
+                <span className="text-emerald-600 dark:text-emerald-500">In Stock</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="pt-1">
           <button
             onClick={handleAddToCart}
             disabled={product.stock <= 0}
-            className={`px-3 py-2 rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all duration-200 hover:scale-105 active:scale-95 ${
+            className={`w-full py-2 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] ${
               product.stock <= 0
-                ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                : 'bg-accent text-text-inverted hover:bg-accent-hover'
+                ? 'bg-gray-100 dark:bg-gray-800 text-gray-450 dark:text-gray-500 cursor-not-allowed'
+                : 'bg-accent hover:bg-accent-hover text-text-inverted'
             }`}
           >
             <ShoppingCart className="w-3.5 h-3.5" />
-            <span className="text-xs font-bold">Add</span>
+            <span className="text-xs font-bold">Add to Cart</span>
           </button>
         </div>
       </div>
