@@ -17,13 +17,13 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2">
+        <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
           <Compass className="w-5 h-5 text-indigo-500" /> Hot Trending
         </h2>
-        <p className="text-xs text-gray-500">Popular items customers are purchasing right now</p>
+        <p className="text-xs text-text-secondary">Popular items customers are purchasing right now</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-5">
         {products.map(prod => (
           <ProductCard
             key={prod.id}
