@@ -7,7 +7,9 @@ interface GlobalErrorPageProps {
   resetErrorBoundary?: () => void;
 }
 
-
+export const GlobalErrorPage: React.FC<GlobalErrorPageProps> = ({ error, resetErrorBoundary }) => {
+  return (
+    <div className="min-h-[70vh] flex items-center justify-center p-6 text-center">
       <div className="glass p-10 md:p-14 rounded-3xl border border-indigo-500/10 bg-white/80 dark:bg-slate-900/80 space-y-6 max-w-lg w-full shadow-2xl">
         <div className="p-4 bg-indigo-500/10 text-indigo-500 rounded-full inline-block">
           <ShieldAlert className="w-12 h-12" />
