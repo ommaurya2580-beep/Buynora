@@ -1,450 +1,361 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import {
-  ShoppingCart,
-  Eye,
-  Heart,
-  Truck,
-  RotateCcw,
-  ShieldCheck,
-  Award,
-  TrendingDown,
-  Flame,
-  Zap,
-  Gift,
-  CreditCard,
-  Landmark,
-  Package,
-  Clock,
-  Star,
-  ChevronRight,
-  Sparkles,
-  Users,
-  AlertTriangle,
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Star, ShoppingBag, Eye, ArrowRight, TrendingDown,
+  Volume2, Battery, Award, Cpu, Tv, Camera, Activity, ShieldCheck
 } from 'lucide-react';
+import { Product } from '../../types';
+import { formatCurrency } from '../../utils/formatters';
+import { useProducts } from '../../hooks/useQueries';
+import { products as fallbackProducts } from '../../services/mockDb';
+import sonyHeadphonesImage from '../../assets/sony_headphones_podium.png';
 
 /* ------------------------------------------------------------------ */
-/*  Countdown Timer Hook                                               */
+/*  Feature Icon Picker Helper                                         */
 /* ------------------------------------------------------------------ */
-function useCountdown(initialSeconds: number) {
-  const [seconds, setSeconds] = useState(initialSeconds);
-
-  useEffect(() => {
-    if (seconds <= 0) return;
-    const id = setInterval(() => setSeconds(s => (s > 0 ? s - 1 : 0)), 1000);
-    return () => clearInterval(id);
-  }, [seconds]);
-
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-  return { hrs, mins, secs };
-}
-
-/* ------------------------------------------------------------------ */
-/*  Timer Box                                                          */
-/* ------------------------------------------------------------------ */
-const TimerBox: React.FC<{ value: number; label: string }> = ({ value, label }) => (
-  <div className="flex flex-col items-center">
-    <motion.div
-      key={value}
-      initial={{ rotateX: -90, opacity: 0 }}
-      animate={{ rotateX: 0, opacity: 1 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center text-xl sm:text-2xl font-black shadow-lg"
-    >
-      {String(value).padStart(2, '0')}
-    </motion.div>
-    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1.5">{label}</span>
-  </div>
-);
-
-/* ------------------------------------------------------------------ */
-/*  Floating Info Card                                                 */
-/* ------------------------------------------------------------------ */
-interface FloatingCardProps {
-  icon: React.ReactNode;
-  title: string;
-  subtitle?: string;
-  className?: string;
-  delay?: number;
-}
-
-const FloatingCard: React.FC<FloatingCardProps> = ({ icon, title, subtitle, className = '', delay = 0 }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.7, y: 20 }}
-    animate={{ opacity: 1, scale: 1, y: 0 }}
-    transition={{ duration: 0.5, delay, ease: 'easeOut' }}
-    className={`absolute hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border border-white/60 dark:border-slate-700/60 shadow-xl text-xs z-20 ${className}`}
-  >
-    <span className="flex-shrink-0">{icon}</span>
-    <div className="leading-tight">
-      <p className="font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">{title}</p>
-      {subtitle && <p className="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap">{subtitle}</p>}
-    </div>
-  </motion.div>
-);
-
-/* ------------------------------------------------------------------ */
-/*  Badge Pill                                                         */
-/* ------------------------------------------------------------------ */
-const Badge: React.FC<{ children: React.ReactNode; variant?: 'default' | 'ai' | 'fire' | 'zap' }> = ({ children, variant = 'default' }) => {
-  const variants: Record<string, string> = {
-    default: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700',
-    ai: 'bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-700',
-    fire: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700',
-    zap: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700',
-  };
-  return (
-    <span className={`inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full border ${variants[variant]}`}>
-      {children}
-    </span>
-  );
+const getFeatureIcon = (label: string) => {
+  const l = label.toLowerCase();
+  if (l.includes('noise') || l.includes('sound') || l.includes('audio')) {
+    return <Volume2 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />;
+  }
+  if (l.includes('battery') || l.includes('charge') || l.includes('runtime')) {
+    return <Battery className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />;
+  }
+  if (l.includes('display') || l.includes('screen') || l.includes('oled')) {
+    return <Tv className="w-4 h-4 text-blue-500 dark:text-blue-400" />;
+  }
+  if (l.includes('processor') || l.includes('chip') || l.includes('cpu')) {
+    return <Cpu className="w-4 h-4 text-violet-500 dark:text-violet-400" />;
+  }
+  if (l.includes('camera') || l.includes('lens')) {
+    return <Camera className="w-4 h-4 text-rose-500 dark:text-rose-400" />;
+  }
+  if (l.includes('cushion') || l.includes('support') || l.includes('fit') || l.includes('sole')) {
+    return <Activity className="w-4 h-4 text-amber-500 dark:text-amber-400" />;
+  }
+  if (l.includes('rating') || l.includes('star')) {
+    return <Star className="w-4 h-4 text-amber-400 fill-current" />;
+  }
+  if (l.includes('premium') || l.includes('brand') || l.includes('quality') || l.includes('fabric')) {
+    return <Award className="w-4 h-4 text-indigo-500 dark:text-indigo-450" />;
+  }
+  return <ShieldCheck className="w-4 h-4 text-sky-500 dark:text-sky-400" />;
 };
 
 /* ------------------------------------------------------------------ */
-/*  MAIN COMPONENT                                                     */
+/*  Product Subtitle Helper                                           */
+/* ------------------------------------------------------------------ */
+const getProductSubtitle = (product: Product) => {
+  const subtitleMap: Record<string, string> = {
+    'p3': 'Hear Every Detail.\nBlock Every Distraction.',
+    'p1': 'Titanium design. A17 Pro chip.\nPro camera system.',
+    'p4': 'Mind-blowing performance.\nStunning Liquid Retina XDR display.',
+    'p2': 'Step into the future.\nUnmatched all-day comfort.',
+    'p5': 'Cozy premium fleece.\nPerfect everyday comfort.',
+  };
+  return subtitleMap[product.id] || product.description;
+};
+
+/* ------------------------------------------------------------------ */
+/*  Product Features Helper                                           */
+/* ------------------------------------------------------------------ */
+const getProductFeatures = (product: Product) => {
+  const customFeatures: Record<string, { label: string; value: string }[]> = {
+    'p3': [
+      { label: 'NOISE CANCELLATION', value: 'Industry Leading' },
+      { label: 'BATTERY LIFE', value: '30H Continuous' },
+      { label: 'SOUND QUALITY', value: 'Premium Audio' }
+    ],
+    'p1': [
+      { label: 'DISPLAY', value: 'Super Retina XDR' },
+      { label: 'PROCESSOR', value: 'A17 Pro Chip' },
+      { label: 'CAMERA SYSTEM', value: '48MP Pro Lens' }
+    ],
+    'p4': [
+      { label: 'PROCESSOR', value: 'Apple M3 Chip' },
+      { label: 'DISPLAY SCREEN', value: 'Liquid Retina XDR' },
+      { label: 'BATTERY RUNTIME', value: 'Up to 22 Hours' }
+    ],
+    'p2': [
+      { label: 'HEEL CUSHION', value: 'Max Air 270 Unit' },
+      { label: 'OUTSOLE FIT', value: 'Premium Mesh' },
+      { label: 'MIDSOLE SUPPORT', value: 'Dual-Density Foam' }
+    ],
+    'p5': [
+      { label: 'FABRIC MATERIAL', value: 'Heavyweight Fleece' },
+      { label: 'SWEATER COPE', value: 'Classic Fit' },
+      { label: 'HEAVY WEIGHT', value: 'Cotton Blend' }
+    ]
+  };
+
+  if (customFeatures[product.id]) return customFeatures[product.id];
+
+  // Fallback: extract from specs
+  const specsKeys = Object.keys(product.specs || {});
+  if (specsKeys.length >= 3) {
+    return [
+      { label: specsKeys[0].toUpperCase(), value: product.specs[specsKeys[0]] },
+      { label: specsKeys[1].toUpperCase(), value: product.specs[specsKeys[1]] },
+      { label: specsKeys[2].toUpperCase(), value: product.specs[specsKeys[2]] }
+    ];
+  }
+
+  return [
+    { label: 'RATING', value: `${product.rating} Stars` },
+    { label: 'AVAILABILITY', value: `${product.availabilityStatus}` },
+    { label: 'OFFICIAL BRAND', value: `${product.brand}` }
+  ];
+};
+
+/* ------------------------------------------------------------------ */
+/*  MAIN HERO COMPONENT                                                */
 /* ------------------------------------------------------------------ */
 export const HeroSection: React.FC = () => {
-  const { hrs, mins, secs } = useCountdown(8147); // ~2h 15m 47s
+  const { data: productsData, isLoading } = useProducts({ limit: 20 });
+  const allProducts = productsData?.products || [];
 
-  /* Simulated live viewers with slight jitter */
-  const [viewers, setViewers] = useState(214);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Curate 5 premium products from categories
+  const featuredProducts = useMemo(() => {
+    const list = allProducts.length > 0 ? allProducts : fallbackProducts;
+    const targetIds = ['p3', 'p1', 'p4', 'p2', 'p5'];
+    const curated = targetIds
+      .map(id => list.find(p => p.id === id))
+      .filter((p): p is Product => !!p);
+    
+    return curated.length > 0 ? curated : list.slice(0, 5);
+  }, [allProducts]);
+
+  // Slideshow auto-rotation logic
   useEffect(() => {
-    const id = setInterval(() => {
-      setViewers(v => v + Math.floor(Math.random() * 5) - 2);
-    }, 4000);
-    return () => clearInterval(id);
-  }, []);
+    if (isPaused || featuredProducts.length === 0) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % featuredProducts.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [isPaused, featuredProducts.length]);
 
-  const [wishlisted, setWishlisted] = useState(false);
-  const toggleWishlist = useCallback(() => setWishlisted(w => !w), []);
+  if (isLoading && allProducts.length === 0) {
+    return (
+      <section className="relative w-full lg:w-[95vw] lg:max-w-[1400px] lg:left-1/2 lg:-translate-x-1/2 h-[450px] md:h-[480px] lg:h-[500px] rounded-3xl overflow-hidden shimmer-effect" />
+    );
+  }
+
+  if (featuredProducts.length === 0) return null;
+
+  const activeProduct = featuredProducts[activeIndex];
+  const features = getProductFeatures(activeProduct);
+  const subtitle = getProductSubtitle(activeProduct);
+  const savingsAmount = activeProduct.originalPrice - activeProduct.price;
 
   return (
-    <section className="relative w-full" id="hero-section">
-      {/* ============================================================ */}
-      {/*  MAIN HERO AREA                                              */}
-      {/* ============================================================ */}
-      <div
-        className="relative w-full rounded-3xl overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #F6F3FF 0%, #F4F0FF 40%, #FFFFFF 100%)',
-        }}
-      >
-        {/* --- Dark-mode overlay --- */}
-        <div className="absolute inset-0 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 pointer-events-none" />
-
-        {/* --- Subtle radial glow top-right --- */}
-        <div
-          className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full pointer-events-none opacity-40 dark:opacity-20"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)' }}
-        />
-
-        {/* --- Subtle radial glow bottom-left --- */}
-        <div
-          className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full pointer-events-none opacity-30 dark:opacity-15"
-          style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)' }}
-        />
-
-        {/* --- AI Personalization Badge (top-left) --- */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-600/10 dark:bg-violet-500/20 backdrop-blur-md border border-violet-300/40 dark:border-violet-500/30"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-          <span className="text-[10px] font-bold text-violet-700 dark:text-violet-300">Recommended For You</span>
-          <span className="text-[9px] font-semibold text-violet-500 dark:text-violet-400">• 95% Match</span>
-        </motion.div>
-
-        {/* --- Content grid --- */}
-        <div className="relative z-10 flex flex-col lg:flex-row min-h-[550px] lg:min-h-[620px]">
-
-          {/* ==== LEFT COLUMN ==== */}
-          <div className="flex-shrink-0 lg:w-[45%] flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-10 lg:py-12 order-2 lg:order-1">
-
-            {/* Badges */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="flex flex-wrap gap-2 mb-5"
-            >
-              <Badge>🚀 New Launch</Badge>
-              <Badge variant="fire">🔥 Trending Now</Badge>
-              <Badge variant="zap">⚡ Limited Time Deal</Badge>
-              <Badge variant="ai">🤖 AI Recommended</Badge>
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tight mb-3"
-            >
-              Sony WH-1000XM5
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-[550px] leading-relaxed mb-5"
-            >
-              Industry-leading noise cancellation headphones with premium audio quality and intelligent adaptive sound control.
-            </motion.p>
-
-            {/* Social Proof */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.35 }}
-              className="flex flex-wrap items-center gap-3 mb-5"
-            >
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-                <span className="font-extrabold text-sm text-slate-800 dark:text-white ml-1">4.8</span>
-              </div>
-              <span className="text-xs text-slate-500 dark:text-slate-400">(12,540 Reviews)</span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-2 py-0.5 rounded-md">
-                <Award className="w-3 h-3" /> Amazon's Choice
-              </span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-md">
-                <Flame className="w-3 h-3" /> Best Seller
-              </span>
-            </motion.div>
-
-            {/* Price Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.4 }}
-              className="flex flex-wrap items-end gap-3 mb-3"
-            >
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">₹24,999</span>
-              <span className="text-base sm:text-lg text-slate-400 line-through font-medium">₹39,999</span>
-              <span className="text-xs font-extrabold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-700">
-                37% OFF
-              </span>
-            </motion.div>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.45 }}
-              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-4"
-            >
-              You Save ₹15,000
-            </motion.p>
-
-            {/* Price Drop Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.5 }}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700/50 mb-5 max-w-fit"
-            >
-              <TrendingDown className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">📉 Price Dropped Today</p>
-                <p className="text-[10px] text-emerald-600 dark:text-emerald-400">Lowest price in last 30 days</p>
-              </div>
-            </motion.div>
-
-            {/* Live Demand */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.55 }}
-              className="flex flex-wrap items-center gap-4 text-xs text-slate-600 dark:text-slate-400 mb-5"
-            >
-              <span className="flex items-center gap-1 font-semibold">
-                <Flame className="w-3.5 h-3.5 text-orange-500" /> {viewers} people viewing now
-              </span>
-              <span className="flex items-center gap-1 font-semibold">
-                <ShoppingCart className="w-3.5 h-3.5 text-indigo-500" /> 1,240 sold this week
-              </span>
-              <span className="flex items-center gap-1 font-bold text-orange-600 dark:text-orange-400">
-                <Zap className="w-3.5 h-3.5" /> Selling fast
-              </span>
-            </motion.div>
-
-            {/* Countdown Timer */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.6 }}
-              className="mb-6"
-            >
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" /> Offer Ends In
-              </p>
-              <div className="flex items-center gap-3">
-                <TimerBox value={hrs} label="Hrs" />
-                <span className="text-xl font-black text-slate-400 dark:text-slate-500 -mt-4">:</span>
-                <TimerBox value={mins} label="Min" />
-                <span className="text-xl font-black text-slate-400 dark:text-slate-500 -mt-4">:</span>
-                <TimerBox value={secs} label="Sec" />
-              </div>
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.65 }}
-              className="flex flex-wrap items-center gap-3 mb-5"
-            >
-              <Link
-                to="/product/p3"
-                className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-violet-600/25 hover:shadow-xl hover:shadow-violet-600/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-              >
-                <ShoppingCart className="w-4 h-4" /> Buy Now
-              </Link>
-              <Link
-                to="/product/p3"
-                className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-bold text-sm px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-              >
-                <Eye className="w-4 h-4" /> View Details <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-              <button
-                onClick={toggleWishlist}
-                className={`inline-flex items-center justify-center w-11 h-11 rounded-xl border transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer ${
-                  wishlisted
-                    ? 'bg-rose-50 dark:bg-rose-900/30 border-rose-200 dark:border-rose-700 text-rose-600 dark:text-rose-400'
-                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-rose-500 hover:border-rose-200'
-                } shadow-md hover:shadow-lg`}
-                title="Add to Wishlist"
-              >
-                <Heart className={`w-5 h-5 ${wishlisted ? 'fill-current' : ''}`} />
-              </button>
-            </motion.div>
-
-            {/* Trust Badges */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.7 }}
-              className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400"
-            >
-              <span className="flex items-center gap-1"><Truck className="w-3 h-3 text-emerald-500" /> Free Delivery Tomorrow</span>
-              <span className="flex items-center gap-1"><RotateCcw className="w-3 h-3 text-blue-500" /> Easy Returns</span>
-              <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3 text-violet-500" /> Secure Checkout</span>
-              <span className="flex items-center gap-1"><Award className="w-3 h-3 text-amber-500" /> 1 Year Warranty</span>
-            </motion.div>
-          </div>
-
-          {/* ==== RIGHT COLUMN ==== */}
-          <div className="flex-1 lg:w-[55%] relative flex items-center justify-center py-8 lg:py-0 order-1 lg:order-2 min-h-[320px] lg:min-h-0">
-
-            {/* Glowing Ring */}
-            <div
-              className="absolute w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] lg:w-[420px] lg:h-[420px] rounded-full animate-hero-glow pointer-events-none"
-              style={{
-                background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(99,102,241,0.08) 50%, transparent 70%)',
-                boxShadow: '0 0 80px rgba(139,92,246,0.15), 0 0 160px rgba(99,102,241,0.08)',
-              }}
-            />
-
-            {/* Stage / Podium */}
-            <div
-              className="absolute bottom-6 sm:bottom-8 lg:bottom-16 w-[260px] sm:w-[320px] lg:w-[400px] h-4 rounded-[50%] pointer-events-none"
-              style={{
-                background: 'radial-gradient(ellipse, rgba(139,92,246,0.2) 0%, transparent 70%)',
-                filter: 'blur(6px)',
-              }}
-            />
-
-            {/* Floating Product Image */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="relative z-10"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=600"
-                alt="Sony WH-1000XM5 Premium Headphones"
-                className="w-48 sm:w-64 lg:w-80 aspect-square object-cover rounded-3xl animate-hero-float drop-shadow-2xl"
-              />
-              {/* Reflection */}
-              <div
-                className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[70%] h-8 rounded-[50%] pointer-events-none"
-                style={{
-                  background: 'radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%)',
-                  filter: 'blur(4px)',
-                }}
-              />
-            </motion.div>
-
-            {/* === FLOATING INFO CARDS === */}
-            <FloatingCard
-              icon={<Users className="w-4 h-4 text-orange-500" />}
-              title={`${viewers} Viewing`}
-              className="top-[15%] right-[8%] lg:right-[10%]"
-              delay={0.6}
-            />
-            <FloatingCard
-              icon={<Package className="w-4 h-4 text-indigo-500" />}
-              title="1.2K Sold Today"
-              className="top-[35%] right-[2%] lg:right-[3%]"
-              delay={0.75}
-            />
-            <FloatingCard
-              icon={<AlertTriangle className="w-4 h-4 text-amber-500" />}
-              title="Only 18 Left"
-              className="bottom-[32%] right-[5%] lg:right-[6%]"
-              delay={0.9}
-            />
-            <FloatingCard
-              icon={<Gift className="w-4 h-4 text-pink-500" />}
-              title="Free Gift Included"
-              subtitle="Worth ₹2,999"
-              className="top-[20%] left-[3%] lg:left-[5%]"
-              delay={1.0}
-            />
-            <FloatingCard
-              icon={<TrendingDown className="w-4 h-4 text-emerald-500" />}
-              title="Price Dropped"
-              subtitle="Lowest in 30 Days"
-              className="bottom-[18%] left-[6%] lg:left-[8%]"
-              delay={1.1}
-            />
-          </div>
+    <section 
+      className="relative w-full lg:w-[95vw] lg:max-w-[1400px] lg:left-1/2 lg:-translate-x-1/2 transition-all duration-300 z-30 select-none" 
+      id="hero-section"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Outer Banner Frame */}
+      <div className="w-full h-auto lg:h-[480px] rounded-3xl overflow-hidden border border-gray-150/90 dark:border-slate-800/80 shadow-xl relative flex flex-col lg:flex-row transition-all duration-300">
+        
+        {/* Background Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FFFFFF] via-[#F7F8FC] via-[#EEF2FF] to-[#F6F3FF] dark:from-[#0F172A] dark:via-[#111827] dark:via-[#1E293B] dark:to-[#312E81] transition-all duration-500 z-0" />
+        
+        {/* Ambient Glow Blobs */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none rounded-3xl z-0">
+          <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-200/25 dark:bg-indigo-900/15 rounded-full blur-[110px]" />
+          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-200/25 dark:bg-purple-900/15 rounded-full blur-[110px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-150/15 dark:bg-indigo-950/10 rounded-full blur-[130px]" />
         </div>
-      </div>
 
-      {/* ============================================================ */}
-      {/*  OFFERS BAR                                                   */}
-      {/* ============================================================ */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-        {[
-          { icon: <CreditCard className="w-5 h-5 text-violet-500" />, title: 'Extra 10% Off', subtitle: 'On Prepaid Orders' },
-          { icon: <Landmark className="w-5 h-5 text-blue-500" />, title: 'Bank Discount', subtitle: 'Instant Savings' },
-          { icon: <Truck className="w-5 h-5 text-emerald-500" />, title: 'Free Delivery', subtitle: 'Tomorrow by 9 PM' },
-          { icon: <Gift className="w-5 h-5 text-pink-500" />, title: 'Free Gift', subtitle: 'Worth ₹2,999' },
-        ].map((offer, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
-            className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-lg border border-white/60 dark:border-slate-700/60 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-default"
-          >
-            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-              {offer.icon}
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{offer.title}</p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">{offer.subtitle}</p>
-            </div>
-          </motion.div>
-        ))}
+        {/* Content Slider */}
+        <div className="w-full h-full relative z-10 flex flex-col lg:flex-row">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeProduct.id}
+              initial={{ opacity: 0, x: 15 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -15 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="w-full flex flex-col lg:flex-row"
+            >
+              
+              {/* LEFT SIDE CONTENT - ORDER 2 ON MOBILE */}
+              <div className="w-full lg:w-[52%] flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-8 lg:py-10 order-2 lg:order-1 select-text">
+                
+                {/* Badge Pill */}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100/60 dark:border-indigo-900/30 rounded-full w-fit mb-3">
+                  🚀 NEW LAUNCH
+                </div>
+
+                {/* Sub-label & Headline */}
+                <div className="mb-2">
+                  <p className="text-[11px] lg:text-xs font-bold text-slate-450 dark:text-slate-500 uppercase tracking-widest mb-0.5">
+                    Introducing
+                  </p>
+                  <h1 className="text-2xl sm:text-3xl lg:text-[38px] font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
+                    {activeProduct.name}
+                  </h1>
+                </div>
+
+                {/* Subtitle */}
+                <p className="text-[13px] sm:text-sm text-slate-550 dark:text-slate-400 max-w-[480px] leading-relaxed mb-4 whitespace-pre-line">
+                  {subtitle}
+                </p>
+
+                {/* Stars Rating */}
+                <div className="flex items-center gap-2 mb-4 text-xs font-semibold">
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`w-3.5 h-3.5 ${
+                          i < Math.floor(activeProduct.rating) 
+                            ? 'fill-amber-400 text-amber-400' 
+                            : 'text-slate-300 dark:text-slate-700 fill-slate-200 dark:fill-slate-800'
+                        }`} 
+                      />
+                    ))}
+                    <span className="text-slate-800 dark:text-slate-255 font-black ml-1">{activeProduct.rating}</span>
+                  </div>
+                  <span className="text-slate-400 dark:text-slate-500 font-medium">({activeProduct.ratingCount.toLocaleString()} Reviews)</span>
+                </div>
+
+                {/* Price Section */}
+                <div className="mb-4">
+                  <div className="flex items-baseline gap-2.5">
+                    <span className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white">
+                      {formatCurrency(activeProduct.price)}
+                    </span>
+                    <span className="text-sm lg:text-base text-slate-450 dark:text-slate-500 line-through font-medium">
+                      {formatCurrency(activeProduct.originalPrice)}
+                    </span>
+                    <span className="text-[10px] font-black bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded border border-rose-100/50 dark:border-rose-900/30">
+                      {activeProduct.discountPercentage}% OFF
+                    </span>
+                  </div>
+                  {savingsAmount > 0 && (
+                    <p className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-450 mt-1">
+                      Save {formatCurrency(savingsAmount)}
+                    </p>
+                  )}
+
+                  {/* Price Drop Badge */}
+                  <div className="flex items-center gap-1 px-2.5 py-1 mt-2.5 rounded-lg bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-100/50 dark:border-emerald-900/30 text-[10px] font-bold text-emerald-700 dark:text-emerald-450 w-fit">
+                    <TrendingDown className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                    <span>📉 Price Dropped Today • Lowest Price in Last 30 Days</span>
+                  </div>
+                </div>
+
+                {/* 3 Inline Features */}
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-1.5 mb-5 border-t border-gray-150/40 dark:border-slate-800/40 pt-4">
+                  {features.map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-white/90 dark:bg-slate-800/80 shadow-sm border border-gray-100/40 dark:border-slate-700/40 flex items-center justify-center flex-shrink-0">
+                        {getFeatureIcon(feat.label)}
+                      </div>
+                      <div className="leading-tight text-[11px]">
+                        <p className="font-semibold text-[8px] text-slate-400 dark:text-slate-500 tracking-wider uppercase">{feat.label}</p>
+                        <p className="font-bold text-slate-850 dark:text-slate-205">{feat.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-3 relative z-20">
+                  <Link
+                    to={`/product/${activeProduct.id}`}
+                    className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold text-xs px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
+                  >
+                    Explore Now <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    to={`/product/${activeProduct.id}`}
+                    className="inline-flex items-center gap-1 hover:bg-slate-200/40 dark:hover:bg-slate-800/40 text-slate-750 dark:text-slate-300 font-bold text-xs px-4 py-2.5 rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5" /> View Details
+                  </Link>
+                </div>
+
+              </div>
+
+              {/* RIGHT SIDE PRODUCT AREA - ORDER 1 ON MOBILE */}
+              <div className="flex-1 w-full lg:w-[48%] h-[240px] sm:h-[280px] lg:h-full relative flex items-center justify-center py-6 lg:py-0 order-1 lg:order-2">
+                
+                {/* Large Circular Glow Halo */}
+                <div
+                  className="absolute w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full border border-indigo-200/20 dark:border-indigo-400/10 shadow-[0_0_80px_rgba(165,180,252,0.25),inset_0_0_40px_rgba(165,180,252,0.15)] dark:shadow-[0_0_80px_rgba(99,102,241,0.2),inset_0_0_40px_rgba(99,102,241,0.1)] blur-[2px] pointer-events-none transition-all duration-500 z-0"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(165,180,252,0.15) 0%, transparent 70%)',
+                  }}
+                />
+
+                {/* Ambient Backlight Reflection */}
+                <div className="absolute w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] rounded-full bg-white/60 dark:bg-indigo-950/20 blur-[50px] pointer-events-none z-0" />
+
+                {/* Premium 3D CSS Podium */}
+                <div className="absolute bottom-[20px] sm:bottom-[30px] lg:bottom-[45px] flex flex-col items-center justify-center z-0">
+                  {/* Floor Shadow under the podium */}
+                  <div className="w-[220px] sm:w-[260px] lg:w-[300px] h-[16px] bg-black/[0.04] dark:bg-black/[0.3] rounded-[50%] blur-sm pointer-events-none" />
+                  
+                  {/* 3D Extruded Cylinder (Podium Body) */}
+                  <div className="relative w-[200px] sm:w-[240px] lg:w-[280px] h-[35px] -mt-[14px]">
+                    {/* Side extrusion of cylinder */}
+                    <div className="absolute top-[6px] w-full h-[18px] bg-gradient-to-b from-[#E2E8F0] to-[#CBD5E1] dark:from-slate-800 dark:to-slate-900 rounded-[50%]" />
+                    
+                    {/* Top cap of cylinder */}
+                    <div className="absolute top-0 w-full h-[15px] bg-gradient-to-b from-white to-[#F1F5F9] dark:from-slate-700 dark:to-slate-800 border border-gray-200/50 dark:border-slate-650/40 rounded-[50%] shadow-[inset_0px_1px_2px_rgba(255,255,255,0.8)]" />
+                  </div>
+                </div>
+
+                {/* Product Image Floating Container */}
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="relative z-10 flex flex-col items-center justify-center w-full"
+                >
+                  {/* Dynamic Image */}
+                  <img
+                    src={activeProduct.id === 'p3' ? sonyHeadphonesImage : activeProduct.images[0]}
+                    alt={activeProduct.name}
+                    className="max-h-[190px] sm:max-h-[220px] lg:max-h-[260px] object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.12)] select-none z-10 transition-transform duration-350 hover:scale-105"
+                    loading="eager"
+                  />
+
+                  {/* Floating Shadow under the product */}
+                  <div className="absolute bottom-[-10px] w-[50%] h-[12px] bg-black/[0.06] dark:bg-black/[0.25] rounded-[50%] blur-md pointer-events-none scale-x-90" />
+                </motion.div>
+
+              </div>
+
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Carousel Dots Indicator - Bottom Left */}
+        <div className="absolute bottom-5 left-6 sm:left-10 lg:left-14 flex items-center gap-2 z-20">
+          {featuredProducts.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                idx === activeIndex
+                  ? 'w-6 bg-indigo-600 dark:bg-indigo-400'
+                  : 'w-2 bg-slate-350 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );
