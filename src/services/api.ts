@@ -171,6 +171,565 @@ const mockUsersList: UserAccount[] = [
   { id: "u5", name: "Spammer Steve", email: "steve@spam.com", role: "CUSTOMER", status: "Banned", joiningDate: "2026-05-28" }
 ];
 
+// ==========================================
+// HERO CAMPAIGN MANAGER MOCK DATABASE HELPERS
+// ==========================================
+const getStoredCampaigns = (): any[] => {
+  const stored = localStorage.getItem('buynora_hero_campaigns');
+  if (stored) return JSON.parse(stored);
+  
+  const defaults = [
+    {
+      id: "camp_p3",
+      campaignName: "Sony Noise Cancellation Launch",
+      campaignSlug: "sony-wh-1000xm5-launch",
+      internalNotes: "Launch campaign for Sony Headphones, featuring premium ANC technology.",
+      description: "Industry-leading noise canceling over-ear headphones with premium sound quality.",
+      tags: ["Electronics", "Sony", "Audio"],
+      priority: 1,
+      status: "Published",
+      campaignType: "New Launch",
+      imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+      mobileImageUrl: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=500",
+      tabletImageUrl: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=600",
+      ultraWideImageUrl: "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&q=80&w=1200",
+      heroProductImageUrl: "",
+      backgroundImageUrl: "",
+      videoUrl: "",
+      videoUrlWebM: "",
+      youtubeUrl: "",
+      vimeoUrl: "",
+      videoSettings: {
+        videoAutoplay: true,
+        videoLoop: true,
+        videoMute: true,
+        videoPauseOnHover: true,
+        videoShowControls: false,
+        videoShowThumbnail: true,
+        videoPreload: true
+      },
+      badge: "🚀 NEW LAUNCH",
+      title: "Sony WH-1000XM5",
+      subtitle: "Hear Every Detail.\nBlock Every Distraction.",
+      offerText: "Introductory Offer: Flat 37% Off",
+      couponCode: "SAVE20",
+      termsConditions: "Valid on online transactions. Limited stock.",
+      pricing: {
+        enablePricing: true,
+        price: 24999,
+        oldPrice: 39999,
+        discount: 37,
+        savingsAmount: 15000,
+        emiOption: "No Cost EMI starting from ₹2,083/month",
+        exchangeOffer: "Exchange up to ₹3,000",
+        bankOffer: "10% Instant Discount on HDFC Cards",
+        couponOffer: "Use code SAVE20 for extra ₹500 off",
+        cashback: "₹1,000 Amazon Pay Cashback"
+      },
+      primaryButton: { text: "Explore Now", icon: "ArrowRight", color: "bg-slate-900 dark:bg-white text-white dark:text-slate-950", link: "/product/p3" },
+      secondaryButton: { text: "View Details", icon: "Eye", color: "border border-slate-200/40 text-slate-750 dark:text-slate-300", link: "/product/p3" },
+      buttonActionType: "Open Product",
+      attachedProductIds: ["p3"],
+      attachedCategoryIds: ["c_electronics"],
+      attachedBrandId: "b_sony",
+      startDate: "2026-06-01",
+      endDate: "2026-08-31",
+      timezone: "GMT+5:30",
+      autoPublish: true,
+      autoExpire: true,
+      rotationMode: "Auto Carousel",
+      carouselAutoplay: true,
+      carouselTransitionSpeed: 6000,
+      carouselAnimationSpeed: 400,
+      carouselInfiniteLoop: true,
+      carouselPauseOnHover: true,
+      animationSetting: "Fade",
+      targetDevices: ["Desktop", "Tablet", "Mobile"],
+      targetUsers: ["Guest", "Logged In", "Customer", "Seller", "Admin", "Premium Member", "New User", "Returning User"],
+      targetGeo: { countries: ["India", "USA"], states: [], cities: [] },
+      enableABTest: false,
+      metaTitle: "Sony WH-1000XM5 Breathtaking Sound",
+      metaDescription: "Buy Sony WH-1000XM5 headphones with industry leading ANC.",
+      metaKeywords: "sony, headphones, noise cancellation, anc",
+      views: 3120,
+      clicks: 450,
+      ctr: 14.42,
+      revenue: 11249550,
+      conversions: 450,
+      createdBy: "admin@buynora.com",
+      createdAt: "2026-06-01T10:00:00Z",
+      updatedAt: "2026-06-01T10:00:00Z"
+    },
+    {
+      id: "camp_p1",
+      campaignName: "iPhone 15 Pro Titanium",
+      campaignSlug: "iphone-15-pro-titanium",
+      internalNotes: "Main Apple showcase for iPhone 15 Pro",
+      description: "Experience the next level of mobile technology with the iPhone 15 Pro.",
+      tags: ["Electronics", "Apple", "Smartphones"],
+      priority: 2,
+      status: "Published",
+      campaignType: "Brand Promotion",
+      imageUrl: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=800",
+      mobileImageUrl: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=500",
+      tabletImageUrl: "https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&q=80&w=600",
+      ultraWideImageUrl: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=1200",
+      heroProductImageUrl: "",
+      backgroundImageUrl: "",
+      videoUrl: "",
+      videoUrlWebM: "",
+      youtubeUrl: "",
+      vimeoUrl: "",
+      videoSettings: {
+        videoAutoplay: true,
+        videoLoop: true,
+        videoMute: true,
+        videoPauseOnHover: true,
+        videoShowControls: false,
+        videoShowThumbnail: true,
+        videoPreload: true
+      },
+      badge: "🚀 NEW LAUNCH",
+      title: "iPhone 15 Pro",
+      subtitle: "Titanium design. A17 Pro chip.\nPro camera system.",
+      offerText: "Get up to ₹6,000 Instant Savings",
+      couponCode: "",
+      termsConditions: "Applicable on bank credit cards.",
+      pricing: {
+        enablePricing: true,
+        price: 79999,
+        oldPrice: 89999,
+        discount: 11,
+        savingsAmount: 10000,
+        emiOption: "No Cost EMI available",
+        exchangeOffer: "Exchange benefits up to ₹15,000",
+        bankOffer: "₹5,000 Instant Discount on ICICI Cards",
+        couponOffer: "",
+        cashback: ""
+      },
+      primaryButton: { text: "Explore Now", icon: "ArrowRight", color: "bg-slate-900 dark:bg-white text-white dark:text-slate-950", link: "/product/p1" },
+      secondaryButton: { text: "View Details", icon: "Eye", color: "border border-slate-200/40 text-slate-750 dark:text-slate-300", link: "/product/p1" },
+      buttonActionType: "Open Product",
+      attachedProductIds: ["p1"],
+      attachedCategoryIds: ["c_electronics"],
+      attachedBrandId: "b_apple",
+      startDate: "2026-06-01",
+      endDate: "2026-08-31",
+      timezone: "GMT+5:30",
+      autoPublish: true,
+      autoExpire: true,
+      rotationMode: "Auto Carousel",
+      carouselAutoplay: true,
+      carouselTransitionSpeed: 6000,
+      carouselAnimationSpeed: 400,
+      carouselInfiniteLoop: true,
+      carouselPauseOnHover: true,
+      animationSetting: "Slide",
+      targetDevices: ["Desktop", "Tablet", "Mobile"],
+      targetUsers: ["Guest", "Logged In", "Customer", "Seller", "Admin", "Premium Member", "New User", "Returning User"],
+      targetGeo: { countries: [], states: [], cities: [] },
+      enableABTest: false,
+      metaTitle: "Buy iPhone 15 Pro Titanium",
+      metaDescription: "Get the iPhone 15 Pro with aerospace grade titanium at Buynora.",
+      metaKeywords: "iphone, apple, titanium",
+      views: 5200,
+      clicks: 840,
+      ctr: 16.15,
+      revenue: 67199160,
+      conversions: 840,
+      createdBy: "admin@buynora.com",
+      createdAt: "2026-06-01T10:00:00Z",
+      updatedAt: "2026-06-01T10:00:00Z"
+    },
+    {
+      id: "camp_p4",
+      campaignName: "MacBook Pro M3 Sale",
+      campaignSlug: "macbook-pro-m3-sale",
+      internalNotes: "High performance laptops campaign",
+      description: "MacBook Pro 14-inch with M3 chip, delivering speed and efficiency.",
+      tags: ["Electronics", "Apple", "Laptops"],
+      priority: 3,
+      status: "Published",
+      campaignType: "Mega Sale",
+      imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=800",
+      mobileImageUrl: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=500",
+      tabletImageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=600",
+      ultraWideImageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1200",
+      heroProductImageUrl: "",
+      backgroundImageUrl: "",
+      videoUrl: "",
+      videoUrlWebM: "",
+      youtubeUrl: "",
+      vimeoUrl: "",
+      videoSettings: {
+        videoAutoplay: true,
+        videoLoop: true,
+        videoMute: true,
+        videoPauseOnHover: true,
+        videoShowControls: false,
+        videoShowThumbnail: true,
+        videoPreload: true
+      },
+      badge: "🚀 NEW LAUNCH",
+      title: "MacBook Pro 14\" M3",
+      subtitle: "Mind-blowing performance.\nStunning Liquid Retina XDR display.",
+      offerText: "Save up to ₹25,000 instantly",
+      couponCode: "BIGNORA30",
+      termsConditions: "T&C apply. Limited period offer.",
+      pricing: {
+        enablePricing: true,
+        price: 144900,
+        oldPrice: 169900,
+        discount: 14,
+        savingsAmount: 25000,
+        emiOption: "No Cost EMI starts at ₹12,075/month",
+        exchangeOffer: "Get up to ₹20,000 off on exchange",
+        bankOffer: "₹8,000 cashback on SBI cards",
+        couponOffer: "Save extra ₹2,000 with coupon BIGNORA30",
+        cashback: "₹5,000 store credits"
+      },
+      primaryButton: { text: "Explore Now", icon: "ArrowRight", color: "bg-slate-900 dark:bg-white text-white dark:text-slate-950", link: "/product/p4" },
+      secondaryButton: { text: "View Details", icon: "Eye", color: "border border-slate-200/40 text-slate-750 dark:text-slate-300", link: "/product/p4" },
+      buttonActionType: "Open Product",
+      attachedProductIds: ["p4"],
+      attachedCategoryIds: ["c_electronics"],
+      attachedBrandId: "b_apple",
+      startDate: "2026-06-01",
+      endDate: "2026-08-31",
+      timezone: "GMT+5:30",
+      autoPublish: true,
+      autoExpire: true,
+      rotationMode: "Auto Carousel",
+      carouselAutoplay: true,
+      carouselTransitionSpeed: 6000,
+      carouselAnimationSpeed: 400,
+      carouselInfiniteLoop: true,
+      carouselPauseOnHover: true,
+      animationSetting: "Zoom",
+      targetDevices: ["Desktop", "Tablet"],
+      targetUsers: ["Logged In", "Customer", "Premium Member"],
+      targetGeo: { countries: ["India"], states: [], cities: [] },
+      enableABTest: false,
+      metaTitle: "MacBook Pro 14 M3 Special Deal",
+      metaDescription: "Purchase Apple MacBook Pro 14 inch M3 with heavy discounts.",
+      metaKeywords: "macbook, apple, m3 laptop",
+      views: 1800,
+      clicks: 220,
+      ctr: 12.22,
+      revenue: 31878000,
+      conversions: 220,
+      createdBy: "admin@buynora.com",
+      createdAt: "2026-06-01T10:00:00Z",
+      updatedAt: "2026-06-01T10:00:00Z"
+    },
+    {
+      id: "camp_p2",
+      campaignName: "Nike Air Max Comfort",
+      campaignSlug: "nike-air-max-comfort",
+      internalNotes: "Sneakers fashion promotional banner",
+      description: "Step into the future. Unmatched all-day comfort.",
+      tags: ["Footwear", "Nike", "Sneakers"],
+      priority: 4,
+      status: "Published",
+      campaignType: "Flash Sale",
+      imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800",
+      mobileImageUrl: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=500",
+      tabletImageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&q=80&w=600",
+      ultraWideImageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1200",
+      heroProductImageUrl: "",
+      backgroundImageUrl: "",
+      videoUrl: "",
+      videoUrlWebM: "",
+      youtubeUrl: "",
+      vimeoUrl: "",
+      videoSettings: {
+        videoAutoplay: true,
+        videoLoop: true,
+        videoMute: true,
+        videoPauseOnHover: true,
+        videoShowControls: false,
+        videoShowThumbnail: true,
+        videoPreload: true
+      },
+      badge: "🚀 NEW LAUNCH",
+      title: "Air Max 270 SE",
+      subtitle: "Step into the future.\nUnmatched all-day comfort.",
+      offerText: "Flat 16% Off for limited time",
+      couponCode: "WELCOME10",
+      termsConditions: "No minimum purchase required.",
+      pricing: {
+        enablePricing: true,
+        price: 12499,
+        oldPrice: 14999,
+        discount: 16,
+        savingsAmount: 2500,
+        emiOption: "EMIs starting from ₹600/month",
+        exchangeOffer: "",
+        bankOffer: "Additional 5% cashback on Axis cards",
+        couponOffer: "Use WELCOME10 for extra 10% off",
+        cashback: "₹500 Nike Gift Card"
+      },
+      primaryButton: { text: "Explore Now", icon: "ArrowRight", color: "bg-slate-900 dark:bg-white text-white dark:text-slate-950", link: "/product/p2" },
+      secondaryButton: { text: "View Details", icon: "Eye", color: "border border-slate-200/40 text-slate-750 dark:text-slate-300", link: "/product/p2" },
+      buttonActionType: "Open Product",
+      attachedProductIds: ["p2"],
+      attachedCategoryIds: ["c_footwear"],
+      attachedBrandId: "b_nike",
+      startDate: "2026-06-01",
+      endDate: "2026-08-31",
+      timezone: "GMT+5:30",
+      autoPublish: true,
+      autoExpire: true,
+      rotationMode: "Auto Carousel",
+      carouselAutoplay: true,
+      carouselTransitionSpeed: 6000,
+      carouselAnimationSpeed: 400,
+      carouselInfiniteLoop: true,
+      carouselPauseOnHover: true,
+      animationSetting: "3D Transform",
+      targetDevices: ["Desktop", "Tablet", "Mobile"],
+      targetUsers: ["Guest", "Logged In", "Customer", "Seller", "Admin", "Premium Member", "New User", "Returning User"],
+      targetGeo: { countries: [], states: [], cities: [] },
+      enableABTest: false,
+      metaTitle: "Nike Air Max 270 SE Sports Shoe Shop",
+      metaDescription: "Purchase Nike Air Max 270 SE running shoes with great cushion support.",
+      metaKeywords: "nike, shoes, running, sneakers",
+      views: 4050,
+      clicks: 580,
+      ctr: 14.32,
+      revenue: 7249420,
+      conversions: 580,
+      createdBy: "admin@buynora.com",
+      createdAt: "2026-06-01T10:00:00Z",
+      updatedAt: "2026-06-01T10:00:00Z"
+    },
+    {
+      id: "camp_p5",
+      campaignName: "Nike Sportswear Hoodie Launch",
+      campaignSlug: "nike-sportswear-hoodie-launch",
+      internalNotes: "Premium apparel collection",
+      description: "Cozy premium fleece. Perfect everyday comfort.",
+      tags: ["Apparel", "Nike", "Hoodies"],
+      priority: 5,
+      status: "Published",
+      campaignType: "Collection Launch",
+      imageUrl: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800",
+      mobileImageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=500",
+      tabletImageUrl: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600",
+      ultraWideImageUrl: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=1200",
+      heroProductImageUrl: "",
+      backgroundImageUrl: "",
+      videoUrl: "",
+      videoUrlWebM: "",
+      youtubeUrl: "",
+      vimeoUrl: "",
+      videoSettings: {
+        videoAutoplay: true,
+        videoLoop: true,
+        videoMute: true,
+        videoPauseOnHover: true,
+        videoShowControls: false,
+        videoShowThumbnail: true,
+        videoPreload: true
+      },
+      badge: "🚀 NEW LAUNCH",
+      title: "Premium Sportswear Hoodie",
+      subtitle: "Cozy premium fleece.\nPerfect everyday comfort.",
+      offerText: "Special 30% Off Launch Discount",
+      couponCode: "SAVE20",
+      termsConditions: "Valid on all hoodie sizes.",
+      pricing: {
+        enablePricing: true,
+        price: 3499,
+        oldPrice: 4999,
+        discount: 30,
+        savingsAmount: 1500,
+        emiOption: "",
+        exchangeOffer: "",
+        bankOffer: "₹200 cashback on PayTM wallet",
+        couponOffer: "Apply WELCOME10 for extra 10% discount",
+        cashback: ""
+      },
+      primaryButton: { text: "Explore Now", icon: "ArrowRight", color: "bg-slate-900 dark:bg-white text-white dark:text-slate-950", link: "/product/p5" },
+      secondaryButton: { text: "View Details", icon: "Eye", color: "border border-slate-200/40 text-slate-750 dark:text-slate-300", link: "/product/p5" },
+      buttonActionType: "Open Product",
+      attachedProductIds: ["p5"],
+      attachedCategoryIds: ["c_apparel"],
+      attachedBrandId: "b_nike",
+      startDate: "2026-06-01",
+      endDate: "2026-08-31",
+      timezone: "GMT+5:30",
+      autoPublish: true,
+      autoExpire: true,
+      rotationMode: "Auto Carousel",
+      carouselAutoplay: true,
+      carouselTransitionSpeed: 6000,
+      carouselAnimationSpeed: 400,
+      carouselInfiniteLoop: true,
+      carouselPauseOnHover: true,
+      animationSetting: "Fade",
+      targetDevices: ["Desktop", "Tablet", "Mobile"],
+      targetUsers: ["Guest", "Logged In", "Customer", "Seller", "Admin", "Premium Member", "New User", "Returning User"],
+      targetGeo: { countries: [], states: [], cities: [] },
+      enableABTest: false,
+      metaTitle: "Buy Premium Sportswear Hoodie online",
+      metaDescription: "Original Nike pullovers with high quality fleece.",
+      metaKeywords: "hoodie, nike, clothing",
+      views: 2900,
+      clicks: 390,
+      ctr: 13.45,
+      revenue: 1364610,
+      conversions: 390,
+      createdBy: "admin@buynora.com",
+      createdAt: "2026-06-01T10:00:00Z",
+      updatedAt: "2026-06-01T10:00:00Z"
+    }
+  ];
+  localStorage.setItem('buynora_hero_campaigns', JSON.stringify(defaults));
+  return defaults;
+};
+
+const getStoredABTests = (): any[] => {
+  const stored = localStorage.getItem('buynora_ab_tests');
+  if (stored) return JSON.parse(stored);
+  const defaults = [
+    {
+      id: "ab_1",
+      name: "Sony vs iPhone Promo test",
+      campaignAId: "camp_p3",
+      campaignBId: "camp_p1",
+      trafficSplitA: 50,
+      trafficSplitB: 50,
+      status: "Active",
+      viewsA: 1560,
+      clicksA: 225,
+      viewsB: 2600,
+      clicksB: 420,
+      conversionsA: 225,
+      conversionsB: 420,
+      revenueA: 5624775,
+      revenueB: 33599580,
+      winner: null,
+      createdAt: "2026-06-02T10:00:00Z",
+      updatedAt: "2026-06-05T12:00:00Z"
+    }
+  ];
+  localStorage.setItem('buynora_ab_tests', JSON.stringify(defaults));
+  return defaults;
+};
+
+const getStoredAssets = (): any[] => {
+  const stored = localStorage.getItem('buynora_campaign_assets');
+  if (stored) return JSON.parse(stored);
+  const defaults = [
+    { id: "ast_1", name: "sony_headphones_main.png", type: "image", url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800", size: "840 KB", folder: "Sony Launch", createdAt: "2026-06-01" },
+    { id: "ast_2", name: "iphone_podium_gray.jpg", type: "image", url: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=800", size: "1.1 MB", folder: "Apple Fall", createdAt: "2026-06-01" },
+    { id: "ast_3", name: "nike_red_shoe_banner.png", type: "image", url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800", size: "620 KB", folder: "Nike Run", createdAt: "2026-06-01" },
+    { id: "ast_4", name: "macbook_lifestyle.jpg", type: "image", url: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=800", size: "1.4 MB", folder: "Apple Laptop", createdAt: "2026-06-01" },
+    { id: "ast_5", name: "hoodie_studio_shot.jpg", type: "image", url: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", size: "910 KB", folder: "Nike Clothing", createdAt: "2026-06-01" },
+    { id: "ast_6", name: "cosmic_stars_background.jpg", type: "background", url: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&q=80&w=800", size: "1.8 MB", folder: "Backgrounds", createdAt: "2026-06-02" },
+    { id: "ast_7", name: "gradient_indigo_sunset.jpg", type: "background", url: "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=800", size: "450 KB", folder: "Backgrounds", createdAt: "2026-06-02" }
+  ];
+  localStorage.setItem('buynora_campaign_assets', JSON.stringify(defaults));
+  return defaults;
+};
+
+const getStoredTemplates = (): any[] => {
+  return [
+    {
+      id: "tpl_apple",
+      name: "Apple Style Hero",
+      description: "Sleek typography, minimal dark-mode ambient glows, highlighting primary product image floating on 3D podium.",
+      thumbnail: "🍎",
+      category: "Tech",
+      campaignData: {
+        badge: "🚀 PREMIUM PRODUCT",
+        title: "Apple Showcase",
+        subtitle: "Design that pushes boundaries.\nFeatures that change everything.",
+        imageUrl: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=800",
+        campaignType: "Brand Promotion",
+        animationSetting: "Fade",
+        rotationMode: "Single Hero"
+      }
+    },
+    {
+      id: "tpl_amazon",
+      name: "Amazon Sale Hero",
+      description: "Bold badges, heavy coupon highlights, red-to-orange warm energetic gradients, price strike-throughs and EMI options.",
+      thumbnail: "📦",
+      category: "Sales",
+      campaignData: {
+        badge: "⚡ FLASH SALE",
+        title: "BIG DEAL SPECTACULAR",
+        subtitle: "Unbelievable price drops for 24 hours only.",
+        imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800",
+        campaignType: "Flash Sale",
+        animationSetting: "Slide",
+        pricing: {
+          enablePricing: true,
+          price: 999,
+          oldPrice: 1999,
+          discount: 50,
+          savingsAmount: 1000,
+          emiOption: "No Cost EMI available",
+          exchangeOffer: "",
+          bankOffer: "10% instant discount on major cards",
+          couponOffer: "",
+          cashback: ""
+        }
+      }
+    },
+    {
+      id: "tpl_flipkart",
+      name: "Flipkart Sale Hero",
+      description: "Festive banners with heavy focus on discounts, savings tags, and yellow-blue bright consumer color palettes.",
+      thumbnail: "🛍️",
+      category: "Sales",
+      campaignData: {
+        badge: "🎉 FESTIVAL BONANZA",
+        title: "Dhamaka Offers",
+        subtitle: "Bring home happiness with our lowest prices ever.",
+        campaignType: "Festival Sale",
+        animationSetting: "Zoom"
+      }
+    },
+    {
+      id: "tpl_video",
+      name: "Video Campaign Hero",
+      description: "Brings cinematic experiences right to your home page banner, supporting custom files or streaming URLs.",
+      thumbnail: "🎬",
+      category: "Media",
+      campaignData: {
+        badge: "🎥 VIDEO EXCLUSIVE",
+        title: "Cinematic Product Tour",
+        subtitle: "Watch the latest launch video details.",
+        campaignType: "Video Campaign",
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"
+      }
+    }
+  ];
+};
+
+const getStoredVersions = (campaignId: string): any[] => {
+  const key = `buynora_versions_${campaignId}`;
+  const stored = localStorage.getItem(key);
+  if (stored) return JSON.parse(stored);
+  
+  const defaults = [
+    {
+      id: `ver_${campaignId}_1`,
+      campaignId,
+      versionNumber: 1,
+      changedBy: "admin@buynora.com",
+      changeSummary: "Initial campaign creation",
+      campaignData: JSON.stringify({ id: campaignId }),
+      createdAt: "2026-06-01T10:00:00Z"
+    }
+  ];
+  localStorage.setItem(key, JSON.stringify(defaults));
+  return defaults;
+};
+
 // Axios Mock Adapter Intercepting Requests
 api.defaults.adapter = async (config) => {
   const url = config.url || '';
@@ -179,6 +738,332 @@ api.defaults.adapter = async (config) => {
   const params = config.params || {};
 
   await new Promise((resolve) => setTimeout(resolve, 300));
+
+  // ==========================================
+  // HERO CAMPAIGN MANAGER MOCK ENDPOINTS
+  // ==========================================
+  if (method === 'get' && url === '/admin/hero-campaigns') {
+    return mockResponse(200, getStoredCampaigns());
+  }
+
+  if (method === 'get' && url === '/admin/hero-campaigns/analytics') {
+    const camps = getStoredCampaigns();
+    const totalViews = camps.reduce((acc, c) => acc + (c.views || 0), 0);
+    const totalClicks = camps.reduce((acc, c) => acc + (c.clicks || 0), 0);
+    const totalRevenue = camps.reduce((acc, c) => acc + (c.revenue || 0), 0);
+    const totalConversions = camps.reduce((acc, c) => acc + (c.conversions || 0), 0);
+    const ctr = totalViews > 0 ? parseFloat(((totalClicks / totalViews) * 100).toFixed(2)) : 0;
+    
+    const viewsTrend = [
+      { name: 'Mon', views: 2400 },
+      { name: 'Tue', views: 1398 },
+      { name: 'Wed', views: 9800 },
+      { name: 'Thu', views: 3908 },
+      { name: 'Fri', views: 4800 },
+      { name: 'Sat', views: 3800 },
+      { name: 'Sun', views: 4300 }
+    ];
+    const clicksTrend = [
+      { name: 'Mon', clicks: 240 },
+      { name: 'Tue', clicks: 139 },
+      { name: 'Wed', clicks: 980 },
+      { name: 'Thu', clicks: 390 },
+      { name: 'Fri', clicks: 480 },
+      { name: 'Sat', clicks: 380 },
+      { name: 'Sun', clicks: 430 }
+    ];
+    const ctrTrend = [
+      { name: 'Mon', ctr: 10.0 },
+      { name: 'Tue', ctr: 9.94 },
+      { name: 'Wed', ctr: 10.0 },
+      { name: 'Thu', ctr: 9.97 },
+      { name: 'Fri', ctr: 10.0 },
+      { name: 'Sat', ctr: 10.0 },
+      { name: 'Sun', ctr: 10.0 }
+    ];
+    const revenueTrend = [
+      { name: 'Mon', revenue: 24000 },
+      { name: 'Tue', revenue: 13980 },
+      { name: 'Wed', revenue: 98000 },
+      { name: 'Thu', revenue: 39080 },
+      { name: 'Fri', revenue: 48000 },
+      { name: 'Sat', revenue: 38000 },
+      { name: 'Sun', revenue: 43000 }
+    ];
+
+    const deviceBreakdown = [
+      { name: 'Desktop', value: 55 },
+      { name: 'Mobile', value: 35 },
+      { name: 'Tablet', value: 10 }
+    ];
+
+    return mockResponse(200, {
+      totalCampaigns: camps.length,
+      activeCampaigns: camps.filter(c => c.status === 'Published').length,
+      scheduledCampaigns: camps.filter(c => c.status === 'Scheduled').length,
+      expiredCampaigns: camps.filter(c => c.status === 'Expired').length,
+      totalViews,
+      totalClicks,
+      ctr,
+      totalRevenue,
+      totalConversions,
+      viewsTrend,
+      clicksTrend,
+      ctrTrend,
+      revenueTrend,
+      deviceBreakdown,
+      campaignPerformance: camps.map(c => ({
+        id: c.id,
+        name: c.campaignName,
+        views: c.views || 0,
+        clicks: c.clicks || 0,
+        ctr: c.ctr || 0,
+        revenue: c.revenue || 0
+      }))
+    });
+  }
+
+  if (method === 'get' && url === '/admin/hero-campaigns/ab-tests') {
+    return mockResponse(200, getStoredABTests());
+  }
+
+  if (method === 'post' && url === '/admin/hero-campaigns/ab-tests') {
+    const abtests = getStoredABTests();
+    const newTest = {
+      ...data,
+      id: `ab_${Date.now()}`,
+      viewsA: 0, clicksA: 0, conversionsA: 0, revenueA: 0,
+      viewsB: 0, clicksB: 0, conversionsB: 0, revenueB: 0,
+      winner: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    abtests.unshift(newTest);
+    localStorage.setItem('buynora_ab_tests', JSON.stringify(abtests));
+    return mockResponse(200, newTest);
+  }
+
+  const abTestIdMatch = url.match(/^\/admin\/hero-campaigns\/ab-tests\/([^/]+)$/);
+  if (method === 'put' && abTestIdMatch) {
+    const abId = abTestIdMatch[1];
+    const abtests = getStoredABTests();
+    const idx = abtests.findIndex(ab => ab.id === abId);
+    if (idx !== -1) {
+      abtests[idx] = { ...abtests[idx], ...data, updatedAt: new Date().toISOString() };
+      localStorage.setItem('buynora_ab_tests', JSON.stringify(abtests));
+      return mockResponse(200, abtests[idx]);
+    }
+    return mockResponse(404, { message: 'AB test not found' });
+  }
+
+  if (method === 'get' && url === '/admin/hero-campaigns/assets') {
+    return mockResponse(200, getStoredAssets());
+  }
+
+  if (method === 'post' && url === '/admin/hero-campaigns/assets') {
+    const assets = getStoredAssets();
+    const newAsset = {
+      ...data,
+      id: `ast_${Date.now()}`,
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+    assets.unshift(newAsset);
+    localStorage.setItem('buynora_campaign_assets', JSON.stringify(assets));
+    return mockResponse(200, newAsset);
+  }
+
+  const assetIdMatch = url.match(/^\/admin\/hero-campaigns\/assets\/([^/]+)$/);
+  if (method === 'delete' && assetIdMatch) {
+    const assetId = assetIdMatch[1];
+    const assets = getStoredAssets();
+    const idx = assets.findIndex(ast => ast.id === assetId);
+    if (idx !== -1) {
+      assets.splice(idx, 1);
+      localStorage.setItem('buynora_campaign_assets', JSON.stringify(assets));
+      return mockResponse(200, { success: true, id: assetId });
+    }
+    return mockResponse(404, { message: 'Asset not found' });
+  }
+
+  if (method === 'get' && url === '/admin/hero-campaigns/templates') {
+    return mockResponse(200, getStoredTemplates());
+  }
+
+  const duplicateMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)\/duplicate$/);
+  if (method === 'post' && duplicateMatch) {
+    const id = duplicateMatch[1];
+    const camps = getStoredCampaigns();
+    const orig = camps.find(c => c.id === id);
+    if (!orig) return mockResponse(404, { message: 'Campaign not found' });
+
+    const duplicated = {
+      ...orig,
+      id: `camp_${Date.now()}`,
+      campaignName: `${orig.campaignName} (Copy)`,
+      campaignSlug: `${orig.campaignSlug}-copy-${Date.now().toString().slice(-4)}`,
+      views: 0,
+      clicks: 0,
+      ctr: 0,
+      revenue: 0,
+      conversions: 0,
+      status: "Draft",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    camps.push(duplicated);
+    localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+    return mockResponse(200, duplicated);
+  }
+
+  const viewTrackMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)\/track-view$/);
+  if (method === 'post' && viewTrackMatch) {
+    const id = viewTrackMatch[1];
+    const camps = getStoredCampaigns();
+    const camp = camps.find(c => c.id === id);
+    if (camp) {
+      camp.views = (camp.views || 0) + 1;
+      localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+      return mockResponse(200, { success: true });
+    }
+    return mockResponse(404, { message: 'Campaign not found' });
+  }
+
+  const clickTrackMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)\/track-click$/);
+  if (method === 'post' && clickTrackMatch) {
+    const id = clickTrackMatch[1];
+    const camps = getStoredCampaigns();
+    const camp = camps.find(c => c.id === id);
+    if (camp) {
+      camp.clicks = (camp.clicks || 0) + 1;
+      camp.ctr = camp.views > 0 ? parseFloat(((camp.clicks / camp.views) * 100).toFixed(2)) : 0;
+      localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+      return mockResponse(200, { success: true });
+    }
+    return mockResponse(404, { message: 'Campaign not found' });
+  }
+
+  const versionsMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)\/versions$/);
+  if (method === 'get' && versionsMatch) {
+    const cId = versionsMatch[1];
+    return mockResponse(200, getStoredVersions(cId));
+  }
+
+  const restoreMatch = url.match(/^\/admin\/hero-campaigns\/versions\/([^/]+)\/restore$/);
+  if (method === 'post' && restoreMatch) {
+    const verId = restoreMatch[1];
+    let matchedVersion: any = null;
+    const camps = getStoredCampaigns();
+    
+    for (let c of camps) {
+      const versions = getStoredVersions(c.id);
+      const found = versions.find(v => v.id === verId);
+      if (found) {
+        matchedVersion = found;
+        break;
+      }
+    }
+
+    if (matchedVersion) {
+      const restoredData = JSON.parse(matchedVersion.campaignData);
+      const campIdx = camps.findIndex(c => c.id === restoredData.id);
+      if (campIdx !== -1) {
+        camps[campIdx] = {
+          ...camps[campIdx],
+          ...restoredData,
+          updatedAt: new Date().toISOString()
+        };
+        localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+        return mockResponse(200, camps[campIdx]);
+      }
+    }
+    return mockResponse(404, { message: 'Version or campaign not found' });
+  }
+
+  if (method === 'post' && url === '/admin/hero-campaigns') {
+    const camps = getStoredCampaigns();
+    const newCamp = {
+      ...data,
+      id: data.id || `camp_${Date.now()}`,
+      views: 0,
+      clicks: 0,
+      ctr: 0,
+      revenue: 0,
+      conversions: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    camps.push(newCamp);
+    localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+    
+    const versions = getStoredVersions(newCamp.id);
+    versions.push({
+      id: `ver_${newCamp.id}_${Date.now()}`,
+      campaignId: newCamp.id,
+      versionNumber: versions.length + 1,
+      changedBy: newCamp.createdBy || "admin@buynora.com",
+      changeSummary: "Campaign created",
+      campaignData: JSON.stringify(newCamp),
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem(`buynora_versions_${newCamp.id}`, JSON.stringify(versions));
+
+    return mockResponse(200, newCamp);
+  }
+
+  const singleCampPutMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)$/);
+  if (method === 'put' && singleCampPutMatch) {
+    const cId = singleCampPutMatch[1];
+    const camps = getStoredCampaigns();
+    const idx = camps.findIndex(c => c.id === cId);
+    if (idx !== -1) {
+      const original = camps[idx];
+      camps[idx] = {
+        ...original,
+        ...data,
+        updatedAt: new Date().toISOString()
+      };
+      localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+
+      const versions = getStoredVersions(cId);
+      versions.push({
+        id: `ver_${cId}_${Date.now()}`,
+        campaignId: cId,
+        versionNumber: versions.length + 1,
+        changedBy: data.createdBy || "admin@buynora.com",
+        changeSummary: `Campaign updated`,
+        campaignData: JSON.stringify(camps[idx]),
+        createdAt: new Date().toISOString()
+      });
+      localStorage.setItem(`buynora_versions_${cId}`, JSON.stringify(versions));
+
+      return mockResponse(200, camps[idx]);
+    }
+    return mockResponse(404, { message: 'Campaign not found' });
+  }
+
+  const singleCampGetMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)$/);
+  if (method === 'get' && singleCampGetMatch) {
+    const cId = singleCampGetMatch[1];
+    const camps = getStoredCampaigns();
+    const camp = camps.find(c => c.id === cId);
+    if (camp) {
+      return mockResponse(200, camp);
+    }
+    return mockResponse(404, { message: 'Campaign not found' });
+  }
+
+  const singleCampDeleteMatch = url.match(/^\/admin\/hero-campaigns\/([^/]+)$/);
+  if (method === 'delete' && singleCampDeleteMatch) {
+    const cId = singleCampDeleteMatch[1];
+    const camps = getStoredCampaigns();
+    const idx = camps.findIndex(c => c.id === cId);
+    if (idx !== -1) {
+      camps.splice(idx, 1);
+      localStorage.setItem('buynora_hero_campaigns', JSON.stringify(camps));
+      return mockResponse(200, { success: true, id: cId });
+    }
+    return mockResponse(404, { message: 'Campaign not found' });
+  }
 
   // 1. GET /products
   if (method === 'get' && url === '/products') {

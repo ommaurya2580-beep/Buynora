@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ShieldAlert, Users, Store, Tag, ArrowLeft, LogOut,
-  LayoutDashboard, Menu, X, Sun, Moon, FolderKanban
+  LayoutDashboard, Menu, X, Sun, Moon, FolderKanban,
+  Sparkles, Megaphone, Bell, Send
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useToast } from '../hooks/useToast';
@@ -15,12 +16,19 @@ export const AdminLayout: React.FC = () => {
   const { showToast } = useToast();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const sidebarItems = [
+  const coreItems = [
     { name: 'System Overview', tab: 'overview', path: '/admin?tab=overview', icon: LayoutDashboard },
-    { name: 'User Management', tab: 'users', path: '/admin?tab=users', icon: Users },
-    { name: 'Seller Management', tab: 'sellers', path: '/admin?tab=sellers', icon: Store },
-    { name: 'Category Settings', tab: 'categories', path: '/admin?tab=categories', icon: FolderKanban },
-    { name: 'Coupon Settings', tab: 'coupons', path: '/admin?tab=coupons', icon: Tag },
+    { name: 'User Management', tab: 'users', path: '/admin/users?tab=users', icon: Users },
+    { name: 'Seller Management', tab: 'sellers', path: '/admin/sellers?tab=sellers', icon: Store },
+    { name: 'Category Settings', tab: 'categories', path: '/admin/categories?tab=categories', icon: FolderKanban },
+  ];
+
+  const marketingItems = [
+    { name: 'Hero Campaigns', path: '/admin/hero-campaigns', icon: Sparkles },
+    { name: 'Promotions', path: '/admin/promotions', icon: Megaphone },
+    { name: 'Coupons', tab: 'coupons', path: '/admin/coupons?tab=coupons', icon: Tag },
+    { name: 'Notifications', path: '/admin/notifications', icon: Bell },
+    { name: 'Push Campaigns', path: '/admin/push-campaigns', icon: Send },
   ];
 
   const currentTab = new URLSearchParams(location.search).get('tab') || 'overview';
@@ -43,25 +51,56 @@ export const AdminLayout: React.FC = () => {
           </div>
 
           {/* Navigation Links */}
-          <div className="space-y-1.5">
-            {sidebarItems.map(item => {
-              const Icon = item.icon;
-              const isActive = currentTab === item.tab;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
-                    isActive 
-                      ? 'bg-purple-600 text-text-inverted shadow-lg shadow-purple-600/10' 
-                      : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {item.name}
-                </Link>
-              );
-            })}
+          <div className="space-y-4">
+            <div>
+              <p className="px-4 text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Core Panel</p>
+              <div className="space-y-1">
+                {coreItems.map(item => {
+                  const Icon = item.icon;
+                  const isActive = currentTab === item.tab && !location.pathname.startsWith('/admin/hero-campaigns') && !location.pathname.startsWith('/admin/promotions') && !location.pathname.startsWith('/admin/notifications') && !location.pathname.startsWith('/admin/push-campaigns');
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+                        isActive 
+                          ? 'bg-purple-600 text-text-inverted shadow-lg shadow-purple-600/10' 
+                          : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <p className="px-4 text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Marketing</p>
+              <div className="space-y-1">
+                {marketingItems.map(item => {
+                  const Icon = item.icon;
+                  const isActive = item.tab 
+                    ? currentTab === item.tab 
+                    : location.pathname.startsWith(item.path);
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+                        isActive 
+                          ? 'bg-purple-600 text-text-inverted shadow-lg shadow-purple-600/10' 
+                          : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -145,26 +184,58 @@ export const AdminLayout: React.FC = () => {
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-                <div className="space-y-1.5">
-                  {sidebarItems.map(item => {
-                    const Icon = item.icon;
-                    const isActive = currentTab === item.tab;
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        onClick={() => setIsSidebarOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
-                          isActive 
-                            ? 'bg-purple-600 text-text-inverted shadow-lg' 
-                            : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                        {item.name}
-                      </Link>
-                    );
-                  })}
+                <div className="space-y-4">
+                  <div>
+                    <p className="px-4 text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">Core Panel</p>
+                    <div className="space-y-1">
+                      {coreItems.map(item => {
+                        const Icon = item.icon;
+                        const isActive = currentTab === item.tab && !location.pathname.startsWith('/admin/hero-campaigns') && !location.pathname.startsWith('/admin/promotions') && !location.pathname.startsWith('/admin/notifications') && !location.pathname.startsWith('/admin/push-campaigns');
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setIsSidebarOpen(false)}
+                            className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+                              isActive 
+                                ? 'bg-purple-600 text-text-inverted shadow-lg' 
+                                : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
+                            }`}
+                          >
+                            <Icon className="w-4 h-4" />
+                            {item.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="px-4 text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">Marketing</p>
+                    <div className="space-y-1">
+                      {marketingItems.map(item => {
+                        const Icon = item.icon;
+                        const isActive = item.tab 
+                          ? currentTab === item.tab 
+                          : location.pathname.startsWith(item.path);
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setIsSidebarOpen(false)}
+                            className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
+                              isActive 
+                                ? 'bg-purple-600 text-text-inverted shadow-lg' 
+                                : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
+                            }`}
+                          >
+                            <Icon className="w-4 h-4" />
+                            {item.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
 
