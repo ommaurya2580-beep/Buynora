@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, Plus, List, BarChart, HardDrive, AlertTriangle,
@@ -7,28 +7,26 @@ import {
 import { useCampaignsList, useCampaignAnalytics } from '../hooks/useCampaigns';
 import { formatCurrency } from '../../../../utils/formatters';
 
+// Read emergency override settings from localStorage on first render (lazy initializer pattern)
+const getStoredOverride = () => {
+  try {
+    const saved = localStorage.getItem('buynora_emergency_override');
+    if (saved) return JSON.parse(saved);
+  } catch { /* ignore */ }
+  return null;
+};
+
 export const CampaignDashboard: React.FC = () => {
   const { data: campaigns = [], isLoading: loadingCamps } = useCampaignsList();
   const { data: analytics, isLoading: loadingAnalytics } = useCampaignAnalytics();
 
-  // Emergency Override System State
-  const [isOverrideEnabled, setIsOverrideEnabled] = useState(false);
-  const [overrideType, setOverrideType] = useState('Emergency Notice');
-  const [overrideTitle, setOverrideTitle] = useState('System Upgrade in Progress');
-  const [overrideSubtitle, setOverrideSubtitle] = useState('We are upgrading our payment systems. Services will resume shortly.');
-  const [overrideBannerColor, setOverrideBannerColor] = useState('bg-gradient-to-r from-red-600 to-amber-600');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('buynora_emergency_override');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setIsOverrideEnabled(parsed.enabled);
-      setOverrideType(parsed.type || 'Emergency Notice');
-      setOverrideTitle(parsed.title || '');
-      setOverrideSubtitle(parsed.subtitle || '');
-      setOverrideBannerColor(parsed.color || 'bg-gradient-to-r from-red-600 to-amber-600');
-    }
-  }, []);
+  // Emergency Override System State — lazy initializers read from localStorage directly
+  const stored = getStoredOverride();
+  const [isOverrideEnabled, setIsOverrideEnabled] = useState<boolean>(() => stored?.enabled ?? false);
+  const [overrideType, setOverrideType] = useState<string>(() => stored?.type ?? 'Emergency Notice');
+  const [overrideTitle, setOverrideTitle] = useState<string>(() => stored?.title ?? 'System Upgrade in Progress');
+  const [overrideSubtitle, setOverrideSubtitle] = useState<string>(() => stored?.subtitle ?? 'We are upgrading our payment systems. Services will resume shortly.');
+  const [overrideBannerColor, setOverrideBannerColor] = useState<string>(() => stored?.color ?? 'bg-gradient-to-r from-red-600 to-amber-600');
 
   const saveOverrideSettings = (enabled: boolean = isOverrideEnabled) => {
     const obj = {
