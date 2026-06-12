@@ -19,7 +19,7 @@ import sonyHeadphonesImage from '../../../../assets/sony_headphones_podium.png';
 const formatCurrency = (val: number) =>
   `₹${val.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
-export const CampaignCreate: React.FC = () => {
+const CampaignCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
   const navigate = useNavigate();
@@ -1475,3 +1475,5 @@ export const CampaignCreate: React.FC = () => {
     </div>
   );
 };
+
+export default CampaignCreate;

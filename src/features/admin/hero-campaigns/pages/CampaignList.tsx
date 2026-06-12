@@ -13,7 +13,7 @@ import {
 import { useToast } from '../../../../hooks/useToast';
 import { formatCurrency } from '../../../../utils/formatters';
 
-export const CampaignList: React.FC = () => {
+const CampaignList: React.FC = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { data: campaigns = [], isLoading, refetch } = useCampaignsList();
@@ -327,3 +327,5 @@ export const CampaignList: React.FC = () => {
     </div>
   );
 };
+
+export default CampaignList;

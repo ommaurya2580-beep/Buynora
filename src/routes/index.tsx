@@ -19,12 +19,12 @@ const TrackOrder = lazy(() => import('../features/orders/pages/TrackOrder').then
 const Wishlist = lazy(() => import('../features/wishlist/pages/Wishlist').then(m => ({ default: m.Wishlist })));
 const SellerDashboard = lazy(() => import('../features/seller/pages/SellerDashboard').then(m => ({ default: m.SellerDashboard })));
 const AdminDashboard = lazy(() => import('../features/admin/pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
-const CampaignDashboard = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignDashboard').then(m => ({ default: m.CampaignDashboard })));
-const CampaignList = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignList').then(m => ({ default: m.CampaignList })));
-const CampaignCreate = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignCreate').then(m => ({ default: m.CampaignCreate })));
-const CampaignAnalytics = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignAnalytics').then(m => ({ default: m.CampaignAnalytics })));
-const AssetLibrary = lazy(() => import('../features/admin/hero-campaigns/pages/AssetLibrary').then(m => ({ default: m.AssetLibrary })));
-const MarketingPlaceholder = lazy(() => import('../features/admin/hero-campaigns/pages/MarketingPlaceholder').then(m => ({ default: m.MarketingPlaceholder })));
+const CampaignDashboard = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignDashboard'));
+const CampaignList = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignList'));
+const CampaignCreate = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignCreate'));
+const CampaignAnalytics = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignAnalytics'));
+const AssetLibrary = lazy(() => import('../features/admin/hero-campaigns/pages/AssetLibrary'));
+const MarketingPlaceholder = lazy(() => import('../features/admin/hero-campaigns/pages/MarketingPlaceholder'));
 const Auth = lazy(() => import('../features/auth/pages/Auth').then(m => ({ default: m.Auth })));
 const StaticPages = lazy(() => import('../pages/StaticPages').then(m => ({ default: m.StaticPages })));
 const NotFound = lazy(() => import('../pages/NotFound').then(m => ({ default: m.NotFound })));

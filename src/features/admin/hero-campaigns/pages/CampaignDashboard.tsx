@@ -16,7 +16,7 @@ const getStoredOverride = () => {
   return null;
 };
 
-export const CampaignDashboard: React.FC = () => {
+const CampaignDashboard: React.FC = () => {
   const { data: campaigns = [], isLoading: loadingCamps } = useCampaignsList();
   const { data: analytics, isLoading: loadingAnalytics } = useCampaignAnalytics();
 
@@ -369,3 +369,5 @@ export const CampaignDashboard: React.FC = () => {
     </div>
   );
 };
+
+export default CampaignDashboard;

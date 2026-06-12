@@ -5,7 +5,7 @@ interface Props {
   title: string;
 }
 
-export const MarketingPlaceholder: React.FC<Props> = ({ title }) => {
+const MarketingPlaceholder: React.FC<Props> = ({ title }) => {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
       <div className="glass p-10 rounded-3xl border border-gray-250/50 dark:border-slate-800/50 max-w-lg bg-white/40 dark:bg-slate-900/40 shadow-xl space-y-6">
@@ -26,3 +26,5 @@ export const MarketingPlaceholder: React.FC<Props> = ({ title }) => {
     </div>
   );
 };
+
+export default MarketingPlaceholder;

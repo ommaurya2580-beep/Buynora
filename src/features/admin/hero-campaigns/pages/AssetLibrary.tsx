@@ -6,7 +6,7 @@ import {
 import { useAssets, useCreateAssetMutation, useDeleteAssetMutation } from '../hooks/useCampaigns';
 import { useToast } from '../../../../hooks/useToast';
 
-export const AssetLibrary: React.FC = () => {
+const AssetLibrary: React.FC = () => {
   const { showToast } = useToast();
   const { data: assets = [], isLoading, refetch } = useAssets();
   
@@ -356,3 +356,5 @@ export const AssetLibrary: React.FC = () => {
     </div>
   );
 };
+
+export default AssetLibrary;

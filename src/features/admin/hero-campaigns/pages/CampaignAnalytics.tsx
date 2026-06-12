@@ -10,7 +10,7 @@ import {
 import { useCampaignAnalytics, useABTests } from '../hooks/useCampaigns';
 import { formatCurrency } from '../../../../utils/formatters';
 
-export const CampaignAnalytics: React.FC = () => {
+const CampaignAnalytics: React.FC = () => {
   const { data: analytics, isLoading: loadingAnalytics, refetch } = useCampaignAnalytics();
   const { data: abtests = [], isLoading: loadingAB } = useABTests();
 
@@ -297,3 +297,5 @@ export const CampaignAnalytics: React.FC = () => {
     </div>
   );
 };
+
+export default CampaignAnalytics;
