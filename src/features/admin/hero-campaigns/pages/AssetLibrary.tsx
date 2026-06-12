@@ -37,7 +37,7 @@ export const AssetLibrary: React.FC = () => {
   const handleUploadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim() || !newUrl.trim()) {
-      showToast("Please fill in all fields", "warning");
+      showToast("Please fill in all fields", "info");
       return;
     }
 

@@ -3,6 +3,7 @@ export type CampaignStatus =
   | 'Pending Review' 
   | 'Approved' 
   | 'Published' 
+  | 'Scheduled'
   | 'Paused' 
   | 'Rejected' 
   | 'Expired' 

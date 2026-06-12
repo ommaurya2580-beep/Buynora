@@ -16,6 +16,9 @@ import { useProducts, useCategories } from '../../../../hooks/useQueries';
 import { useToast } from '../../../../hooks/useToast';
 import sonyHeadphonesImage from '../../../../assets/sony_headphones_podium.png';
 
+const formatCurrency = (val: number) =>
+  `₹${val.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+
 export const CampaignCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
@@ -210,7 +213,7 @@ export const CampaignCreate: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.campaignName.trim() || !form.campaignSlug.trim()) {
-      showToast("Please input campaign name and slug.", "warning");
+      showToast("Please input campaign name and slug.", "info");
       return;
     }
 
@@ -305,8 +308,8 @@ export const CampaignCreate: React.FC = () => {
               { id: 'targeting', name: 'Targeting' },
               { id: 'scheduling', name: 'Scheduling' },
               { id: 'abtest', name: 'A/B Test' },
-              { isEdit && { id: 'versions', name: 'Versions' } }
-            ].filter(Boolean).map((tab: any) => (
+              ...(isEdit ? [{ id: 'versions', name: 'Versions' }] : [])
+            ].map((tab: any) => (
               <button
                 key={tab.id}
                 type="button"
