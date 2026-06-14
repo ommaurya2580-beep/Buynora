@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Clock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '../../types';
 import { ProductCard } from '../ProductCard';
 
@@ -15,6 +16,8 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
   onCompareToggle
 }) => {
   const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 34, seconds: 12 });
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [limit, setLimit] = useState(6);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -28,8 +31,26 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setLimit(2);
+      } else if (window.innerWidth < 1024) {
+        setLimit(4);
+      } else {
+        setLimit(6);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const visibleProducts = isExpanded ? products : products.slice(0, limit);
+  const showButton = products.length > limit;
+
   return (
-    <section className="glass p-6 md:p-8 rounded-3xl border border-rose-500/15 relative overflow-hidden bg-rose-500/[0.01]">
+    <section className="glass p-6 md:p-8 rounded-3xl border border-rose-500/15 relative overflow-hidden bg-rose-500/[0.01] w-full max-w-full">
       <div className="absolute top-0 right-0 w-[30vw] h-[30vw] bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
@@ -45,25 +66,50 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           </div>
         </div>
 
-        {/* Countdown Clock */}
-        <div className="flex items-center gap-1 text-slate-800 dark:text-slate-200 bg-gray-100 dark:bg-slate-800 px-4 py-2 rounded-2xl self-start sm:self-auto border border-gray-200/50 dark:border-gray-700/50 font-mono text-xs shadow-sm">
-          <Clock className="w-3.5 h-3.5 text-rose-500 mr-1 animate-pulse" />
-          <span className="font-extrabold">{timeLeft.hours.toString().padStart(2, '0')}</span>h :
-          <span className="font-extrabold">{timeLeft.minutes.toString().padStart(2, '0')}</span>m :
-          <span className="font-extrabold">{timeLeft.seconds.toString().padStart(2, '0')}</span>s
+        {/* Countdown Clock & Show More */}
+        <div className="flex items-center gap-3 self-start sm:self-auto">
+          <div className="flex items-center gap-1 text-slate-800 dark:text-slate-200 bg-gray-100 dark:bg-slate-800 px-4 py-2 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 font-mono text-xs shadow-sm">
+            <Clock className="w-3.5 h-3.5 text-rose-500 mr-1 animate-pulse" />
+            <span className="font-extrabold">{timeLeft.hours.toString().padStart(2, '0')}</span>h :
+            <span className="font-extrabold">{timeLeft.minutes.toString().padStart(2, '0')}</span>m :
+            <span className="font-extrabold">{timeLeft.seconds.toString().padStart(2, '0')}</span>s
+          </div>
+
+          {showButton && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-xs font-black text-rose-600 dark:text-rose-450 hover:text-rose-700 dark:hover:text-rose-350 flex items-center gap-1 cursor-pointer transition-colors bg-rose-500/5 hover:bg-rose-500/10 px-3.5 py-1.5 rounded-xl border border-rose-500/10"
+            >
+              {isExpanded ? 'Show Less' : 'Show More'}
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-5 relative z-10">
-        {products.map(prod => (
-          <ProductCard
-            key={prod.id}
-            product={prod}
-            onCompareToggle={onCompareToggle}
-            isCompared={comparedProducts.some(p => p.id === prod.id)}
-          />
-        ))}
-      </div>
+      <motion.div 
+        layout
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 relative z-10 w-full"
+      >
+        <AnimatePresence mode="popLayout">
+          {visibleProducts.map(prod => (
+            <motion.div
+              key={prod.id}
+              layout
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="h-full"
+            >
+              <ProductCard
+                product={prod}
+                onCompareToggle={onCompareToggle}
+                isCompared={comparedProducts.some(p => p.id === prod.id)}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };

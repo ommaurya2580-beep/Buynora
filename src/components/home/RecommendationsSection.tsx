@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles, HelpCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '../../types';
 import { ProductCard } from '../ProductCard';
 
@@ -14,8 +15,29 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   comparedProducts,
   onCompareToggle
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [limit, setLimit] = useState(6);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setLimit(2);
+      } else if (window.innerWidth < 1024) {
+        setLimit(4);
+      } else {
+        setLimit(6);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const visibleProducts = isExpanded ? products : products.slice(0, limit);
+  const showButton = products.length > limit;
+
   return (
-    <section className="glass rounded-3xl p-6 md:p-8 border border-indigo-500/15 relative overflow-hidden bg-indigo-500/[0.01]">
+    <section className="glass rounded-3xl p-6 md:p-8 border border-indigo-500/15 relative overflow-hidden bg-indigo-500/[0.01] w-full max-w-full">
       {/* Ambient background glow */}
       <div className="absolute top-0 right-0 w-[25vw] h-[25vw] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
       
@@ -32,29 +54,55 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
           <p className="text-xs text-text-secondary">Custom suggestions based on your search history and profile interests</p>
         </div>
 
-        {/* Why Recommended Tooltip */}
-        <div className="relative group/tooltip self-start sm:self-auto">
-          <button className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 bg-indigo-500/5 px-3 py-1.5 rounded-xl cursor-help transition-all hover:bg-indigo-500/10">
-            <HelpCircle className="w-3.5 h-3.5" /> Why Recommended?
-          </button>
-          
-          <div className="absolute bottom-full mb-2 right-0 sm:right-1/2 sm:translate-x-1/2 w-64 bg-slate-900 border border-slate-800 text-slate-100 text-[11px] p-3 rounded-xl shadow-xl opacity-0 scale-95 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:scale-100 transition-all duration-200 z-50 leading-relaxed text-center">
-            Our recommender system uses collaborative filtering to suggest items similar to your views, cart items, and recent purchases.
-            <div className="absolute top-full right-4 sm:right-1/2 sm:translate-x-1/2 border-4 border-transparent border-t-slate-900" />
+        {/* Action Panel: Tooltip + Show More */}
+        <div className="flex items-center gap-3 self-start sm:self-auto relative z-20">
+          {/* Why Recommended Tooltip */}
+          <div className="relative group/tooltip">
+            <button className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 bg-indigo-500/5 px-3 py-1.5 rounded-xl cursor-help transition-all hover:bg-indigo-500/10">
+              <HelpCircle className="w-3.5 h-3.5" /> Why Recommended?
+            </button>
+            
+            <div className="absolute bottom-full mb-2 right-0 sm:right-1/2 sm:translate-x-1/2 w-64 bg-slate-900 border border-slate-800 text-slate-100 text-[11px] p-3 rounded-xl shadow-xl opacity-0 scale-95 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:scale-100 transition-all duration-200 z-50 leading-relaxed text-center">
+              Our recommender system uses collaborative filtering to suggest items similar to your views, cart items, and recent purchases.
+              <div className="absolute top-full right-4 sm:right-1/2 sm:translate-x-1/2 border-4 border-transparent border-t-slate-900" />
+            </div>
           </div>
+
+          {showButton && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/10"
+            >
+              {isExpanded ? 'Show Less' : 'Show More'}
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-5 relative z-10">
-        {products.map(prod => (
-          <ProductCard
-            key={prod.id}
-            product={prod}
-            onCompareToggle={onCompareToggle}
-            isCompared={comparedProducts.some(p => p.id === prod.id)}
-          />
-        ))}
-      </div>
+      <motion.div 
+        layout
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 relative z-10 w-full"
+      >
+        <AnimatePresence mode="popLayout">
+          {visibleProducts.map(prod => (
+            <motion.div
+              key={prod.id}
+              layout
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="h-full"
+            >
+              <ProductCard
+                product={prod}
+                onCompareToggle={onCompareToggle}
+                isCompared={comparedProducts.some(p => p.id === prod.id)}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };

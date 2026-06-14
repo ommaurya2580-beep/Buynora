@@ -11,6 +11,8 @@ import { useToast } from '../../../hooks/useToast';
 import { formatCurrency } from '../../../utils/formatters';
 import { ShimmerPDP } from '../../../components/Shimmer';
 import { ProductCard } from '../../../components/ProductCard';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 // PDP Subcomponents
 import { ProductGallery } from '../../../components/pdp/ProductGallery';
@@ -35,10 +37,30 @@ export const ProductDetail: React.FC = () => {
   const [bundleProduct, setBundleProduct] = useState<Product | null>(null);
   const [includeBundleItem, setIncludeBundleItem] = useState(true);
 
-  // React Query queries
   const { data: product, isLoading: loadingProduct, error: productError } = useProduct(id || '');
   const { data: recommendations = [] } = useRecommendations(id);
-  const similarProducts = recommendations.slice(0, 4);
+  
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [limit, setLimit] = useState(6);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setLimit(2);
+      } else if (window.innerWidth < 1024) {
+        setLimit(4);
+      } else {
+        setLimit(6);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const visibleSimilarProducts = isExpanded ? recommendations : recommendations.slice(0, limit);
+  const showSimilarMoreButton = recommendations.length > limit;
+
 
   const addReviewMutation = useAddReviewMutation();
   const addQuestionMutation = useAddQuestionMutation();
@@ -270,24 +292,47 @@ export const ProductDetail: React.FC = () => {
       />
 
       {/* Similar Products */}
-      <section className="space-y-6">
-        <div className="text-left">
-          <h3 className="text-lg font-black text-text-primary border-b border-gray-150 dark:border-gray-800 pb-2">
+      <section className="space-y-6 w-full max-w-full">
+        <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-800 pb-2">
+          <h3 className="text-lg font-black text-text-primary">
             Similar Products You May Like
           </h3>
+          {showSimilarMoreButton && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/10"
+            >
+              {isExpanded ? 'Show Less' : 'Show More'}
+            </button>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {similarProducts.map(prod => (
-            <ProductCard
-              key={prod.id}
-              product={prod}
-              onCompareToggle={handleCompareToggle}
-              isCompared={comparedProducts.some(p => p.id === prod.id)}
-            />
-          ))}
-        </div>
+        <motion.div 
+          layout
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 w-full"
+        >
+          <AnimatePresence mode="popLayout">
+            {visibleSimilarProducts.map(prod => (
+              <motion.div
+                key={prod.id}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="h-full"
+              >
+                <ProductCard
+                  product={prod}
+                  onCompareToggle={handleCompareToggle}
+                  isCompared={comparedProducts.some(p => p.id === prod.id)}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </section>
+
 
     </div>
   );

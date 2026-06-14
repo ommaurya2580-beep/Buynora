@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ShoppingBag, Heart, Bell, Sun, Moon, 
   Menu, X, Sparkles, Globe, ChevronDown, Check,
@@ -310,9 +310,10 @@ export const MainLayout: React.FC = () => {
       </header>
 
       {/* Main Outlet */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 py-6">
+      <main className={`flex-1 w-full py-6 ${location.pathname === '/' ? 'px-4 md:px-8 max-w-none w-full' : 'max-w-7xl mx-auto px-4 md:px-8'}`}>
         <Outlet />
       </main>
+
 
       {/* FOOTER */}
       <footer className="bg-slate-950 text-slate-400 text-xs border-t border-slate-900">
