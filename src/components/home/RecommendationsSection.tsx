@@ -37,11 +37,11 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   const showButton = products.length > limit;
 
   return (
-    <section className="glass rounded-3xl p-6 md:p-8 border border-indigo-500/15 relative overflow-hidden bg-indigo-500/[0.01] w-full max-w-full">
+    <section className="glass rounded-3xl p-4 md:p-5 border border-indigo-500/15 relative overflow-hidden bg-indigo-500/[0.01] w-full max-w-full">
       {/* Ambient background glow */}
       <div className="absolute top-0 right-0 w-[25vw] h-[25vw] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
       
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 relative z-10">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">

@@ -62,7 +62,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-bg-surface">
+    <div className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full bg-bg-surface">
       
       {/* Wishlist Button */}
       <button
@@ -94,11 +94,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       )}
 
       {/* Product Image Link */}
-      <Link to={`/product/${product.id}`} className="block relative aspect-[4/3] p-4 overflow-hidden bg-white dark:bg-slate-900 flex items-center justify-center border-b border-gray-100 dark:border-gray-800/80">
+      <Link to={`/product/${product.id}`} className="block relative aspect-[3/4] overflow-hidden bg-white dark:bg-slate-900 flex items-center justify-center border-b border-gray-100 dark:border-gray-800/80">
         <img
           src={product.images[0]}
           alt={product.name}
-          className="max-h-full max-w-full object-contain transform group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
         

@@ -158,6 +158,17 @@ export interface HeroCampaign {
   // Visual Effect Settings
   animationSetting: AnimationSetting;
 
+  // Background Customizer Theme Settings
+  backgroundTheme?: string;
+  bgColor1?: string;
+  bgColor2?: string;
+  bgColor3?: string;
+  gradientDirection?: string;
+  glowIntensity?: string;
+  backgroundBlur?: string;
+  floatingLights?: boolean;
+  ambientEffect?: boolean;
+
   // Targeting
   targetDevices: DeviceType[];
   targetUsers: UserTargetType[];

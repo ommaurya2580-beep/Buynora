@@ -44,9 +44,9 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
   const showBestSellersButton = bestSellers.length > limit;
 
   return (
-    <div className="space-y-16 w-full max-w-full">
+    <div className="space-y-8 w-full max-w-full">
       {/* New Arrivals */}
-      <section className="space-y-6">
+      <section className="space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
@@ -96,7 +96,7 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
       </section>
 
       {/* Best Sellers */}
-      <section className="space-y-6">
+      <section className="space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">

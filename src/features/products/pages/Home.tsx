@@ -16,6 +16,10 @@ import { RecommendationsSection } from '../../../components/home/Recommendations
 import { BrandsSection } from '../../../components/home/BrandsSection';
 import { TestimonialsSection } from '../../../components/home/TestimonialsSection';
 import { NewsletterSection } from '../../../components/home/NewsletterSection';
+import { CategoryStrip } from '../../../components/home/CategoryStrip';
+import { MenCollection } from '../../../components/home/MenCollection';
+import { WomenCollection } from '../../../components/home/WomenCollection';
+import { MoreRecommendations } from '../../../components/home/MoreRecommendations';
 
 export const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +47,12 @@ export const Home: React.FC = () => {
   const { data: aiRecommendedRes } = useProducts({ isAiRecommended: true, limit: 8 });
   const aiRecommended = aiRecommendedRes?.products || [];
 
+  const { data: menProductsRes } = useProducts({ search: 'Men', limit: 8 });
+  const menProducts = menProductsRes?.products || [];
+
+  const { data: womenProductsRes } = useProducts({ search: 'Women', limit: 8 });
+  const womenProducts = womenProductsRes?.products || [];
+
   // Recently viewed section has been moved to Navbar
 
   const handleCompareToggle = (product: Product) => {
@@ -60,10 +70,13 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 pb-12">
+    <div className="space-y-8 pb-12">
       
       {/* 1. HERO CAROUSEL BANNER */}
       <HeroSection />
+
+      {/* 1b. popular circular Category Strip */}
+      <CategoryStrip />
 
       {/* 2. AI RECOMMENDED PRODUCTS */}
       <RecommendationsSection 
@@ -72,9 +85,29 @@ export const Home: React.FC = () => {
         onCompareToggle={handleCompareToggle}
       />
 
+      {/* 2b. MORE PERSONALIZED RECOMMENDATIONS TABS */}
+      <MoreRecommendations
+        allProducts={allProducts}
+        comparedProducts={comparedProducts}
+        onCompareToggle={handleCompareToggle}
+      />
+
       {/* 3. HOT TRENDING */}
       <TrendingSection 
         products={trending}
+        comparedProducts={comparedProducts}
+        onCompareToggle={handleCompareToggle}
+      />
+
+      {/* 3b. LIFESTYLE COLLECTIONS */}
+      <MenCollection
+        products={menProducts}
+        comparedProducts={comparedProducts}
+        onCompareToggle={handleCompareToggle}
+      />
+
+      <WomenCollection
+        products={womenProducts}
         comparedProducts={comparedProducts}
         onCompareToggle={handleCompareToggle}
       />

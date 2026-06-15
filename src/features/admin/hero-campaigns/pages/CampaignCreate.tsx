@@ -84,6 +84,51 @@ const CampaignImage: React.FC<{ src: string; alt: string; className?: string }> 
   );
 };
 
+const getBackgroundStyle = (campaign: any) => {
+  const theme = campaign.backgroundTheme || 'Premium White';
+  const dir = campaign.gradientDirection || 'to-br';
+  
+  const presets: Record<string, string> = {
+    'Premium White': 'linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 50%, #F1F5F9 100%)',
+    'Apple Silver': 'linear-gradient(135deg, #E2E8F0 0%, #F8FAFC 50%, #CBD5E1 100%)',
+    'Soft Purple': 'linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 50%, #DDD6FE 100%)',
+    'Luxury Black': 'linear-gradient(135deg, #111827 0%, #1F2937 50%, #030712 100%)',
+    'Midnight Blue': 'linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #172554 100%)',
+    'Royal Gold': 'linear-gradient(135deg, #FEF08A 0%, #F59E0B 50%, #78350F 100%)',
+    'Rose Gold': 'linear-gradient(135deg, #FFF1F2 0%, #FDA4AF 50%, #F43F5E 100%)',
+    'Luxury Pink': 'linear-gradient(135deg, #FDF2F8 0%, #FBCFE8 50%, #EC4899 100%)',
+    'Ocean Blue': 'linear-gradient(135deg, #ECFDF5 0%, #06B6D4 50%, #0891B2 100%)',
+    'Cyber Neon': 'linear-gradient(135deg, #09090B 0%, #2563EB 50%, #D946EF 100%)'
+  };
+
+  if (presets[theme]) {
+    return { background: presets[theme] };
+  }
+  
+  if (theme === 'Gradient Custom') {
+    const c1 = campaign.bgColor1 || '#FFFFFF';
+    const c2 = campaign.bgColor2 || '#F7F8FC';
+    const c3 = campaign.bgColor3 || '#EEF2FF';
+    
+    let angle = '135deg';
+    if (dir === 'to-r') angle = '90deg';
+    else if (dir === 'to-br') angle = '135deg';
+    else if (dir === 'to-tr') angle = '45deg';
+    else if (dir === 'to-b') angle = '180deg';
+    else if (dir === 'to-t') angle = '0deg';
+    else if (dir === 'to-l') angle = '270deg';
+    
+    return { background: `linear-gradient(${angle}, ${c1} 0%, ${c2} 50%, ${c3} 100%)` };
+  }
+  
+  return { background: 'linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 50%, #F1F5F9 100%)' };
+};
+
+const isDarkBackground = (campaign: any) => {
+  const theme = campaign.backgroundTheme || 'Premium White';
+  return ['Luxury Black', 'Midnight Blue', 'Cyber Neon'].includes(theme);
+};
+
 
 const CampaignCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -104,7 +149,7 @@ const CampaignCreate: React.FC = () => {
   const productsList = productsData?.products || [];
 
   // Form Tabs
-  const [activeFormTab, setActiveFormTab] = useState<'info' | 'media' | 'content' | 'pricing' | 'targeting' | 'scheduling' | 'abtest' | 'versions'>('info');
+  const [activeFormTab, setActiveFormTab] = useState<'info' | 'media' | 'content' | 'pricing' | 'targeting' | 'scheduling' | 'abtest' | 'versions' | 'background'>('info');
 
   // Preview options
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -193,6 +238,17 @@ const CampaignCreate: React.FC = () => {
     carouselPauseOnHover: true,
     animationSetting: 'Fade' as any,
 
+    // Background Customizer Theme Settings
+    backgroundTheme: 'Premium White',
+    bgColor1: '#FFFFFF',
+    bgColor2: '#F7F8FC',
+    bgColor3: '#EEF2FF',
+    gradientDirection: 'to-br',
+    glowIntensity: 'medium',
+    backgroundBlur: 'none',
+    floatingLights: false,
+    ambientEffect: true,
+
     // Targeting
     targetDevices: ['Desktop', 'Tablet', 'Mobile'] as any[],
     targetUsers: ['Guest', 'Logged In', 'Customer'] as any[],
@@ -218,6 +274,15 @@ const CampaignCreate: React.FC = () => {
         targetDevices: campaignData.targetDevices || ['Desktop', 'Tablet', 'Mobile'],
         targetUsers: campaignData.targetUsers || ['Guest', 'Logged In', 'Customer'],
         targetGeo: campaignData.targetGeo || { countries: [], states: [], cities: [] },
+        backgroundTheme: campaignData.backgroundTheme || 'Premium White',
+        bgColor1: campaignData.bgColor1 || '#FFFFFF',
+        bgColor2: campaignData.bgColor2 || '#F7F8FC',
+        bgColor3: campaignData.bgColor3 || '#EEF2FF',
+        gradientDirection: campaignData.gradientDirection || 'to-br',
+        glowIntensity: campaignData.glowIntensity || 'medium',
+        backgroundBlur: campaignData.backgroundBlur || 'none',
+        floatingLights: campaignData.floatingLights ?? false,
+        ambientEffect: campaignData.ambientEffect ?? true,
         pricing: {
           ...form.pricing,
           ...(campaignData.pricing || {})
@@ -381,11 +446,11 @@ const CampaignCreate: React.FC = () => {
           transformOrigin: 'top center',
         }}
         className={`border border-gray-200/90 dark:border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl relative transition-all duration-350 select-none ${
-          previewTheme === 'dark' ? 'dark bg-slate-900 text-white' : 'bg-white text-slate-900'
+          isDarkBackground(form) ? 'dark text-white' : (previewTheme === 'dark' ? 'dark bg-slate-900 text-white' : 'bg-white text-slate-900')
         }`}
       >
         {/* Background Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FFFFFF] via-[#F7F8FC] via-[#EEF2FF] to-[#F6F3FF] dark:from-[#0F172A] dark:via-[#111827] dark:via-[#1E293B] dark:to-[#312E81] transition-all duration-500 z-0" />
+        <div className="absolute inset-0 transition-all duration-500 z-0" style={getBackgroundStyle(form)} />
         
         {/* Background Image override */}
         {form.backgroundImageUrl && (
@@ -397,11 +462,31 @@ const CampaignCreate: React.FC = () => {
         )}
 
         {/* Ambient Glow Blobs */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none rounded-3xl z-0">
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-200/25 dark:bg-indigo-900/15 rounded-full blur-[110px]" />
-          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-200/25 dark:bg-purple-900/15 rounded-full blur-[110px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-150/15 dark:bg-indigo-950/10 rounded-full blur-[130px]" />
-        </div>
+        {form.ambientEffect && (
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none rounded-3xl z-0">
+            <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-200/25 dark:bg-indigo-900/15 rounded-full blur-[110px]" />
+            <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-200/25 dark:bg-purple-900/15 rounded-full blur-[110px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-150/15 dark:bg-indigo-950/10 rounded-full blur-[130px]" />
+          </div>
+        )}
+
+        {/* Floating Lights */}
+        {form.floatingLights && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div className="absolute top-10 left-10 w-2.5 h-2.5 rounded-full bg-white/40 blur-[1px] animate-pulse-slow" />
+            <div className="absolute top-1/3 left-1/2 w-4 h-4 rounded-full bg-white/30 blur-[2px] animate-pulse-slow" style={{ animationDelay: '1s' }} />
+            <div className="absolute bottom-12 left-1/4 w-3 h-3 rounded-full bg-white/20 blur-[1px] animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
+            <div className="absolute top-1/4 right-12 w-2 h-2 rounded-full bg-white/40 blur-[0.5px] animate-pulse-slow" style={{ animationDelay: '0.5s' }} />
+            <div className="absolute bottom-20 right-1/3 w-3 h-3 rounded-full bg-white/35 blur-[1.5px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
+          </div>
+        )}
+
+        {/* Background Blur Overlay */}
+        {form.backgroundBlur && form.backgroundBlur !== 'none' && (
+          <div className={`absolute inset-0 z-0 pointer-events-none ${
+            form.backgroundBlur === 'high' ? 'backdrop-blur-lg' : form.backgroundBlur === 'low' ? 'backdrop-blur-xs' : 'backdrop-blur-md'
+          }`} />
+        )}
 
         {/* Content Slider Replica */}
         <div className="w-full h-full relative z-10 flex flex-col lg:flex-row">
@@ -523,12 +608,21 @@ const CampaignCreate: React.FC = () => {
             <div className={`flex-1 w-full ${isMobile ? 'h-[40%] p-4' : 'lg:w-[48%] p-6'} relative flex items-center justify-center ${isMobile ? 'order-1' : 'lg:order-2'}`}>
               
               {/* Large Circular Glow Halo */}
-              <div
-                className="absolute w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] lg:w-[260px] lg:h-[260px] rounded-full border border-indigo-200/20 dark:border-indigo-400/10 shadow-[0_0_80px_rgba(165,180,252,0.25),inset_0_0_40px_rgba(165,180,252,0.15)] dark:shadow-[0_0_80px_rgba(99,102,241,0.2),inset_0_0_40px_rgba(99,102,241,0.1)] blur-[2px] pointer-events-none transition-all duration-500 z-0"
-                style={{
-                  background: 'radial-gradient(circle, rgba(165,180,252,0.15) 0%, transparent 70%)',
-                }}
-              />
+              {form.glowIntensity !== 'none' && (
+                <div
+                  className="absolute rounded-full border border-indigo-200/20 dark:border-indigo-400/10 blur-[2px] pointer-events-none transition-all duration-500 z-0"
+                  style={{
+                    width: form.glowIntensity === 'high' ? '300px' : form.glowIntensity === 'low' ? '200px' : '260px',
+                    height: form.glowIntensity === 'high' ? '300px' : form.glowIntensity === 'low' ? '200px' : '260px',
+                    background: `radial-gradient(circle, rgba(165,180,252,${form.glowIntensity === 'high' ? 0.3 : form.glowIntensity === 'low' ? 0.08 : 0.18}) 0%, transparent 70%)`,
+                    boxShadow: form.glowIntensity === 'high' 
+                      ? '0 0 100px rgba(165,180,252,0.4), inset 0 0 50px rgba(165,180,252,0.25)' 
+                      : form.glowIntensity === 'low'
+                      ? '0 0 40px rgba(165,180,252,0.12), inset 0 0 20px rgba(165,180,252,0.06)'
+                      : '0 0 80px rgba(165,180,252,0.25), inset 0 0 40px rgba(165,180,252,0.15)'
+                  }}
+                />
+              )}
 
               {/* Ambient Backlight Reflection */}
               <div className="absolute w-[140px] h-[140px] rounded-full bg-white/60 dark:bg-indigo-950/20 blur-[40px] pointer-events-none z-0" />
@@ -641,6 +735,7 @@ const CampaignCreate: React.FC = () => {
             {[
               { id: 'info', name: 'Information' },
               { id: 'media', name: 'Media / Video' },
+              { id: 'background', name: 'Background Theme' },
               { id: 'content', name: 'Badge & Copy' },
               { id: 'pricing', name: 'Pricing' },
               { id: 'targeting', name: 'Targeting' },
@@ -929,6 +1024,142 @@ const CampaignCreate: React.FC = () => {
                   </div>
                 </div>
 
+              </div>
+            )}
+
+            {/* TAB: BACKGROUND THEME */}
+            {activeFormTab === 'background' && (
+              <div className="glass p-6 rounded-3xl border border-gray-250/50 dark:border-slate-855/50 bg-bg-surface/40 space-y-6">
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-gray-400 border-b border-gray-150/40 dark:border-slate-800/40 pb-3">Background Theme Library</h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 uppercase">Preset Theme</label>
+                    <select
+                      value={form.backgroundTheme}
+                      onChange={e => setForm({ ...form, backgroundTheme: e.target.value })}
+                      className="bg-gray-100 dark:bg-slate-850 text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-indigo-500 outline-none font-bold"
+                    >
+                      <option value="Premium White">Premium White</option>
+                      <option value="Apple Silver">Apple Silver</option>
+                      <option value="Soft Purple">Soft Purple</option>
+                      <option value="Luxury Black">Luxury Black</option>
+                      <option value="Midnight Blue">Midnight Blue</option>
+                      <option value="Royal Gold">Royal Gold</option>
+                      <option value="Rose Gold">Rose Gold</option>
+                      <option value="Luxury Pink">Luxury Pink</option>
+                      <option value="Ocean Blue">Ocean Blue</option>
+                      <option value="Cyber Neon">Cyber Neon</option>
+                      <option value="Gradient Custom">Gradient Custom</option>
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 uppercase">Gradient Direction</label>
+                    <select
+                      value={form.gradientDirection}
+                      onChange={e => setForm({ ...form, gradientDirection: e.target.value })}
+                      className="bg-gray-100 dark:bg-slate-850 text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-indigo-500 outline-none font-bold"
+                    >
+                      <option value="to-r">to Right (→)</option>
+                      <option value="to-br">to Bottom Right (↘)</option>
+                      <option value="to-tr">to Top Right (↗)</option>
+                      <option value="to-b">to Bottom (↓)</option>
+                      <option value="to-t">to Top (↑)</option>
+                      <option value="to-l">to Left (←)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Custom Color Pickers */}
+                {form.backgroundTheme === 'Gradient Custom' && (
+                  <div className="grid grid-cols-3 gap-4 p-4 bg-gray-100/50 dark:bg-slate-850/50 rounded-2xl border border-gray-150 dark:border-slate-800 animate-fadeIn">
+                    <div className="flex flex-col gap-1.5 items-center">
+                      <span className="text-[9px] font-bold text-gray-400 uppercase">Color 1</span>
+                      <input
+                        type="color"
+                        value={form.bgColor1}
+                        onChange={e => setForm({ ...form, bgColor1: e.target.value })}
+                        className="w-12 h-8 rounded-lg cursor-pointer border border-gray-300 dark:border-slate-700 bg-transparent"
+                      />
+                      <span className="text-[10px] font-mono text-gray-400">{form.bgColor1}</span>
+                    </div>
+                    <div className="flex flex-col gap-1.5 items-center">
+                      <span className="text-[9px] font-bold text-gray-400 uppercase">Color 2</span>
+                      <input
+                        type="color"
+                        value={form.bgColor2}
+                        onChange={e => setForm({ ...form, bgColor2: e.target.value })}
+                        className="w-12 h-8 rounded-lg cursor-pointer border border-gray-300 dark:border-slate-700 bg-transparent"
+                      />
+                      <span className="text-[10px] font-mono text-gray-400">{form.bgColor2}</span>
+                    </div>
+                    <div className="flex flex-col gap-1.5 items-center">
+                      <span className="text-[9px] font-bold text-gray-400 uppercase">Color 3</span>
+                      <input
+                        type="color"
+                        value={form.bgColor3}
+                        onChange={e => setForm({ ...form, bgColor3: e.target.value })}
+                        className="w-12 h-8 rounded-lg cursor-pointer border border-gray-300 dark:border-slate-700 bg-transparent"
+                      />
+                      <span className="text-[10px] font-mono text-gray-400">{form.bgColor3}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Glow & Blur Intensity */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 uppercase">Glow Intensity</label>
+                    <select
+                      value={form.glowIntensity}
+                      onChange={e => setForm({ ...form, glowIntensity: e.target.value })}
+                      className="bg-gray-100 dark:bg-slate-850 text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-indigo-500 outline-none font-bold"
+                    >
+                      <option value="none">None</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 uppercase">Background Blur</label>
+                    <select
+                      value={form.backgroundBlur}
+                      onChange={e => setForm({ ...form, backgroundBlur: e.target.value })}
+                      className="bg-gray-100 dark:bg-slate-850 text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-indigo-500 outline-none font-bold"
+                    >
+                      <option value="none">None</option>
+                      <option value="low">Low Blur</option>
+                      <option value="medium">Medium Blur</option>
+                      <option value="high">High Blur</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Floating Lights & Ambient Effect Checkboxes */}
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-text-secondary">
+                    <input
+                      type="checkbox"
+                      checked={form.floatingLights}
+                      onChange={e => setForm({ ...form, floatingLights: e.target.checked })}
+                      className="w-4 h-4 rounded text-purple-600 border-gray-300 dark:border-slate-850"
+                    />
+                    <span>Floating Lights</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-text-secondary">
+                    <input
+                      type="checkbox"
+                      checked={form.ambientEffect}
+                      onChange={e => setForm({ ...form, ambientEffect: e.target.checked })}
+                      className="w-4 h-4 rounded text-purple-600 border-gray-300 dark:border-slate-850"
+                    />
+                    <span>Ambient Glow Blobs</span>
+                  </label>
+                </div>
               </div>
             )}
 

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ShoppingBag, Heart, Bell, Sun, Moon, 
   Menu, X, Sparkles, Globe, ChevronDown, Check,
-  RotateCcw, Truck, Tag, RefreshCcw, HeadphonesIcon
+  RotateCcw, Truck, Tag, RefreshCcw, HeadphonesIcon,
+  MapPin, Navigation, Plus
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { logoutUser } from '../redux/authSlice';
@@ -42,10 +43,52 @@ export const MainLayout: React.FC = () => {
   // Redux Selectors
   const { cartItems } = useAppSelector(state => state.cart);
   const wishlistItems = useAppSelector(state => state.wishlist.wishlistItems);
-  const { user, isAuthenticated } = useAppSelector(state => state.auth);
+  const { user, isAuthenticated, addresses = [] } = useAppSelector(state => state.auth);
   const notifications = useAppSelector(state => state.notification.notifications);
   const unreadCount = notifications.filter((n: UserNotification) => !n.isRead).length;
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+  // Delivery Location Selector States
+  const defaultAddress = addresses.find((a: any) => a.isDefault) || addresses[0];
+  const [selectedAddress, setSelectedAddress] = useState<any>(() => {
+    const saved = localStorage.getItem('buynora_selected_address');
+    if (saved) return JSON.parse(saved);
+    return defaultAddress || { id: 'default', name: 'Select Location', city: 'Select Delivery Location', line1: '', state: '' };
+  });
+  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
+  const locationDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Sync with default address when loaded
+  useEffect(() => {
+    if (addresses.length > 0 && selectedAddress?.id === 'default') {
+      const def = addresses.find((a: any) => a.isDefault) || addresses[0];
+      setSelectedAddress(def);
+      localStorage.setItem('buynora_selected_address', JSON.stringify(def));
+    }
+  }, [addresses, selectedAddress]);
+
+  // Close on click outside
+  useEffect(() => {
+    const clickOutside = (e: MouseEvent) => {
+      if (locationDropdownRef.current && !locationDropdownRef.current.contains(e.target as Node)) {
+        setIsLocationDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', clickOutside);
+    return () => document.removeEventListener('mousedown', clickOutside);
+  }, []);
+
+  const handleSelectAddress = (addr: any) => {
+    setSelectedAddress(addr);
+    localStorage.setItem('buynora_selected_address', JSON.stringify(addr));
+    setIsLocationDropdownOpen(false);
+    showToast(`Delivery location set to ${addr.city}`, 'success');
+  };
+
+  const handleUseCurrentLocation = () => {
+    const mockAddr = { id: 'current', name: 'Current Location', city: 'Varanasi', line1: 'Assi Ghat Road', state: 'Uttar Pradesh' };
+    handleSelectAddress(mockAddr);
+  };
 
   const handleVoiceSearchResult = (result: string) => {
     showToast(`Voice Search recognized: "${result}"`, 'success');
@@ -143,22 +186,69 @@ export const MainLayout: React.FC = () => {
               )}
             </div>
 
-            {/* Currency Selector */}
-            <div className="flex gap-2">
-              {['INR', 'USD', 'EUR', 'GBP'].map(cur => (
-                <button
-                  key={cur}
-                  onClick={() => {
-                    setSelectedCurrency(cur);
-                    localStorage.setItem('currency', cur);
-                    window.dispatchEvent(new Event('currencyChange'));
-                    window.location.reload();
-                  }}
-                  className={`hover:text-text-inverted cursor-pointer font-bold ${selectedCurrency === cur ? 'text-indigo-400' : ''}`}
-                >
-                  {selectedCurrency === cur ? (cur === 'INR' ? '₹ INR' : `${cur === 'USD' ? '$' : cur === 'EUR' ? '€' : '£'} ${cur}`) : cur}
-                </button>
-              ))}
+            {/* Delivery Location Selector */}
+            <div className="relative text-left" ref={locationDropdownRef}>
+              <button 
+                onClick={() => setIsLocationDropdownOpen(!isLocationDropdownOpen)} 
+                className="flex items-center gap-1.5 hover:text-text-inverted cursor-pointer select-none py-1 px-2.5 rounded-lg hover:bg-white/5 transition-all text-slate-350"
+              >
+                <MapPin className="w-3.5 h-3.5 text-indigo-400" />
+                <div className="flex flex-col text-left">
+                  <span className="text-[8px] text-slate-450 block font-normal leading-none uppercase tracking-wide">Deliver to</span>
+                  <span className="text-[10px] font-black text-white block mt-0.5 leading-none">
+                    {selectedAddress?.city ? `${selectedAddress.city}, ${selectedAddress.state || ''}` : 'Select Location'}
+                  </span>
+                </div>
+                <ChevronDown className="w-3 h-3 text-slate-500" />
+              </button>
+              
+              {isLocationDropdownOpen && (
+                <div className="absolute right-0 mt-2 bg-slate-950/95 backdrop-blur-md border border-slate-800 rounded-xl p-3 w-64 flex flex-col gap-2 shadow-2xl z-50 animate-fade-in text-left">
+                  <span className="font-bold text-[9px] text-slate-400 uppercase tracking-widest block border-b border-slate-900 pb-1.5 mb-1">
+                    Select Delivery Location
+                  </span>
+                  
+                  {/* Saved Addresses list */}
+                  {addresses.length === 0 ? (
+                    <div className="text-[10px] text-slate-500 py-1 italic">No saved addresses found.</div>
+                  ) : (
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 pr-1">
+                      {addresses.map((addr: any) => (
+                        <button 
+                          key={addr.id} 
+                          onClick={() => handleSelectAddress(addr)} 
+                          className={`w-full text-left p-2 rounded-lg hover:bg-slate-900 border transition-all cursor-pointer block ${
+                            selectedAddress?.id === addr.id ? 'border-indigo-500/50 bg-slate-900/40' : 'border-slate-900'
+                          }`}
+                        >
+                          <span className="font-bold text-[10px] text-white block">{addr.name}</span>
+                          <span className="text-[9px] text-slate-405 block mt-0.5 truncate">{addr.line1}, {addr.city}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="border-t border-slate-900 pt-2 mt-1 flex flex-col gap-2">
+                    <button 
+                      onClick={handleUseCurrentLocation} 
+                      className="flex items-center gap-1.5 text-[10px] font-black text-indigo-400 hover:text-indigo-305 py-1 cursor-pointer transition-colors"
+                    >
+                      <Navigation className="w-3 h-3" />
+                      <span>USE CURRENT LOCATION</span>
+                    </button>
+                    
+                    <Link 
+                      to="/dashboard?tab=addresses" 
+                      onClick={() => setIsLocationDropdownOpen(false)}
+                      className="flex items-center gap-1.5 text-[10px] font-black text-slate-350 hover:text-white py-1 transition-colors"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>MANAGE ADDRESSES</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Theme Toggler */}
@@ -176,8 +266,15 @@ export const MainLayout: React.FC = () => {
               </span>
             </Link>
 
-            {/* Mega Menu Categories (Desktop) */}
-            <MegaMenu categories={categories} />
+            {/* Custom Modern Hybrid Navigation Categories */}
+            <div className="hidden lg:flex items-center gap-5 text-sm font-extrabold text-text-secondary select-none">
+              <Link to="/products?category=Men" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Men</Link>
+              <Link to="/products?category=Women" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Women</Link>
+              <Link to="/products?category=Electronics" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Electronics</Link>
+              <Link to="/products?category=Apparel" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Fashion</Link>
+              <Link to="/products?category=Footwear" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Footwear</Link>
+              <Link to="/products?category=Accessories" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Accessories</Link>
+            </div>
           </div>
 
           {/* Search bar with Recommendations */}
@@ -310,7 +407,7 @@ export const MainLayout: React.FC = () => {
       </header>
 
       {/* Main Outlet */}
-      <main className={`flex-1 w-full py-6 ${location.pathname === '/' ? 'px-4 md:px-8 max-w-none w-full' : 'max-w-7xl mx-auto px-4 md:px-8'}`}>
+      <main className={`flex-1 w-full ${location.pathname === '/' ? 'pt-2 pb-8 px-4 md:px-8 max-w-none w-full' : 'py-6 max-w-7xl mx-auto px-4 md:px-8'}`}>
         <Outlet />
       </main>
 

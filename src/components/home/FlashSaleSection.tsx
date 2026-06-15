@@ -50,10 +50,10 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
   const showButton = products.length > limit;
 
   return (
-    <section className="glass p-6 md:p-8 rounded-3xl border border-rose-500/15 relative overflow-hidden bg-rose-500/[0.01] w-full max-w-full">
+    <section className="glass p-4 md:p-5 rounded-3xl border border-rose-500/15 relative overflow-hidden bg-rose-500/[0.01] w-full max-w-full">
       <div className="absolute top-0 right-0 w-[30vw] h-[30vw] bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
       
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 relative z-10">
         <div className="flex items-center gap-3">
           <div className="bg-rose-500 p-2.5 rounded-2xl text-white shadow-lg shadow-rose-500/20">
             <Flame className="w-5 h-5 animate-pulse" />

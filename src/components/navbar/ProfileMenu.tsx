@@ -17,34 +17,15 @@ interface ProfileMenuProps {
   onLogout: () => void;
 }
 
-// ── CUSTOMER menu groups ─────────────────────────────────────────────────────
-const CUSTOMER_MENU = [
-  {
-    group: 'My Account',
-    items: [
-      { to: '/dashboard',               label: 'My Profile',       icon: <User className="w-4 h-4" />,         color: 'text-indigo-500' },
-      { to: '/orders',                  label: 'My Orders',        icon: <ShoppingBag className="w-4 h-4" />,  color: 'text-emerald-500' },
-      { to: '/wishlist',                label: 'Wishlist',         icon: <Heart className="w-4 h-4" />,        color: 'text-rose-500' },
-    ],
-  },
-  {
-    group: 'Saved Info',
-    items: [
-      { to: '/dashboard?tab=addresses', label: 'Saved Addresses',  icon: <MapPin className="w-4 h-4" />,       color: 'text-amber-500' },
-      { to: '/dashboard?tab=payments',  label: 'Payment Methods',  icon: <CreditCard className="w-4 h-4" />,   color: 'text-blue-500' },
-      { to: '/dashboard?tab=coupons',   label: 'Coupons',          icon: <Tag className="w-4 h-4" />,          color: 'text-orange-500' },
-      { to: '/dashboard?tab=rewards',   label: 'Reward Points',    icon: <Star className="w-4 h-4" />,         color: 'text-yellow-500' },
-    ],
-  },
-  {
-    group: 'Support',
-    items: [
-      { to: '/dashboard?tab=notifications', label: 'Notifications',    icon: <Bell className="w-4 h-4" />,    color: 'text-purple-500' },
-      { to: '/contact',                     label: 'Customer Support',  icon: <Headphones className="w-4 h-4" />, color: 'text-teal-500' },
-      { to: '/faq',                         label: 'Help Center',       icon: <HelpCircle className="w-4 h-4" />, color: 'text-cyan-500' },
-      { to: '/dashboard?tab=settings',      label: 'Settings',          icon: <Settings className="w-4 h-4" />,   color: 'text-gray-500' },
-    ],
-  },
+// ── CUSTOMER flat menu ───────────────────────────────────────────────────────
+const CUSTOMER_FLAT_MENU = [
+  { to: '/dashboard',               label: 'Profile',       icon: <User className="w-4 h-4" />,         color: 'text-indigo-500' },
+  { to: '/orders',                  label: 'Orders',        icon: <ShoppingBag className="w-4 h-4" />,  color: 'text-emerald-500' },
+  { to: '/wishlist',                label: 'Wishlist',      icon: <Heart className="w-4 h-4" />,        color: 'text-rose-500' },
+  { to: '/dashboard?tab=addresses', label: 'Addresses',     icon: <MapPin className="w-4 h-4" />,       color: 'text-amber-500' },
+  { to: '/dashboard?tab=coupons',   label: 'Coupons',       icon: <Tag className="w-4 h-4" />,          color: 'text-orange-500' },
+  { to: '/dashboard?tab=notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />,     color: 'text-purple-500' },
+  { to: '/dashboard?tab=settings',  label: 'Settings',      icon: <Settings className="w-4 h-4" />,     color: 'text-gray-500' },
 ];
 
 // ── SELLER menu groups ────────────────────────────────────────────────────────
@@ -241,9 +222,24 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({ user, isAuthenticated,
             {isAuthenticated ? (
               <>
                 {/* CUSTOMER */}
-                {isCustomer && CUSTOMER_MENU.map((section, si) => (
-                  <MenuGroup key={si} section={section} onClose={() => setIsOpen(false)} hasBorder={si > 0} />
-                ))}
+                {isCustomer && (
+                  <div className="px-2 py-1.5 space-y-0.5">
+                    {CUSTOMER_FLAT_MENU.map(item => (
+                      <Link
+                        key={`${item.to}-${item.label}`}
+                        to={item.to}
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-3 px-3 py-1.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 text-text-secondary hover:text-text-primary transition-all group"
+                      >
+                        <span className={`flex-shrink-0 ${item.color} group-hover:scale-110 transition-transform`}>
+                          {item.icon}
+                        </span>
+                        <span className="text-xs font-semibold flex-1">{item.label}</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-gray-300 dark:text-gray-700 group-hover:text-gray-400 transition-colors" />
+                      </Link>
+                    ))}
+                  </div>
+                )}
 
                 {/* SELLER */}
                 {isSeller && SELLER_MENU.map((section, si) => (
