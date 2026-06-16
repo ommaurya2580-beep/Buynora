@@ -9,13 +9,13 @@ interface BrandSplashProps {
   onComplete: () => void;
 }
 
-type SplashStage = 'logo' | 'modern' | 'premium' | 'buynora' | 'transitioning' | 'complete';
+type SplashStage = 'bg' | 'logo' | 'hold' | 'transitioning' | 'complete';
 
 export const BrandSplash: React.FC<BrandSplashProps> = ({ 
   onTransitionStart, 
   onComplete 
 }) => {
-  const [stage, setStage] = useState<SplashStage>('logo');
+  const [stage, setStage] = useState<SplashStage>('bg');
   const [hasShown, setHasShown] = useState(false);
 
   useEffect(() => {
@@ -27,44 +27,36 @@ export const BrandSplash: React.FC<BrandSplashProps> = ({
       return;
     }
 
-    // Mark as shown immediately to prevent double-mount replay in React StrictMode
-    sessionStorage.setItem('buynora_splash_shown', 'true');
     setHasShown(true);
 
     // Timeline durations
-    // 0s - 1.5s: Show only the Buynora logo in the center (logo stage)
+    // 0s - 1s: Full-screen premium background only
     const t1 = setTimeout(() => {
-      setStage('modern');
-    }, 1500);
+      setStage('logo'); // Reveal logo and "Buynora" name (1.0s - 2.5s)
+    }, 1000);
 
-    // 1.5s - 2.5s: Show the first slogan "BUY MODERN"
+    // 2.5s - 3.5s: Final Brand Hold
     const t2 = setTimeout(() => {
-      setStage('premium');
-    }, 2500);
+      setStage('hold');
+    }, 2505);
 
-    // 2.5s - 3.5s: Transform "BUY MODERN" -> "BUY PREMIUM"
+    // 3.5s - 4.5s: Transition to website
     const t3 = setTimeout(() => {
-      setStage('buynora');
-    }, 3500);
-
-    // 3.5s - 4.5s: Transform "BUY PREMIUM" -> "BUYNORA"
-    const t4 = setTimeout(() => {
       setStage('transitioning');
       onTransitionStart(); // Trigger navbar logo mount & homepage fade-in
-    }, 4500);
+    }, 3500);
 
-    // 4.5s - 5.5s: Transition to website (background fades, logo slides to navbar)
-    const t5 = setTimeout(() => {
-      setStage('complete');
+    // 4.5s+: Complete unmount
+    const t4 = setTimeout(() => {
+      sessionStorage.setItem('buynora_splash_shown', 'true');
       onComplete(); // completely unmount overlay
-    }, 5500);
+    }, 4500);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
       clearTimeout(t4);
-      clearTimeout(t5);
     };
   }, [onTransitionStart, onComplete]);
 
@@ -74,79 +66,63 @@ export const BrandSplash: React.FC<BrandSplashProps> = ({
     <motion.div
       initial={{ opacity: 1 }}
       animate={stage === 'transitioning' ? { opacity: 0 } : { opacity: 1 }}
-      transition={{ duration: 1.0, ease: 'easeInOut' }}
+      transition={{ duration: 0.8, ease: 'easeInOut' }}
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black overflow-hidden select-none"
     >
       {/* Deep Emerald Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#001F1A] to-[#000000]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#001F1A] via-[#003D33] to-[#00110E]" />
       
+      {/* Soft moving green glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,217,166,0.08)_0%,transparent_70%)] animate-pulse-slow" />
+
       {/* Particle Overlay (only active during splash, disabled on transitioning to save performance) */}
       {stage !== 'transitioning' && <ParticleBackground />}
 
       {/* Ripple/wave behind the logo */}
-      {stage !== 'transitioning' && (
+      {stage !== 'transitioning' && stage !== 'bg' && (
         <div className="radial-wave absolute top-[43%] left-1/2 -translate-x-1/2 -translate-y-1/2" />
       )}
 
       {/* Center Group */}
       {stage !== 'transitioning' && (
         <div className="flex flex-col items-center justify-center z-10 gap-6">
-          {/* Logo box with glowing border */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ 
-              scale: 1.0, 
-              opacity: 1,
-              y: [0, -6, 0]
-            }}
-            transition={{ 
-              scale: { duration: 1.5, ease: "easeOut" },
-              opacity: { duration: 1.2, ease: "easeOut" },
-              y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
-            }}
-            className="emerald-glow-lg rounded-2xl bg-[#001F1A]/60 backdrop-blur-md p-5 border border-[#00D9A6]/20 relative shadow-[0_0_50px_rgba(0,217,166,0.15)] glass-reflection"
-          >
-            <LogoAnimation size={96} layoutId="logo-bag" />
-          </motion.div>
+          <AnimatePresence>
+            {stage !== 'bg' && (
+              <motion.div
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={stage === 'hold' ? {
+                  scale: 1.0,
+                  opacity: 1,
+                  y: 0
+                } : {
+                  scale: 1.0,
+                  opacity: 1,
+                  y: [0, -6, 0]
+                }}
+                transition={{ 
+                  scale: { duration: 1.2, ease: "easeOut" },
+                  opacity: { duration: 1.0, ease: "easeOut" },
+                  y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
+                }}
+                className="emerald-glow-lg rounded-2xl bg-[#001F1A]/60 backdrop-blur-md p-5 border border-[#00D9A6]/20 relative shadow-[0_0_50px_rgba(0,217,166,0.15)] glass-reflection"
+              >
+                <LogoAnimation size={96} layoutId="logo-bag" />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Sub-text revealing / morphing */}
           <div className="h-16 flex items-center justify-center mt-2">
-            <AnimatePresence mode="wait">
-              {stage === 'modern' && (
+            <AnimatePresence>
+              {stage !== 'bg' && (
                 <motion.div
-                  key="modern"
-                  initial={{ opacity: 0, filter: 'blur(8px)', scale: 0.95 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', scale: 1.0 }}
-                  exit={{ opacity: 0, filter: 'blur(8px)', scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                  className="text-2xl font-extrabold tracking-widest text-white font-sans drop-shadow-[0_0_10px_rgba(0,217,166,0.3)]"
-                >
-                  BUY <span className="text-[#00D9A6]">MODERN</span>
-                </motion.div>
-              )}
-
-              {stage === 'premium' && (
-                <motion.div
-                  key="premium"
-                  initial={{ opacity: 0, filter: 'blur(8px)', scale: 0.95 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', scale: 1.0 }}
-                  exit={{ opacity: 0, filter: 'blur(8px)', scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                  className="text-2xl font-extrabold tracking-widest text-white font-sans drop-shadow-[0_0_10px_rgba(0,217,166,0.3)]"
-                >
-                  BUY <span className="text-[#00D9A6]">PREMIUM</span>
-                </motion.div>
-              )}
-
-              {stage === 'buynora' && (
-                <motion.div
-                  key="buynora"
+                  key="buynora-text"
                   layoutId="logo-text"
-                  initial={{ opacity: 0, filter: 'blur(10px)', scale: 0.95 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', scale: 1.15 }}
-                  exit={{ opacity: 0, filter: 'blur(10px)', scale: 0.95 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="text-3.5xl font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-[#00D9A6] via-[#38FFD3] to-[#007A5E] drop-shadow-[0_0_20px_rgba(0,217,166,0.6)] font-sans uppercase"
+                  initial={{ opacity: 0, filter: 'blur(8px)', scale: 0.95 }}
+                  animate={{ opacity: 1, filter: 'blur(0px)', scale: stage === 'hold' ? 1.0 : 1.05 }}
+                  exit={{ opacity: 0, filter: 'blur(8px)' }}
+                  transition={{ duration: 0.8, ease: "easeInOut", delay: 0.5 }}
+                  className="text-3.5xl font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#00D9A6] drop-shadow-[0_0_15px_rgba(0,217,166,0.4)] font-sans uppercase"
                 >
                   BUYNORA
                 </motion.div>
