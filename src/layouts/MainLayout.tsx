@@ -283,22 +283,27 @@ export const MainLayout: React.FC = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group transition-all duration-300">
               {!isSplashTransitioning ? (
-                <motion.div
-                  layoutId="logo-bag"
-                  className="w-8 h-8 flex items-center justify-center rounded-xl bg-gradient-to-tr from-[#007A5E] to-[#00D9A6] p-1.5 shadow-[0_0_15px_rgba(0,217,166,0.35)] group-hover:shadow-[0_0_25px_rgba(56,255,211,0.6)] group-hover:scale-105 transition-all duration-300"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-white">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <path d="M16 10a4 4 0 0 1-8 0" />
-                  </svg>
-                </motion.div>
+                <>
+                  <motion.div
+                    layoutId="logo-bag"
+                    className="w-8 h-8 flex items-center justify-center rounded-xl bg-gradient-to-tr from-[#007A5E] to-[#00D9A6] p-1.5 shadow-[0_0_15px_rgba(0,217,166,0.35)] group-hover:shadow-[0_0_25px_rgba(56,255,211,0.6)] group-hover:scale-105 transition-all duration-300"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-white">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                      <line x1="3" y1="6" x2="21" y2="6" />
+                      <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                  </motion.div>
+                  <motion.span
+                    layoutId="logo-text"
+                    className="text-2xl font-black bg-gradient-to-r from-[#00D9A6] via-[#38FFD3] to-[#007A5E] bg-clip-text text-transparent tracking-tight group-hover:scale-105 group-hover:drop-shadow-[0_0_12px_rgba(56,255,211,0.5)] transition-all duration-300 select-none"
+                  >
+                    Buynora
+                  </motion.span>
+                </>
               ) : (
-                <div className="w-8 h-8" />
+                <div className="w-28 h-8" />
               )}
-              <span className="text-2xl font-black bg-gradient-to-r from-[#00D9A6] via-[#38FFD3] to-[#007A5E] bg-clip-text text-transparent tracking-tight group-hover:scale-105 group-hover:drop-shadow-[0_0_12px_rgba(56,255,211,0.5)] transition-all duration-300 select-none">
-                Buynora
-              </span>
             </Link>
 
             {/* Custom Modern Hybrid Navigation Categories */}
