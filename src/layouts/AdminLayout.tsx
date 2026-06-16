@@ -41,7 +41,7 @@ export const AdminLayout: React.FC = () => {
         <div className="space-y-8">
           {/* Logo / Title */}
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-purple-600 rounded-xl text-text-inverted">
+            <div className="p-2 bg-primary rounded-xl text-text-inverted">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
@@ -64,7 +64,7 @@ export const AdminLayout: React.FC = () => {
                       to={item.path}
                       className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
                         isActive 
-                          ? 'bg-purple-600 text-text-inverted shadow-lg shadow-purple-600/10' 
+                          ? 'bg-primary-hover text-text-inverted shadow-lg shadow-primary/10' 
                           : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
                       }`}
                     >
@@ -90,7 +90,7 @@ export const AdminLayout: React.FC = () => {
                       to={item.path}
                       className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
                         isActive 
-                          ? 'bg-purple-600 text-text-inverted shadow-lg shadow-purple-600/10' 
+                          ? 'bg-primary-hover text-text-inverted shadow-lg shadow-primary/10' 
                           : 'hover:bg-gray-100 dark:hover:bg-slate-800/50 text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
                       }`}
                     >
@@ -150,7 +150,7 @@ export const AdminLayout: React.FC = () => {
             </button>
             <div className="hidden sm:flex items-center gap-2">
               <span className="text-xs font-bold">Alice Admin</span>
-              <span className="text-[10px] bg-purple-500/10 text-purple-500 font-extrabold px-2 py-0.5 rounded-full uppercase">
+              <span className="text-[10px] bg-primary/10 text-primary font-extrabold px-2 py-0.5 rounded-full uppercase">
                 Owner
               </span>
             </div>
@@ -177,7 +177,7 @@ export const AdminLayout: React.FC = () => {
               <div className="space-y-8">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <ShieldAlert className="w-5 h-5 text-purple-500" />
+                    <ShieldAlert className="w-5 h-5 text-primary" />
                     <span className="font-extrabold text-sm">Admin Portal</span>
                   </div>
                   <button onClick={() => setIsSidebarOpen(false)}>
@@ -198,7 +198,7 @@ export const AdminLayout: React.FC = () => {
                             onClick={() => setIsSidebarOpen(false)}
                             className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
                               isActive 
-                                ? 'bg-purple-600 text-text-inverted shadow-lg' 
+                                ? 'bg-primary-hover text-text-inverted shadow-lg' 
                                 : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
                             }`}
                           >
@@ -225,7 +225,7 @@ export const AdminLayout: React.FC = () => {
                             onClick={() => setIsSidebarOpen(false)}
                             className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl transition-all ${
                               isActive 
-                                ? 'bg-purple-600 text-text-inverted shadow-lg' 
+                                ? 'bg-primary-hover text-text-inverted shadow-lg' 
                                 : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
                             }`}
                           >

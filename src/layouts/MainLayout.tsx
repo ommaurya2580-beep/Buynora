@@ -22,6 +22,8 @@ import { ProfileMenu } from '../components/navbar/ProfileMenu';
 import { MegaMenu } from '../components/navbar/MegaMenu';
 import { ThemeToggle } from '../components/navbar/ThemeToggle';
 import { RecentlyViewedDropdown } from '../components/navbar/RecentlyViewedDropdown';
+import { BrandSplash } from '../components/BrandSplash/BrandSplash';
+import { motion } from 'framer-motion';
 
 export const MainLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -32,6 +34,12 @@ export const MainLayout: React.FC = () => {
   const { data: categories = [] } = useCategories();
 
   // State
+  const [isSplashActive, setIsSplashActive] = useState(() => {
+    return sessionStorage.getItem('buynora_splash_shown') !== 'true';
+  });
+  const [isSplashTransitioning, setIsSplashTransitioning] = useState(() => {
+    return sessionStorage.getItem('buynora_splash_shown') !== 'true';
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isRecentlyViewedOpen, setIsRecentlyViewedOpen] = useState(false);
@@ -101,7 +109,20 @@ export const MainLayout: React.FC = () => {
     navigate('/');
   };
   return (
-    <div className="min-h-screen bg-bg-secondary flex flex-col justify-between">
+    <>
+      {isSplashActive && (
+        <BrandSplash 
+          onTransitionStart={() => setIsSplashTransitioning(false)} 
+          onComplete={() => setIsSplashActive(false)} 
+        />
+      )}
+      <div 
+        className="min-h-screen bg-bg-secondary flex flex-col justify-between"
+        style={{
+          opacity: isSplashTransitioning ? 0 : 1,
+          transition: 'opacity 0.8s ease-in-out'
+        }}
+      >
       {/* DOUBLE DECKER NAVBAR */}
       <header className="sticky top-0 z-50 w-full">
         {/* TOP PANEL: Promo Ticker, Lang, Currency, Dark Mode */}
@@ -260,8 +281,22 @@ export const MainLayout: React.FC = () => {
         <nav className="glass bg-white/85 dark:bg-slate-900/85 border-b border-gray-200/50 dark:border-gray-800/50 px-4 md:px-8 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-8">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl font-black text-primary tracking-tight">
+            <Link to="/" className="flex items-center gap-2 group transition-all duration-300">
+              {!isSplashTransitioning ? (
+                <motion.div
+                  layoutId="logo-bag"
+                  className="w-8 h-8 flex items-center justify-center rounded-xl bg-gradient-to-tr from-[#007A5E] to-[#00D9A6] p-1.5 shadow-[0_0_15px_rgba(0,217,166,0.35)] group-hover:shadow-[0_0_25px_rgba(56,255,211,0.6)] group-hover:scale-105 transition-all duration-300"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-white">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                  </svg>
+                </motion.div>
+              ) : (
+                <div className="w-8 h-8" />
+              )}
+              <span className="text-2xl font-black bg-gradient-to-r from-[#00D9A6] via-[#38FFD3] to-[#007A5E] bg-clip-text text-transparent tracking-tight group-hover:scale-105 group-hover:drop-shadow-[0_0_12px_rgba(56,255,211,0.5)] transition-all duration-300 select-none">
                 Buynora
               </span>
             </Link>
@@ -418,7 +453,7 @@ export const MainLayout: React.FC = () => {
           
           {/* About Column */}
           <div className="flex flex-col gap-3">
-            <span className="text-xl font-black text-text-inverted tracking-tight">Buynora</span>
+            <span className="text-xl font-black bg-gradient-to-r from-[#00D9A6] to-[#38FFD3] bg-clip-text text-transparent tracking-tight">Buynora</span>
             <p className="leading-relaxed text-[11px] text-slate-400">
               Providing enterprise-grade modern shopping portals with advanced features, inspired by standard-defining brands like Apple, Nike, and Sony.
             </p>
@@ -487,6 +522,7 @@ export const MainLayout: React.FC = () => {
 
       {/* Floating Chatbot Widget */}
       <ChatWidget />
-    </div>
+      </div>
+    </>
   );
 };
