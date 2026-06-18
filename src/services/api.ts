@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { environment } from '../config/environment';
-import { products, categories, coupons } from './mockDb';
+import { products, categories, coupons, Announcement, TickerSettings, NavigationMenuItem } from './mockDb';
 import { Review, QnA, Order, UserAccount, Seller } from '../types';
 import { TokenManager } from '../features/auth/services/tokenManager';
 import { RefreshTokenManager } from '../features/auth/services/refreshTokenManager';
@@ -766,6 +766,170 @@ const getStoredVersions = (campaignId: string): any[] => {
   return defaults;
 };
 
+const getStoredAnnouncements = (): Announcement[] => {
+  const stored = localStorage.getItem('buynora_announcements');
+  if (stored) return JSON.parse(stored);
+  const defaults: Announcement[] = [
+    {
+      id: "ann_1",
+      title: "Free Shipping",
+      messageText: "Free Shipping above ₹499",
+      icon: "Truck",
+      textColor: "#E2E8F0",
+      backgroundColor: "#1F2937",
+      iconColor: "#34D399",
+      displayOrder: 1,
+      openInNewTab: false,
+      status: "Active"
+    },
+    {
+      id: "ann_2",
+      title: "Coupon Code",
+      messageText: "Use code SAVE20 for extra 20% off",
+      icon: "Coupon",
+      textColor: "#E2E8F0",
+      backgroundColor: "#1F2937",
+      iconColor: "#FBBF24",
+      displayOrder: 2,
+      openInNewTab: false,
+      status: "Active"
+    },
+    {
+      id: "ann_3",
+      title: "Easy Returns",
+      messageText: "Easy 30-day Returns",
+      icon: "Gift",
+      textColor: "#E2E8F0",
+      backgroundColor: "#1F2937",
+      iconColor: "#38BDF8",
+      displayOrder: 3,
+      openInNewTab: false,
+      status: "Active"
+    },
+    {
+      id: "ann_4",
+      title: "24x7 Customer Support",
+      messageText: "24×7 Customer Support",
+      icon: "Support",
+      textColor: "#E2E8F0",
+      backgroundColor: "#1F2937",
+      iconColor: "#818CF8",
+      displayOrder: 4,
+      openInNewTab: false,
+      status: "Active"
+    }
+  ];
+  localStorage.setItem('buynora_announcements', JSON.stringify(defaults));
+  return defaults;
+};
+
+const getStoredTickerSettings = (): TickerSettings => {
+  const stored = localStorage.getItem('buynora_ticker_settings');
+  if (stored) return JSON.parse(stored);
+  const defaults: TickerSettings = {
+    scrollSpeed: "Normal",
+    customSpeedMs: 25000,
+    direction: "R2L",
+    pauseOnHover: true,
+    autoplay: true,
+    infiniteLoop: true,
+    showAnnouncementBar: true
+  };
+  localStorage.setItem('buynora_ticker_settings', JSON.stringify(defaults));
+  return defaults;
+};
+
+const getStoredNavigationItems = (): NavigationMenuItem[] => {
+  const stored = localStorage.getItem('buynora_navigation_items');
+  if (stored) return JSON.parse(stored);
+  const defaults: NavigationMenuItem[] = [
+    {
+      id: "nav_1",
+      name: "MEN",
+      slug: "/products?category=Men",
+      menuType: "CustomPage",
+      openInNewTab: false,
+      showInDesktop: true,
+      showInMobile: true,
+      showInSidebar: true,
+      highlight: "None",
+      displayOrder: 1,
+      status: "Active"
+    },
+    {
+      id: "nav_2",
+      name: "WOMEN",
+      slug: "/products?category=Women",
+      menuType: "CustomPage",
+      openInNewTab: false,
+      showInDesktop: true,
+      showInMobile: true,
+      showInSidebar: true,
+      highlight: "None",
+      displayOrder: 2,
+      status: "Active"
+    },
+    {
+      id: "nav_3",
+      name: "ELECTRONICS",
+      slug: "/products?category=Electronics",
+      menuType: "Category",
+      categoryConnectionId: "c_electronics",
+      openInNewTab: false,
+      showInDesktop: true,
+      showInMobile: true,
+      showInSidebar: true,
+      highlight: "None",
+      displayOrder: 3,
+      status: "Active"
+    },
+    {
+      id: "nav_4",
+      name: "FASHION",
+      slug: "/products?category=Apparel",
+      menuType: "Category",
+      categoryConnectionId: "c_apparel",
+      openInNewTab: false,
+      showInDesktop: true,
+      showInMobile: true,
+      showInSidebar: true,
+      highlight: "None",
+      displayOrder: 4,
+      status: "Active"
+    },
+    {
+      id: "nav_5",
+      name: "FOOTWEAR",
+      slug: "/products?category=Footwear",
+      menuType: "Category",
+      categoryConnectionId: "c_footwear",
+      openInNewTab: false,
+      showInDesktop: true,
+      showInMobile: true,
+      showInSidebar: true,
+      highlight: "None",
+      displayOrder: 5,
+      status: "Active"
+    },
+    {
+      id: "nav_6",
+      name: "ACCESSORIES",
+      slug: "/products?category=Accessories",
+      menuType: "Category",
+      categoryConnectionId: "c_accessories",
+      openInNewTab: false,
+      showInDesktop: true,
+      showInMobile: true,
+      showInSidebar: true,
+      highlight: "None",
+      displayOrder: 6,
+      status: "Active"
+    }
+  ];
+  localStorage.setItem('buynora_navigation_items', JSON.stringify(defaults));
+  return defaults;
+};
+
 // Axios Mock Adapter Intercepting Requests
 api.defaults.adapter = async (config) => {
   const url = config.url || '';
@@ -774,6 +938,123 @@ api.defaults.adapter = async (config) => {
   const params = config.params || {};
 
   await new Promise((resolve) => setTimeout(resolve, 300));
+
+  // ==========================================
+  // HEADER ANNOUNCEMENTS MOCK ENDPOINTS
+  // ==========================================
+  if (method === 'get' && url === '/admin/announcements') {
+    return mockResponse(200, {
+      announcements: getStoredAnnouncements(),
+      tickerSettings: getStoredTickerSettings()
+    });
+  }
+
+  if (method === 'put' && url === '/admin/announcements/settings') {
+    localStorage.setItem('buynora_ticker_settings', JSON.stringify(data));
+    return mockResponse(200, data);
+  }
+
+  if (method === 'post' && url === '/admin/announcements') {
+    const list = getStoredAnnouncements();
+    const newAnn = {
+      ...data,
+      id: `ann_${Date.now()}`
+    };
+    list.push(newAnn);
+    localStorage.setItem('buynora_announcements', JSON.stringify(list));
+    return mockResponse(200, newAnn);
+  }
+
+  const singleAnnMatch = url.match(/^\/admin\/announcements\/([^/]+)$/);
+  if (method === 'put' && singleAnnMatch) {
+    const annId = singleAnnMatch[1];
+    const list = getStoredAnnouncements();
+    const idx = list.findIndex(ann => ann.id === annId);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...data };
+      localStorage.setItem('buynora_announcements', JSON.stringify(list));
+      return mockResponse(200, list[idx]);
+    }
+    return mockResponse(404, { message: 'Announcement not found' });
+  }
+
+  if (method === 'delete' && singleAnnMatch) {
+    const annId = singleAnnMatch[1];
+    const list = getStoredAnnouncements();
+    const filtered = list.filter(ann => ann.id !== annId);
+    localStorage.setItem('buynora_announcements', JSON.stringify(filtered));
+    return mockResponse(200, { success: true, id: annId });
+  }
+
+  const duplicateAnnMatch = url.match(/^\/admin\/announcements\/([^/]+)\/duplicate$/);
+  if (method === 'post' && duplicateAnnMatch) {
+    const annId = duplicateAnnMatch[1];
+    const list = getStoredAnnouncements();
+    const orig = list.find(ann => ann.id === annId);
+    if (!orig) return mockResponse(404, { message: 'Announcement not found' });
+    const duplicated = {
+      ...orig,
+      id: `ann_${Date.now()}`,
+      title: `${orig.title} (Copy)`,
+      displayOrder: list.length + 1
+    };
+    list.push(duplicated);
+    localStorage.setItem('buynora_announcements', JSON.stringify(list));
+    return mockResponse(200, duplicated);
+  }
+
+  // ==========================================
+  // NAVIGATION MENU MANAGER MOCK ENDPOINTS
+  // ==========================================
+  if (method === 'get' && url === '/admin/navigation-items') {
+    const items = getStoredNavigationItems();
+    return mockResponse(200, items.sort((a, b) => a.displayOrder - b.displayOrder));
+  }
+
+  if (method === 'post' && url === '/admin/navigation-items') {
+    const list = getStoredNavigationItems();
+    const newItem = {
+      ...data,
+      id: `nav_${Date.now()}`
+    };
+    list.push(newItem);
+    localStorage.setItem('buynora_navigation_items', JSON.stringify(list));
+    return mockResponse(200, newItem);
+  }
+
+  if (method === 'put' && url === '/admin/navigation-items/reorder') {
+    const list = getStoredNavigationItems();
+    const reorders: { id: string; displayOrder: number }[] = data.items;
+    reorders.forEach(item => {
+      const found = list.find(nav => nav.id === item.id);
+      if (found) {
+        found.displayOrder = item.displayOrder;
+      }
+    });
+    localStorage.setItem('buynora_navigation_items', JSON.stringify(list));
+    return mockResponse(200, list.sort((a, b) => a.displayOrder - b.displayOrder));
+  }
+
+  const singleNavMatch = url.match(/^\/admin\/navigation-items\/([^/]+)$/);
+  if (method === 'put' && singleNavMatch) {
+    const navId = singleNavMatch[1];
+    const list = getStoredNavigationItems();
+    const idx = list.findIndex(nav => nav.id === navId);
+    if (idx !== -1) {
+      list[idx] = { ...list[idx], ...data };
+      localStorage.setItem('buynora_navigation_items', JSON.stringify(list));
+      return mockResponse(200, list[idx]);
+    }
+    return mockResponse(404, { message: 'Navigation item not found' });
+  }
+
+  if (method === 'delete' && singleNavMatch) {
+    const navId = singleNavMatch[1];
+    const list = getStoredNavigationItems();
+    const filtered = list.filter(nav => nav.id !== navId);
+    localStorage.setItem('buynora_navigation_items', JSON.stringify(filtered));
+    return mockResponse(200, { success: true, id: navId });
+  }
 
   // ==========================================
   // HERO CAMPAIGN MANAGER MOCK ENDPOINTS

@@ -25,6 +25,8 @@ export const AdminLayout: React.FC = () => {
 
   const marketingItems = [
     { name: 'Hero Campaigns', path: '/admin/hero-campaigns', icon: Sparkles },
+    { name: 'Header Announcements', path: '/admin/header-announcements', icon: Megaphone },
+    { name: 'Navigation Manager', path: '/admin/navigation-manager', icon: Menu },
     { name: 'Promotions', path: '/admin/promotions', icon: Megaphone },
     { name: 'Coupons', tab: 'coupons', path: '/admin/coupons?tab=coupons', icon: Tag },
     { name: 'Notifications', path: '/admin/notifications', icon: Bell },
@@ -57,7 +59,7 @@ export const AdminLayout: React.FC = () => {
               <div className="space-y-1">
                 {coreItems.map(item => {
                   const Icon = item.icon;
-                  const isActive = currentTab === item.tab && !location.pathname.startsWith('/admin/hero-campaigns') && !location.pathname.startsWith('/admin/promotions') && !location.pathname.startsWith('/admin/notifications') && !location.pathname.startsWith('/admin/push-campaigns');
+                  const isActive = currentTab === item.tab && !location.pathname.startsWith('/admin/hero-campaigns') && !location.pathname.startsWith('/admin/header-announcements') && !location.pathname.startsWith('/admin/navigation-manager') && !location.pathname.startsWith('/admin/promotions') && !location.pathname.startsWith('/admin/notifications') && !location.pathname.startsWith('/admin/push-campaigns');
                   return (
                     <Link
                       key={item.path}
@@ -190,7 +192,7 @@ export const AdminLayout: React.FC = () => {
                     <div className="space-y-1">
                       {coreItems.map(item => {
                         const Icon = item.icon;
-                        const isActive = currentTab === item.tab && !location.pathname.startsWith('/admin/hero-campaigns') && !location.pathname.startsWith('/admin/promotions') && !location.pathname.startsWith('/admin/notifications') && !location.pathname.startsWith('/admin/push-campaigns');
+                        const isActive = currentTab === item.tab && !location.pathname.startsWith('/admin/hero-campaigns') && !location.pathname.startsWith('/admin/header-announcements') && !location.pathname.startsWith('/admin/navigation-manager') && !location.pathname.startsWith('/admin/promotions') && !location.pathname.startsWith('/admin/notifications') && !location.pathname.startsWith('/admin/push-campaigns');
                         return (
                           <Link
                             key={item.path}

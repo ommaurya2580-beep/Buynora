@@ -583,3 +583,46 @@ for (let i = 1; i <= 100; i++) {
     deliveryDays: (i % 3) + 2
   });
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  messageText: string;
+  icon: string;
+  textColor: string;
+  backgroundColor: string;
+  iconColor: string;
+  linkUrl?: string;
+  openInNewTab: boolean;
+  displayOrder: number;
+  status: 'Active' | 'Disabled';
+}
+
+export interface TickerSettings {
+  scrollSpeed: 'Slow' | 'Normal' | 'Fast' | 'Custom';
+  customSpeedMs?: number;
+  direction: 'L2R' | 'R2L';
+  pauseOnHover: boolean;
+  autoplay: boolean;
+  infiniteLoop: boolean;
+  showAnnouncementBar: boolean;
+}
+
+export interface NavigationMenuItem {
+  id: string;
+  name: string;
+  slug: string;
+  icon?: string;
+  menuType: 'Category' | 'CustomPage' | 'External';
+  categoryConnectionId?: string;
+  externalUrl?: string;
+  openInNewTab: boolean;
+  showInDesktop: boolean;
+  showInMobile: boolean;
+  showInSidebar: boolean;
+  highlight: 'None' | 'NEW' | 'SALE';
+  badgeText?: string;
+  displayOrder: number;
+  status: 'Active' | 'Disabled';
+}
+
