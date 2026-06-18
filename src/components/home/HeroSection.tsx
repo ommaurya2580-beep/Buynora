@@ -9,6 +9,7 @@ import {
 import { useCampaignsList } from '../../features/admin/hero-campaigns/hooks/useCampaigns';
 import sonyHeadphonesImage from '../../assets/sony_headphones_podium.png';
 import { formatCurrency } from '../../utils/formatters';
+import { Modal } from '../Modal';
 
 /* ------------------------------------------------------------------ */
 /*  Feature Icon Picker Helper                                         */
@@ -131,6 +132,7 @@ export const HeroSection: React.FC = () => {
   
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   // Touch States for swipe support
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -224,6 +226,7 @@ export const HeroSection: React.FC = () => {
     <section 
       className="relative w-full lg:w-[98vw] lg:max-w-[1600px] lg:left-1/2 lg:-translate-x-1/2 transition-all duration-300 z-30 select-none group/hero" 
       id="hero-section"
+      style={{ touchAction: 'pan-y' }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={onTouchStart}
@@ -231,7 +234,7 @@ export const HeroSection: React.FC = () => {
       onTouchEnd={onTouchEnd}
     >
       {/* Outer Banner Frame */}
-      <div className={`w-full h-auto lg:min-h-[480px] rounded-3xl overflow-hidden border border-gray-150/90 dark:border-slate-800/80 shadow-xl relative flex flex-col lg:flex-row transition-all duration-300 ${
+      <div className={`w-full h-auto lg:min-h-[480px] rounded-2xl lg:rounded-3xl overflow-hidden border border-gray-150/90 dark:border-slate-800/80 shadow-xl relative transition-all duration-300 ${
         isDarkBackground(currentCampaign) ? 'dark text-white' : ''
       }`}>
         
@@ -249,7 +252,7 @@ export const HeroSection: React.FC = () => {
 
         {/* Ambient Glow Blobs */}
         {currentCampaign.ambientEffect && (
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none rounded-3xl z-0">
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none rounded-2xl lg:rounded-3xl z-0">
             <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-200/25 dark:bg-indigo-900/15 rounded-full blur-[110px]" />
             <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-200/25 dark:bg-purple-900/15 rounded-full blur-[110px]" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-150/15 dark:bg-indigo-950/10 rounded-full blur-[130px]" />
@@ -275,7 +278,7 @@ export const HeroSection: React.FC = () => {
         )}
 
         {/* Content Slider */}
-        <div className="w-full h-full relative z-10 flex flex-col lg:flex-row">
+        <div className="w-full h-full relative z-10">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentCampaign.id}
@@ -283,200 +286,319 @@ export const HeroSection: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -15 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="w-full flex flex-col lg:flex-row"
+              className="w-full flex"
             >
               
-              {/* LEFT SIDE CONTENT - ORDER 2 ON MOBILE */}
-              <div className="w-full lg:w-[52%] flex flex-col items-center lg:items-start text-center lg:text-left justify-center px-6 sm:px-10 lg:px-14 py-8 lg:py-10 order-2 lg:order-1 select-text">
+              {/* DESKTOP CONTENT - hidden on mobile/tablet (below lg), visible on lg */}
+              <div className="hidden lg:flex w-full min-h-[480px] flex-col lg:flex-row">
                 
-                {/* Badge Pill */}
-                {currentCampaign.badge && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100/60 dark:border-indigo-900/30 rounded-full w-fit mb-3">
-                    {currentCampaign.badge}
+                {/* LEFT SIDE CONTENT - ORDER 2 ON MOBILE */}
+                <div className="w-full lg:w-[52%] flex flex-col items-center lg:items-start text-center lg:text-left justify-center px-6 sm:px-10 lg:px-14 py-8 lg:py-10 order-2 lg:order-1 select-text">
+                  
+                  {/* Badge Pill */}
+                  {currentCampaign.badge && (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-indigo-50/80 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100/60 dark:border-indigo-900/30 rounded-full w-fit mb-3">
+                      {currentCampaign.badge}
+                    </div>
+                  )}
+
+                  {/* Sub-label & Headline */}
+                  <div className="mb-2">
+                    <p className="text-[11px] lg:text-xs font-bold text-slate-455 dark:text-slate-500 uppercase tracking-widest mb-0.5">
+                      {currentCampaign.campaignType || 'Featured'}
+                    </p>
+                    <h1 className="text-2xl sm:text-3xl lg:text-[38px] font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
+                      {currentCampaign.title || currentCampaign.campaignName}
+                    </h1>
                   </div>
-                )}
 
-                {/* Sub-label & Headline */}
-                <div className="mb-2">
-                  <p className="text-[11px] lg:text-xs font-bold text-slate-455 dark:text-slate-500 uppercase tracking-widest mb-0.5">
-                    {currentCampaign.campaignType || 'Featured'}
-                  </p>
-                  <h1 className="text-2xl sm:text-3xl lg:text-[38px] font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
-                    {currentCampaign.title || currentCampaign.campaignName}
-                  </h1>
-                </div>
+                  {/* Subtitle */}
+                  {currentCampaign.subtitle && (
+                    <p className="text-[13px] sm:text-sm text-slate-550 dark:text-slate-400 max-w-[480px] leading-relaxed mb-4 whitespace-pre-line">
+                      {currentCampaign.subtitle}
+                    </p>
+                  )}
 
-                {/* Subtitle */}
-                {currentCampaign.subtitle && (
-                  <p className="text-[13px] sm:text-sm text-slate-550 dark:text-slate-400 max-w-[480px] leading-relaxed mb-4 whitespace-pre-line">
-                    {currentCampaign.subtitle}
-                  </p>
-                )}
+                  {/* Description */}
+                  {currentCampaign.description && (
+                    <p className="text-xs text-slate-450 dark:text-slate-555 max-w-[460px] leading-relaxed mb-4">
+                      {currentCampaign.description}
+                    </p>
+                  )}
 
-                {/* Description */}
-                {currentCampaign.description && (
-                  <p className="text-xs text-slate-450 dark:text-slate-555 max-w-[460px] leading-relaxed mb-4">
-                    {currentCampaign.description}
-                  </p>
-                )}
-
-                {/* Price Section */}
-                {currentCampaign.pricing?.enablePricing && (
-                  <div className="mb-4 flex flex-col items-center lg:items-start">
-                    <div className="flex items-baseline gap-2.5">
-                      <span className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white">
-                        {formatCurrency(currentCampaign.pricing.price)}
-                      </span>
-                      {currentCampaign.pricing.oldPrice > 0 && (
-                        <span className="text-sm lg:text-base text-slate-450 dark:text-slate-500 line-through font-medium">
-                          {formatCurrency(currentCampaign.pricing.oldPrice)}
+                  {/* Price Section */}
+                  {currentCampaign.pricing?.enablePricing && (
+                    <div className="mb-4 flex flex-col items-center lg:items-start">
+                      <div className="flex items-baseline gap-2.5">
+                        <span className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white">
+                          {formatCurrency(currentCampaign.pricing.price)}
                         </span>
+                        {currentCampaign.pricing.oldPrice > 0 && (
+                          <span className="text-sm lg:text-base text-slate-455 dark:text-slate-500 line-through font-medium">
+                            {formatCurrency(currentCampaign.pricing.oldPrice)}
+                          </span>
+                        )}
+                        {currentCampaign.pricing.discount > 0 && (
+                          <span className="text-[10px] font-black bg-rose-550/10 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded border border-rose-100/50 dark:border-rose-900/30">
+                            {currentCampaign.pricing.discount}% OFF
+                          </span>
+                        )}
+                      </div>
+                      {currentCampaign.pricing.savingsAmount > 0 && (
+                        <p className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-455 mt-1">
+                          Save {formatCurrency(currentCampaign.pricing.savingsAmount)}
+                        </p>
                       )}
-                      {currentCampaign.pricing.discount > 0 && (
-                        <span className="text-[10px] font-black bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded border border-rose-100/50 dark:border-rose-900/30">
-                          {currentCampaign.pricing.discount}% OFF
-                        </span>
+
+                      {/* EMI / Bank Offer Badge */}
+                      {(currentCampaign.pricing.emiOption || currentCampaign.pricing.bankOffer) && (
+                        <div className="flex items-center gap-1 px-2.5 py-1 mt-2.5 rounded-lg bg-emerald-50/80 dark:bg-emerald-955/20 border border-emerald-100/50 dark:border-emerald-900/30 text-[10px] font-bold text-emerald-700 dark:text-emerald-450 w-fit">
+                          <TrendingDown className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                          <span>
+                            {currentCampaign.pricing.bankOffer || currentCampaign.pricing.emiOption}
+                          </span>
+                        </div>
                       )}
                     </div>
-                    {currentCampaign.pricing.savingsAmount > 0 && (
-                      <p className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-450 mt-1">
-                        Save {formatCurrency(currentCampaign.pricing.savingsAmount)}
-                      </p>
-                    )}
+                  )}
 
-                    {/* EMI / Bank Offer Badge */}
-                    {(currentCampaign.pricing.emiOption || currentCampaign.pricing.bankOffer) && (
-                      <div className="flex items-center gap-1 px-2.5 py-1 mt-2.5 rounded-lg bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-100/50 dark:border-emerald-900/30 text-[10px] font-bold text-emerald-700 dark:text-emerald-450 w-fit">
-                        <TrendingDown className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                        <span>
-                          {currentCampaign.pricing.bankOffer || currentCampaign.pricing.emiOption}
-                        </span>
+                  {/* 3 Inline Features */}
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 mt-1.5 mb-5 border-t border-gray-150/40 dark:border-slate-800/40 pt-4">
+                    {features.map((feat, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-lg bg-white/90 dark:bg-slate-800/80 shadow-sm border border-gray-100/40 dark:border-slate-700/40 flex items-center justify-center flex-shrink-0">
+                          {getFeatureIcon(feat.label)}
+                        </div>
+                        <div className="leading-tight text-[11px] text-left">
+                          <p className="font-semibold text-[8px] text-slate-400 dark:text-slate-500 tracking-wider uppercase">{feat.label}</p>
+                          <p className="font-bold text-slate-850 dark:text-slate-200">{feat.value}</p>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 relative z-20 w-full sm:w-auto">
+                    {currentCampaign.primaryButton?.text && (
+                      <Link
+                        to={currentCampaign.primaryButton.link || '/products'}
+                        className={`w-full sm:w-auto text-center inline-flex items-center justify-center gap-1.5 font-bold text-xs px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer ${
+                          currentCampaign.primaryButton.color || 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950'
+                        }`}
+                      >
+                        {currentCampaign.primaryButton.text} <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    )}
+                    {currentCampaign.secondaryButton?.text && (
+                      <Link
+                        to={currentCampaign.secondaryButton.link || '/products'}
+                        className={`w-full sm:w-auto text-center inline-flex items-center justify-center gap-1 hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-xs px-4 py-2.5 rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer ${
+                          currentCampaign.secondaryButton.color || 'text-slate-750 dark:text-slate-300'
+                        }`}
+                      >
+                        <Eye className="w-3.5 h-3.5 mr-1" /> {currentCampaign.secondaryButton.text}
+                      </Link>
                     )}
                   </div>
-                )}
 
-                {/* 3 Inline Features */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 mt-1.5 mb-5 border-t border-gray-150/40 dark:border-slate-800/40 pt-4">
-                  {features.map((feat, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-white/90 dark:bg-slate-800/80 shadow-sm border border-gray-100/40 dark:border-slate-700/40 flex items-center justify-center flex-shrink-0">
-                        {getFeatureIcon(feat.label)}
-                      </div>
-                      <div className="leading-tight text-[11px] text-left">
-                        <p className="font-semibold text-[8px] text-slate-400 dark:text-slate-500 tracking-wider uppercase">{feat.label}</p>
-                        <p className="font-bold text-slate-850 dark:text-slate-200">{feat.value}</p>
-                      </div>
-                    </div>
-                  ))}
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 relative z-20 w-full sm:w-auto">
-                  {currentCampaign.primaryButton?.text && (
-                    <Link
-                      to={currentCampaign.primaryButton.link || '/products'}
-                      className={`w-full sm:w-auto text-center inline-flex items-center justify-center gap-1.5 font-bold text-xs px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer ${
-                        currentCampaign.primaryButton.color || 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950'
-                      }`}
-                    >
-                      {currentCampaign.primaryButton.text} <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                {/* RIGHT SIDE PRODUCT AREA - ORDER 1 ON MOBILE */}
+                <div className="flex-1 w-full lg:w-[48%] h-[260px] sm:h-[300px] lg:h-auto relative flex items-center justify-center p-6 order-1 lg:order-2">
+                  
+                  {/* Large Circular Glow Halo */}
+                  {currentCampaign.glowIntensity !== 'none' && (
+                    <div
+                      className="absolute rounded-full border border-indigo-200/20 dark:border-indigo-400/10 blur-[2px] pointer-events-none transition-all duration-500 z-0"
+                      style={{
+                        width: currentCampaign.glowIntensity === 'high' ? '360px' : currentCampaign.glowIntensity === 'low' ? '240px' : '320px',
+                        height: currentCampaign.glowIntensity === 'high' ? '360px' : currentCampaign.glowIntensity === 'low' ? '240px' : '320px',
+                        background: `radial-gradient(circle, rgba(165,180,252,${currentCampaign.glowIntensity === 'high' ? 0.28 : currentCampaign.glowIntensity === 'low' ? 0.08 : 0.16}) 0%, transparent 70%)`,
+                        boxShadow: currentCampaign.glowIntensity === 'high'
+                          ? '0 0 100px rgba(165,180,252,0.4), inset 0 0 50px rgba(165,180,252,0.25)'
+                          : currentCampaign.glowIntensity === 'low'
+                          ? '0 0 40px rgba(165,180,252,0.12), inset 0 0 20px rgba(165,180,252,0.06)'
+                          : '0 0 80px rgba(165,180,252,0.25), inset 0 0 40px rgba(165,180,252,0.15)'
+                      }}
+                    />
                   )}
-                  {currentCampaign.secondaryButton?.text && (
-                    <Link
-                      to={currentCampaign.secondaryButton.link || '/products'}
-                      className={`w-full sm:w-auto text-center inline-flex items-center justify-center gap-1 hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-xs px-4 py-2.5 rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer ${
-                        currentCampaign.secondaryButton.color || 'text-slate-750 dark:text-slate-300'
-                      }`}
-                    >
-                      <Eye className="w-3.5 h-3.5 mr-1" /> {currentCampaign.secondaryButton.text}
-                    </Link>
+
+                  {/* Ambient Backlight Reflection */}
+                  <div className="absolute w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] rounded-full bg-white/60 dark:bg-indigo-950/20 blur-[50px] pointer-events-none z-0" />
+
+                  {/* Premium 3D CSS Podium (Only show for product image layouts, not lifestyle banner grids) */}
+                  {!currentCampaign.videoUrl && !currentCampaign.youtubeUrl && (
+                    <div className="absolute bottom-[20px] sm:bottom-[30px] lg:bottom-[45px] flex flex-col items-center justify-center z-0">
+                      {/* Floor Shadow under the podium */}
+                      <div className="w-[220px] sm:w-[260px] lg:w-[300px] h-[16px] bg-black/[0.04] dark:bg-black/[0.3] rounded-[50%] blur-sm pointer-events-none" />
+                      
+                      {/* 3D Extruded Cylinder (Podium Body) */}
+                      <div className="relative w-[200px] sm:w-[240px] lg:w-[280px] h-[35px] -mt-[14px]">
+                        {/* Side extrusion of cylinder */}
+                        <div className="absolute top-[6px] w-full h-[18px] bg-gradient-to-b from-[#E2E8F0] to-[#CBD5E1] dark:from-slate-800 dark:to-slate-900 rounded-[50%]" />
+                        
+                        {/* Top cap of cylinder */}
+                        <div className="absolute top-0 w-full h-[15px] bg-gradient-to-b from-white to-[#F1F5F9] dark:from-slate-700 dark:to-slate-800 border border-gray-200/50 dark:border-slate-650/40 rounded-[50%] shadow-[inset_0px_1px_2px_rgba(255,255,255,0.8)]" />
+                      </div>
+                    </div>
                   )}
+
+                  {/* Product Image / Video Floating Container */}
+                  <motion.div
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="relative z-10 flex flex-col items-center justify-center w-full h-full"
+                  >
+                    {currentCampaign.videoUrl ? (
+                      <div className="w-full h-full max-h-[200px] sm:max-h-[240px] lg:max-h-[300px] rounded-3xl overflow-hidden shadow-2xl border border-gray-200/20 dark:border-slate-800 bg-slate-950 flex items-center justify-center">
+                        <video
+                          src={currentCampaign.videoUrl}
+                          autoPlay={currentCampaign.videoSettings?.videoAutoplay ?? true}
+                          loop={currentCampaign.videoSettings?.videoLoop ?? true}
+                          muted={currentCampaign.videoSettings?.videoMute ?? true}
+                          playsInline
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : currentCampaign.youtubeUrl ? (
+                      <div className="w-full h-full max-h-[200px] sm:max-h-[240px] lg:max-h-[300px] rounded-3xl overflow-hidden shadow-2xl border border-gray-200/20 dark:border-slate-800 bg-slate-950 flex items-center justify-center text-[10px] font-bold text-gray-400 p-2">
+                        <Play className="w-8 h-8 text-rose-500 animate-pulse mr-2" />
+                        <span>YouTube Campaign Video Streaming...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <CampaignImage
+                          src={currentCampaign.heroProductImageUrl || currentCampaign.imageUrl}
+                          alt={currentCampaign.title || currentCampaign.campaignName}
+                          className="max-h-[190px] sm:max-h-[220px] lg:max-h-[280px] w-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.12)] select-none z-10 transition-transform duration-350 hover:scale-105"
+                        />
+                        
+                        {/* Floating Shadow under the product */}
+                        <div className="absolute bottom-[-10px] w-[50%] h-[12px] bg-black/[0.06] dark:bg-black/[0.25] rounded-[50%] blur-md pointer-events-none scale-x-90" />
+                      </>
+                    )}
+                  </motion.div>
+
                 </div>
 
               </div>
 
-              {/* RIGHT SIDE PRODUCT AREA - ORDER 1 ON MOBILE */}
-              <div className="flex-1 w-full lg:w-[48%] h-[260px] sm:h-[300px] lg:h-auto relative flex items-center justify-center p-6 order-1 lg:order-2">
-                
-                {/* Large Circular Glow Halo */}
-                {currentCampaign.glowIntensity !== 'none' && (
-                  <div
-                    className="absolute rounded-full border border-indigo-200/20 dark:border-indigo-400/10 blur-[2px] pointer-events-none transition-all duration-500 z-0"
-                    style={{
-                      width: currentCampaign.glowIntensity === 'high' ? '360px' : currentCampaign.glowIntensity === 'low' ? '240px' : '320px',
-                      height: currentCampaign.glowIntensity === 'high' ? '360px' : currentCampaign.glowIntensity === 'low' ? '240px' : '320px',
-                      background: `radial-gradient(circle, rgba(165,180,252,${currentCampaign.glowIntensity === 'high' ? 0.28 : currentCampaign.glowIntensity === 'low' ? 0.08 : 0.16}) 0%, transparent 70%)`,
-                      boxShadow: currentCampaign.glowIntensity === 'high'
-                        ? '0 0 100px rgba(165,180,252,0.4), inset 0 0 50px rgba(165,180,252,0.25)'
-                        : currentCampaign.glowIntensity === 'low'
-                        ? '0 0 40px rgba(165,180,252,0.12), inset 0 0 20px rgba(165,180,252,0.06)'
-                        : '0 0 80px rgba(165,180,252,0.25), inset 0 0 40px rgba(165,180,252,0.15)'
-                    }}
-                  />
-                )}
+              {/* MOBILE CONTENT - visible on mobile/tablet, hidden on lg */}
+              <div className="lg:hidden w-full h-[250px] xs:h-[270px] sm:h-[285px] flex flex-row relative p-3 sm:p-4 select-text">
+                {/* Left Column (60% width) */}
+                <div className="w-[60%] flex flex-col justify-between h-full pr-2 text-left">
+                  <div className="space-y-1">
+                    {/* Badge Pill */}
+                    {currentCampaign.badge && (
+                      <div className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wider bg-indigo-50/85 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 border border-indigo-100/60 dark:border-indigo-900/30 rounded-full w-fit">
+                        {currentCampaign.badge}
+                      </div>
+                    )}
 
-                {/* Ambient Backlight Reflection */}
-                <div className="absolute w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] rounded-full bg-white/60 dark:bg-indigo-950/20 blur-[50px] pointer-events-none z-0" />
+                    {/* Headline */}
+                    <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight line-clamp-2">
+                      {currentCampaign.title || currentCampaign.campaignName}
+                    </h1>
 
-                {/* Premium 3D CSS Podium (Only show for product image layouts, not lifestyle banner grids) */}
-                {!currentCampaign.videoUrl && !currentCampaign.youtubeUrl && (
-                  <div className="absolute bottom-[20px] sm:bottom-[30px] lg:bottom-[45px] flex flex-col items-center justify-center z-0">
-                    {/* Floor Shadow under the podium */}
-                    <div className="w-[220px] sm:w-[260px] lg:w-[300px] h-[16px] bg-black/[0.04] dark:bg-black/[0.3] rounded-[50%] blur-sm pointer-events-none" />
-                    
-                    {/* 3D Extruded Cylinder (Podium Body) */}
-                    <div className="relative w-[200px] sm:w-[240px] lg:w-[280px] h-[35px] -mt-[14px]">
-                      {/* Side extrusion of cylinder */}
-                      <div className="absolute top-[6px] w-full h-[18px] bg-gradient-to-b from-[#E2E8F0] to-[#CBD5E1] dark:from-slate-800 dark:to-slate-900 rounded-[50%]" />
-                      
-                      {/* Top cap of cylinder */}
-                      <div className="absolute top-0 w-full h-[15px] bg-gradient-to-b from-white to-[#F1F5F9] dark:from-slate-700 dark:to-slate-800 border border-gray-200/50 dark:border-slate-650/40 rounded-[50%] shadow-[inset_0px_1px_2px_rgba(255,255,255,0.8)]" />
+                    {/* Subtitle / Tagline */}
+                    {currentCampaign.subtitle && (
+                      <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {currentCampaign.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Price & Buttons at the bottom */}
+                  <div className="space-y-2.5">
+                    {/* Pricing Section */}
+                    {currentCampaign.pricing?.enablePricing && (
+                      <div className="flex items-baseline gap-1.5 flex-wrap">
+                        <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+                          {formatCurrency(currentCampaign.pricing.price)}
+                        </span>
+                        {currentCampaign.pricing.oldPrice > 0 && (
+                          <span className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 line-through font-medium">
+                            {formatCurrency(currentCampaign.pricing.oldPrice)}
+                          </span>
+                        )}
+                        {currentCampaign.pricing.discount > 0 && (
+                          <span className="text-[8px] sm:text-[9px] font-black bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-1.5 py-0.2 rounded border border-rose-100/50 dark:border-rose-900/30">
+                            {currentCampaign.pricing.discount}% OFF
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Buttons */}
+                    <div className="flex items-center gap-2">
+                      {currentCampaign.primaryButton?.text && (
+                        <Link
+                          to={currentCampaign.primaryButton.link || '/products'}
+                          className={`h-9 px-4 inline-flex items-center justify-center font-bold text-[10px] sm:text-xs rounded-full shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer ${
+                            currentCampaign.primaryButton.color || 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950'
+                          }`}
+                        >
+                          Explore Now
+                        </Link>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setIsDetailsModalOpen(true)}
+                        className="h-9 px-3.5 inline-flex items-center justify-center hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-[10px] sm:text-xs rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer text-slate-750 dark:text-slate-300 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xs"
+                      >
+                        View Details
+                      </button>
                     </div>
                   </div>
-                )}
+                </div>
 
-                {/* Product Image / Video Floating Container */}
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="relative z-10 flex flex-col items-center justify-center w-full h-full"
-                >
-                  {currentCampaign.videoUrl ? (
-                    <div className="w-full h-full max-h-[200px] sm:max-h-[240px] lg:max-h-[300px] rounded-3xl overflow-hidden shadow-2xl border border-gray-200/20 dark:border-slate-800 bg-slate-950 flex items-center justify-center">
-                      <video
-                        src={currentCampaign.videoUrl}
-                        autoPlay={currentCampaign.videoSettings?.videoAutoplay ?? true}
-                        loop={currentCampaign.videoSettings?.videoLoop ?? true}
-                        muted={currentCampaign.videoSettings?.videoMute ?? true}
-                        playsInline
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : currentCampaign.youtubeUrl ? (
-                    <div className="w-full h-full max-h-[200px] sm:max-h-[240px] lg:max-h-[300px] rounded-3xl overflow-hidden shadow-2xl border border-gray-200/20 dark:border-slate-800 bg-slate-950 flex items-center justify-center text-[10px] font-bold text-gray-400 p-2">
-                      <Play className="w-8 h-8 text-rose-500 animate-pulse mr-2" />
-                      <span>YouTube Campaign Video Streaming...</span>
-                    </div>
-                  ) : (
-                    <>
-                      <CampaignImage
-                        src={currentCampaign.heroProductImageUrl || currentCampaign.imageUrl}
-                        alt={currentCampaign.title || currentCampaign.campaignName}
-                        className="max-h-[190px] sm:max-h-[220px] lg:max-h-[280px] w-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.12)] select-none z-10 transition-transform duration-350 hover:scale-105"
-                      />
-                      
-                      {/* Floating Shadow under the product */}
-                      <div className="absolute bottom-[-10px] w-[50%] h-[12px] bg-black/[0.06] dark:bg-black/[0.25] rounded-[50%] blur-md pointer-events-none scale-x-90" />
-                    </>
+                {/* Right Column (40% width) */}
+                <div className="w-[40%] h-full relative flex items-center justify-center">
+                  {/* circular glow */}
+                  {currentCampaign.glowIntensity !== 'none' && (
+                    <div
+                      className="absolute rounded-full border border-indigo-200/10 dark:border-indigo-400/5 blur-[2px] pointer-events-none transition-all duration-500 z-0"
+                      style={{
+                        width: '140px',
+                        height: '140px',
+                        background: `radial-gradient(circle, rgba(165,180,252,${currentCampaign.glowIntensity === 'high' ? 0.2 : 0.1}) 0%, transparent 70%)`,
+                      }}
+                    />
                   )}
-                </motion.div>
 
+                  {/* Image Container */}
+                  <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
+                    {currentCampaign.videoUrl ? (
+                      <div className="w-full h-full max-h-[140px] rounded-xl overflow-hidden shadow bg-slate-950 flex items-center justify-center">
+                        <video
+                          src={currentCampaign.videoUrl}
+                          autoPlay={currentCampaign.videoSettings?.videoAutoplay ?? true}
+                          loop={currentCampaign.videoSettings?.videoLoop ?? true}
+                          muted={currentCampaign.videoSettings?.videoMute ?? true}
+                          playsInline
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : currentCampaign.youtubeUrl ? (
+                      <div className="w-full h-full max-h-[140px] rounded-xl overflow-hidden shadow bg-slate-950 flex items-center justify-center text-[8px] font-bold text-gray-400 p-2 text-center">
+                        <span>YouTube Video</span>
+                      </div>
+                    ) : (
+                      <>
+                        <CampaignImage
+                          src={currentCampaign.heroProductImageUrl || currentCampaign.imageUrl}
+                          alt={currentCampaign.title || currentCampaign.campaignName}
+                          className="max-h-[140px] sm:max-h-[160px] w-auto drop-shadow-md select-none z-10 object-contain"
+                        />
+                        <div className="absolute bottom-[10px] w-[60%] h-[8px] bg-black/[0.04] dark:bg-black/[0.2] rounded-[50%] blur-sm pointer-events-none scale-x-90" />
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
 
             </motion.div>
@@ -500,7 +622,7 @@ export const HeroSection: React.FC = () => {
         </button>
 
         {/* Carousel Dots Indicator - Bottom Center/Left */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 lg:left-14 lg:translate-x-0 flex items-center gap-2 z-20">
+        <div className="absolute bottom-3 sm:bottom-4 lg:bottom-5 left-1/2 -translate-x-1/2 lg:left-14 lg:translate-x-0 flex items-center gap-2 z-20">
           {activeCampaigns.map((_, idx) => (
             <button
               key={idx}
@@ -516,6 +638,140 @@ export const HeroSection: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Details Modal popup on mobile for viewing more campaign details */}
+      <Modal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        title={currentCampaign?.title || currentCampaign?.campaignName || 'Campaign Details'}
+        size="md"
+      >
+        {currentCampaign && (
+          <div className="space-y-5 text-left dark:text-white">
+            {/* Header/Badge */}
+            <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 dark:border-slate-800/60 pb-3">
+              {currentCampaign.badge && (
+                <span className="px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 border border-indigo-100/60 dark:border-indigo-900/30 rounded-full">
+                  {currentCampaign.badge}
+                </span>
+              )}
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                {currentCampaign.campaignType || 'Featured'}
+              </span>
+            </div>
+
+            {/* Subtitle */}
+            {currentCampaign.subtitle && (
+              <p className="text-xs text-slate-550 dark:text-slate-400 leading-relaxed font-semibold">
+                {currentCampaign.subtitle}
+              </p>
+            )}
+
+            {/* Campaign Product Image */}
+            <div className="flex justify-center py-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-gray-100 dark:border-slate-800/80">
+              <CampaignImage
+                src={currentCampaign.heroProductImageUrl || currentCampaign.imageUrl}
+                alt={currentCampaign.title || currentCampaign.campaignName}
+                className="max-h-[160px] w-auto object-contain drop-shadow"
+              />
+            </div>
+
+            {/* Pricing Card */}
+            {currentCampaign.pricing?.enablePricing && (
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-gray-100 dark:border-slate-800/80">
+                <div className="flex items-baseline gap-2.5">
+                  <span className="text-xl font-black text-slate-900 dark:text-white">
+                    {formatCurrency(currentCampaign.pricing.price)}
+                  </span>
+                  {currentCampaign.pricing.oldPrice > 0 && (
+                    <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
+                      {formatCurrency(currentCampaign.pricing.oldPrice)}
+                    </span>
+                  )}
+                  {currentCampaign.pricing.discount > 0 && (
+                    <span className="text-[10px] font-black bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-450 px-2 py-0.5 rounded border border-rose-100/30">
+                      {currentCampaign.pricing.discount}% OFF
+                    </span>
+                  )}
+                </div>
+                {currentCampaign.pricing.savingsAmount > 0 && (
+                  <p className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-450 mt-1.5">
+                    Save {formatCurrency(currentCampaign.pricing.savingsAmount)}
+                  </p>
+                )}
+                
+                {/* EMI & Offers inside Modal */}
+                {(currentCampaign.pricing.emiOption || currentCampaign.pricing.bankOffer) && (
+                  <div className="mt-3.5 pt-3.5 border-t border-slate-100 dark:border-slate-800/60 space-y-2 text-xs">
+                    {currentCampaign.pricing.emiOption && (
+                      <div className="flex items-center gap-2 text-slate-605 dark:text-slate-400">
+                        <TrendingDown className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                        <span>EMI Option: <strong>{currentCampaign.pricing.emiOption}</strong></span>
+                      </div>
+                    )}
+                    {currentCampaign.pricing.bankOffer && (
+                      <div className="flex items-center gap-2 text-slate-605 dark:text-slate-400">
+                        <TrendingDown className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                        <span>Bank Offer: <strong>{currentCampaign.pricing.bankOffer}</strong></span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Description */}
+            {currentCampaign.description && (
+              <div className="space-y-1">
+                <h4 className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Description</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-350 leading-relaxed">
+                  {currentCampaign.description}
+                </p>
+              </div>
+            )}
+
+            {/* Extra Key Info Lists (Warranty, Delivery, Support) */}
+            <div className="space-y-1.5">
+              <h4 className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Key Features & Info</h4>
+              <div className="grid grid-cols-1 gap-2">
+                {features.map((feat, idx) => (
+                  <div key={idx} className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-gray-100 dark:border-slate-800/80">
+                    <div className="w-7 h-7 rounded-lg bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center flex-shrink-0">
+                      {getFeatureIcon(feat.label)}
+                    </div>
+                    <div className="leading-tight text-[11px]">
+                      <p className="font-semibold text-[8px] text-slate-400 dark:text-slate-500 tracking-wider uppercase">{feat.label}</p>
+                      <p className="font-bold text-slate-850 dark:text-slate-200">{feat.value}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Action buttons inside Modal */}
+            <div className="flex gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+              {currentCampaign.primaryButton?.text && (
+                <Link
+                  to={currentCampaign.primaryButton.link || '/products'}
+                  onClick={() => setIsDetailsModalOpen(false)}
+                  className={`flex-1 text-center inline-flex items-center justify-center gap-1 font-bold text-xs px-4 py-2.5 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer ${
+                    currentCampaign.primaryButton.color || 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950'
+                  }`}
+                >
+                  Explore Now <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              )}
+              <button
+                type="button"
+                onClick={() => setIsDetailsModalOpen(false)}
+                className="flex-1 py-2.5 rounded-full border border-slate-200 dark:border-slate-700/60 font-bold text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </section>
   );
 };
