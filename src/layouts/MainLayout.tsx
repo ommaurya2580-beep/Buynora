@@ -15,6 +15,9 @@ import { NotificationCenter } from '../components/NotificationCenter';
 import { ChatWidget } from '../components/ChatWidget';
 import { useCategories } from '../hooks/useQueries';
 import { UserNotification } from '../types';
+import * as LucideIcons from 'lucide-react';
+import { useAnnouncements } from '../features/admin/header-manager/hooks/useAnnouncements';
+import { useNavigationItems } from '../features/admin/navigation-manager/hooks/useNavigation';
 
 // Navbar subcomponents
 import { SearchBar } from '../components/navbar/SearchBar';
@@ -32,6 +35,48 @@ export const MainLayout: React.FC = () => {
   const { toggleTheme, isDark } = useTheme();
 
   const { data: categories = [] } = useCategories();
+
+  const { data: annData } = useAnnouncements();
+  const { data: navItems = [] } = useNavigationItems();
+
+  const announcements = annData?.announcements || [];
+  const tickerSettings = annData?.tickerSettings || {
+    scrollSpeed: 'Normal',
+    customSpeedMs: 25000,
+    direction: 'R2L',
+    pauseOnHover: true,
+    autoplay: true,
+    infiniteLoop: true,
+    showAnnouncementBar: true
+  };
+
+  const activeAnnouncements = announcements
+    .filter((ann: any) => ann.status === 'Active')
+    .sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+
+  const activeDesktopItems = [...navItems]
+    .filter((item: any) => item.status === 'Active' && item.showInDesktop)
+    .sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+
+  const activeMobileItems = [...navItems]
+    .filter((item: any) => item.status === 'Active' && item.showInMobile)
+    .sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+
+  const renderIcon = (iconName: string, className: string = "w-4 h-4") => {
+    if (!iconName) return null;
+    const IconComponent = (LucideIcons as any)[iconName];
+    if (!IconComponent) return null;
+    return <IconComponent className={className} />;
+  };
+
+  const getSpeedDuration = (settings: any) => {
+    if (settings?.scrollSpeed === 'Slow') return '40s';
+    if (settings?.scrollSpeed === 'Fast') return '10s';
+    if (settings?.scrollSpeed === 'Custom' && settings?.customSpeedMs) {
+      return `${settings.customSpeedMs / 1000}s`;
+    }
+    return '25s'; // Normal
+  };
 
   // State
   const [isSplashActive, setIsSplashActive] = useState(() => {
@@ -129,52 +174,78 @@ export const MainLayout: React.FC = () => {
         <div className="bg-[#1F2937] dark:bg-[#131921] text-white h-[40px] px-4 md:px-8 flex items-center justify-between border-b border-white/5">
 
           {/* Marquee Container */}
-          <div className="flex-1 overflow-hidden relative h-full flex items-center group">
-            {/* Left fade */}
-            <div className="absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
+          {tickerSettings.showAnnouncementBar && (
+            <div className="flex-1 overflow-hidden relative h-full flex items-center group">
+              {/* Left fade */}
+              <div className="absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
 
-            <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap">
-              {[0, 1].map(i => (
-                <div key={i} className="flex items-center gap-0 px-6" aria-hidden={i === 1}>
+              <div 
+                className={`flex w-max ${tickerSettings.pauseOnHover ? 'group-hover:[animation-play-state:paused]' : ''} whitespace-nowrap`}
+                style={{
+                  animation: tickerSettings.autoplay ? `marquee ${getSpeedDuration(tickerSettings)} linear infinite` : 'none',
+                  animationPlayState: 'running',
+                  animationDirection: tickerSettings.direction === 'L2R' ? 'reverse' : 'normal',
+                }}
+              >
+                {activeAnnouncements.length === 0 ? (
+                  <div className="w-full text-center text-xs text-gray-400 font-semibold italic z-20 px-6">
+                    No active announcements to display
+                  </div>
+                ) : (
+                  [0, 1].map((loopIdx) => (
+                    <div key={loopIdx} className="flex items-center gap-0 px-6" aria-hidden={loopIdx === 1}>
+                      {activeAnnouncements.map((ann: any, idx: number) => (
+                        <React.Fragment key={`${ann.id}-${loopIdx}`}>
+                          {idx > 0 && <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>}
+                          {ann.linkUrl ? (
+                            ann.linkUrl.startsWith('http') ? (
+                              <a 
+                                href={ann.linkUrl}
+                                target={ann.openInNewTab ? "_blank" : undefined}
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide hover:underline cursor-pointer"
+                                style={{ color: ann.textColor }}
+                              >
+                                <span style={{ color: ann.iconColor }}>
+                                  {renderIcon(ann.icon, "w-3.5 h-3.5 flex-shrink-0")}
+                                </span>
+                                {ann.messageText}
+                              </a>
+                            ) : (
+                              <Link 
+                                to={ann.linkUrl}
+                                target={ann.openInNewTab ? "_blank" : undefined}
+                                className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide hover:underline cursor-pointer"
+                                style={{ color: ann.textColor }}
+                              >
+                                <span style={{ color: ann.iconColor }}>
+                                  {renderIcon(ann.icon, "w-3.5 h-3.5 flex-shrink-0")}
+                                </span>
+                                {ann.messageText}
+                              </Link>
+                            )
+                          ) : (
+                            <span 
+                              className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide"
+                              style={{ color: ann.textColor }}
+                            >
+                              <span style={{ color: ann.iconColor }}>
+                                {renderIcon(ann.icon, "w-3.5 h-3.5 flex-shrink-0")}
+                              </span>
+                              {ann.messageText}
+                            </span>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  ))
+                )}
+              </div>
 
-                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
-                    <Truck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                    Free Shipping above
-                    <span className="text-white font-bold">₹499</span>
-                  </span>
-
-                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
-
-                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
-                    <Tag className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-                    Use code
-                    <span className="font-black text-amber-400 tracking-widest uppercase bg-amber-400/10 px-1.5 py-0.5 rounded text-[10px]">SAVE20</span>
-                    for extra 20% off
-                  </span>
-
-                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
-
-                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
-                    <RefreshCcw className="w-3.5 h-3.5 text-sky-400 flex-shrink-0" />
-                    <span className="text-white font-semibold">Easy</span> 30-day Returns
-                  </span>
-
-                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
-
-                  <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-slate-200">
-                    <HeadphonesIcon className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
-                    <span className="text-white font-semibold">24×7</span> Customer Support
-                  </span>
-
-                  <span className="mx-6 text-white/15 text-lg leading-none select-none">·</span>
-
-                </div>
-              ))}
+              {/* Right fade */}
+              <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
             </div>
-
-            {/* Right fade */}
-            <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
-          </div>
+          )}
 
           {/* Right Section */}
           <div className="hidden sm:flex items-center gap-4 relative z-20 pl-5 border-l border-white/10 ml-4 text-[11px] font-medium text-slate-300">
@@ -307,13 +378,54 @@ export const MainLayout: React.FC = () => {
             </Link>
 
             {/* Custom Modern Hybrid Navigation Categories */}
-            <div className="hidden lg:flex items-center gap-5 text-sm font-extrabold text-text-secondary select-none">
-              <Link to="/products?category=Men" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Men</Link>
-              <Link to="/products?category=Women" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Women</Link>
-              <Link to="/products?category=Electronics" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Electronics</Link>
-              <Link to="/products?category=Apparel" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Fashion</Link>
-              <Link to="/products?category=Footwear" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Footwear</Link>
-              <Link to="/products?category=Accessories" className="hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans">Accessories</Link>
+            <div className="hidden lg:flex items-center gap-5 text-sm font-extrabold text-text-secondary select-none pl-4">
+              {activeDesktopItems.map(item => {
+                const linkContent = (
+                  <>
+                    {item.icon && renderIcon(item.icon, "w-3.5 h-3.5 text-gray-400")}
+                    <span>{item.name}</span>
+                    
+                    {/* Custom Badges & Highlights */}
+                    {item.highlight === 'NEW' && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-500 text-text-inverted text-[7px] font-black px-1.5 py-0.2 rounded uppercase scale-90">NEW</span>
+                    )}
+                    {item.highlight === 'SALE' && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-rose-500 text-text-inverted text-[7px] font-black px-1.5 py-0.2 rounded uppercase scale-90">SALE</span>
+                    )}
+                    {item.badgeText && (
+                      <span className="bg-primary/15 text-primary text-[8px] font-bold px-1.5 py-0.2 rounded-full ml-1 scale-90 uppercase">{item.badgeText}</span>
+                    )}
+                  </>
+                );
+
+                const isExternal = item.slug?.startsWith('http');
+                const commonClass = "relative py-1 group hover:text-indigo-650 transition-colors uppercase tracking-wider text-[11px] font-sans flex items-center gap-1 cursor-pointer";
+
+                if (isExternal) {
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.slug}
+                      target={item.openInNewTab ? "_blank" : undefined}
+                      rel="noopener noreferrer"
+                      className={commonClass}
+                    >
+                      {linkContent}
+                    </a>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.slug}
+                    target={item.openInNewTab ? "_blank" : undefined}
+                    className={commonClass}
+                  >
+                    {linkContent}
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
@@ -429,18 +541,57 @@ export const MainLayout: React.FC = () => {
             </form>
 
             <div className="flex flex-col gap-2.5 text-xs font-bold text-text-secondary">
-              <Link to="/products" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-gray-100 dark:border-gray-800/50">Shop All</Link>
-              {categories.map(cat => (
-                <Link
-                  key={cat.id}
-                  to={`/products?category=${encodeURIComponent(cat.name)}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-2 border-b border-gray-100 dark:border-gray-800/50"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-              <Link to="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-gray-100 dark:border-gray-800/50">Wishlist</Link>
+              {activeMobileItems.map(item => {
+                const linkContent = (
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                      {item.icon && renderIcon(item.icon, "w-4 h-4 text-gray-400")}
+                      <span>{item.name}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {item.highlight === 'NEW' && (
+                        <span className="bg-indigo-500 text-text-inverted text-[8px] font-black px-1.5 py-0.2 rounded uppercase scale-90">NEW</span>
+                      )}
+                      {item.highlight === 'SALE' && (
+                        <span className="bg-rose-500 text-text-inverted text-[8px] font-black px-1.5 py-0.2 rounded uppercase scale-90">SALE</span>
+                      )}
+                      {item.badgeText && (
+                        <span className="bg-primary/15 text-primary text-[8px] font-black px-1.5 py-0.2 rounded scale-90 uppercase">{item.badgeText}</span>
+                      )}
+                    </div>
+                  </div>
+                );
+
+                const isExternal = item.slug?.startsWith('http');
+                const commonClass = "py-2.5 border-b border-gray-100 dark:border-gray-800/50 flex items-center justify-between cursor-pointer hover:text-primary transition-colors";
+
+                if (isExternal) {
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.slug}
+                      target={item.openInNewTab ? "_blank" : undefined}
+                      rel="noopener noreferrer"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={commonClass}
+                    >
+                      {linkContent}
+                    </a>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.slug}
+                    target={item.openInNewTab ? "_blank" : undefined}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={commonClass}
+                  >
+                    {linkContent}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

@@ -25,6 +25,8 @@ const CampaignCreate = lazy(() => import('../features/admin/hero-campaigns/pages
 const CampaignAnalytics = lazy(() => import('../features/admin/hero-campaigns/pages/CampaignAnalytics'));
 const AssetLibrary = lazy(() => import('../features/admin/hero-campaigns/pages/AssetLibrary'));
 const MarketingPlaceholder = lazy(() => import('../features/admin/hero-campaigns/pages/MarketingPlaceholder'));
+const HeaderAnnouncementManager = lazy(() => import('../features/admin/header-manager/pages/HeaderAnnouncementManager').then(m => ({ default: m.HeaderAnnouncementManager })));
+const NavigationManager = lazy(() => import('../features/admin/navigation-manager/pages/NavigationManager').then(m => ({ default: m.NavigationManager })));
 const Auth = lazy(() => import('../features/auth/pages/Auth').then(m => ({ default: m.Auth })));
 const StaticPages = lazy(() => import('../pages/StaticPages').then(m => ({ default: m.StaticPages })));
 const NotFound = lazy(() => import('../pages/NotFound').then(m => ({ default: m.NotFound })));
@@ -89,6 +91,8 @@ export const AppRoutes: React.FC = () => {
           <Route path="hero-campaigns/edit/:id" element={<CampaignCreate />} />
           <Route path="hero-campaigns/analytics" element={<CampaignAnalytics />} />
           <Route path="hero-campaigns/assets" element={<AssetLibrary />} />
+          <Route path="header-announcements" element={<HeaderAnnouncementManager />} />
+          <Route path="navigation-manager" element={<NavigationManager />} />
           <Route path="promotions" element={<MarketingPlaceholder title="Promotions Settings" />} />
           <Route path="notifications" element={<MarketingPlaceholder title="Notifications Settings" />} />
           <Route path="push-campaigns" element={<MarketingPlaceholder title="Push Campaigns Settings" />} />
