@@ -778,6 +778,12 @@ export const MainLayout: React.FC = () => {
               className="fixed top-0 bottom-0 left-0 w-4/5 max-w-sm z-[101] bg-bg-surface dark:bg-slate-900 border-r border-gray-250/20 dark:border-slate-800/80 shadow-2xl flex flex-col justify-between overflow-hidden lg:hidden"
             >
               {/* Header / User Profile */}
+              {(() => {
+                console.log("Mobile menu data:", activeMobileItems);
+                console.log("Categories:", categories);
+                console.log("User:", user);
+                return null;
+              })()}
               <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 relative">
                 {/* Close Button */}
                 <button
@@ -806,7 +812,7 @@ export const MainLayout: React.FC = () => {
                     <span className="font-bold text-sm">Welcome to Buynora</span>
                     <p className="text-[10px] text-slate-400 leading-relaxed">Sign in to manage orders, wishlist and enjoy premium experience.</p>
                     <Link
-                      to="/login"
+                      to="/auth/login"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white text-xs font-bold py-2 px-4 rounded-xl transition-all w-max shadow-sm"
                     >
@@ -879,12 +885,12 @@ export const MainLayout: React.FC = () => {
                   <h4 className="text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Shop By Categories</h4>
                   {categories.map((cat: any) => (
                     <Link
-                      key={cat}
-                      to={`/products?category=${encodeURIComponent(cat)}`}
+                      key={cat.id || cat.name}
+                      to={`/products?category=${encodeURIComponent(cat.name)}`}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="flex items-center justify-between py-2.5 text-xs font-bold text-text-secondary hover:text-primary transition-all border-b border-gray-100 dark:border-slate-800/40"
                     >
-                      <span>{cat}</span>
+                      <span>{cat.name}</span>
                       <span className="text-[10px] text-gray-400">&rarr;</span>
                     </Link>
                   ))}
