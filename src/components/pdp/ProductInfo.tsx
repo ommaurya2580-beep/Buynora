@@ -42,12 +42,12 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
   };
 
   return (
-    <div className="text-left space-y-6">
+    <div className="text-center lg:text-left space-y-6">
       <div className="space-y-2">
         <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{product.brand}</span>
         <h1 className="text-2xl sm:text-3xl font-black text-text-primary leading-tight mt-1">{product.name}</h1>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center lg:justify-start gap-3">
           <div className="flex items-center text-amber-400 gap-0.5">
             <Star className="w-4 h-4 fill-current" />
             <span className="text-xs font-extrabold ml-1">{product.rating}</span>
@@ -56,13 +56,13 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
         </div>
       </div>
 
-      <div className="border-t border-b border-gray-150 dark:border-gray-800 py-4 flex items-center justify-between">
+      <div className="border-t border-b border-gray-150 dark:border-gray-800 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1">
           <span className="text-3xl font-black text-text-primary">
             {formatCurrency(product.price)}
           </span>
           {product.discountPercentage > 0 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center lg:justify-start gap-2">
               <span className="text-xs text-gray-400 line-through">
                 {formatCurrency(product.originalPrice)}
               </span>
@@ -73,7 +73,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
           )}
         </div>
 
-        <div className="text-right">
+        <div className="text-center sm:text-right">
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${
             product.availabilityStatus === 'In Stock' 
               ? 'bg-emerald-500/10 text-emerald-500' 
@@ -86,7 +86,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
       </div>
 
       {/* Description */}
-      <p className="text-xs text-text-secondary leading-relaxed">
+      <p className="text-xs text-text-secondary leading-relaxed max-w-2xl mx-auto lg:mx-0">
         {product.longDescription || product.description}
       </p>
 
@@ -107,7 +107,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
       </div>
 
       {/* Wishlist & Compare Toolbar */}
-      <div className="flex gap-4 pt-2 border-b border-gray-150 dark:border-gray-800 pb-4">
+      <div className="flex justify-center lg:justify-start gap-4 pt-2 border-b border-gray-150 dark:border-gray-800 pb-4">
         <button
           onClick={handleWishlistToggle}
           className="flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-rose-500 transition-colors cursor-pointer"
@@ -126,8 +126,8 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 
       {/* Delivery & Returns Panel */}
       <div className="space-y-4">
-        <h5 className="text-xs font-bold uppercase tracking-wider text-gray-400">Delivery Options</h5>
-        <form onSubmit={handleZipCalculate} className="flex gap-2">
+        <h5 className="text-xs font-bold uppercase tracking-wider text-gray-400 text-center lg:text-left">Delivery Options</h5>
+        <form onSubmit={handleZipCalculate} className="flex gap-2 max-w-md mx-auto lg:mx-0">
           <input
             type="text"
             maxLength={5}
@@ -144,11 +144,11 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
           </button>
         </form>
         {deliveryEstimate && (
-          <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1.5">
+          <p className="text-xs text-emerald-500 font-semibold flex items-center justify-center lg:justify-start gap-1.5">
             <Truck className="w-4 h-4" /> {deliveryEstimate}
           </p>
         )}
-        <div className="text-[11px] text-gray-400 space-y-1 pl-1">
+        <div className="text-[11px] text-gray-400 space-y-1 pl-1 flex flex-col items-center lg:items-start">
           <p className="flex items-center gap-2"><Truck className="w-3.5 h-3.5" /> 30-Day Returns Policy</p>
           <p className="flex items-center gap-2"><RefreshCcw className="w-3.5 h-3.5" /> Free return shipping on exchanges</p>
         </div>

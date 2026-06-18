@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   User, MapPin, CreditCard, History, Heart, Shield, Gift, Plus, Trash2
@@ -28,6 +28,17 @@ export const Dashboard: React.FC = () => {
 
   // States
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isMobileView, setIsMobileView] = useState(false);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const tabParam = searchParams.get('tab') || 'profile';
   const activeTab: TabType = (
     tabParam === 'payments' ? 'payment' :
@@ -135,11 +146,61 @@ export const Dashboard: React.FC = () => {
     { type: 'security', label: 'Security Logs', icon: Shield },
   ] as const;
 
+  if (isMobileView && !searchParams.get('tab')) {
+    return (
+      <div className="w-full space-y-6 pb-20">
+        <div>
+          <h1 className="text-2xl font-black text-text-primary">My Account</h1>
+          <p className="text-xs text-gray-500">Manage orders, addresses and reward details</p>
+        </div>
+
+        {/* User Card */}
+        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 text-white flex items-center gap-4 relative overflow-hidden shadow-xl">
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="w-14 h-14 rounded-2xl bg-indigo-650 flex items-center justify-center font-black text-xl text-white shadow-md uppercase">
+            {user?.name?.charAt(0) || 'U'}
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="font-extrabold text-base">{user?.name || 'User'}</span>
+            <span className="text-xs text-slate-400">{user?.email}</span>
+            <span className="inline-flex items-center gap-1 bg-indigo-500/20 text-indigo-300 text-[9px] font-black tracking-widest px-2.5 py-0.5 rounded-full w-max mt-1.5 border border-indigo-400/20 uppercase">
+              Buynora Premium
+            </span>
+          </div>
+        </div>
+
+        {/* Menu List */}
+        <div className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/50 rounded-3xl p-4 flex flex-col gap-1.5 shadow-sm text-left">
+          {menuItems.map(item => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.type}
+                onClick={() => {
+                  setActiveTab(item.type);
+                  setShowAddressForm(false);
+                  setShowCardForm(false);
+                }}
+                className="flex items-center justify-between px-4 py-3.5 text-xs font-bold text-text-secondary hover:text-text-primary rounded-2xl hover:bg-gray-150 dark:hover:bg-slate-800/40 cursor-pointer border-b border-gray-150/20 dark:border-slate-800/20 last:border-0 transition-colors"
+              >
+                <span className="flex items-center gap-3.5">
+                  <Icon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                  <span>{item.label}</span>
+                </span>
+                <span className="text-gray-400 font-light">&rarr;</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 pb-16 text-left items-start">
       
       {/* Navigation sidebar */}
-      <aside className="w-full lg:w-64 glass p-4 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 flex-shrink-0 bg-white/40 dark:bg-slate-900/40">
+      <aside className="w-full lg:w-64 glass p-4 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 flex-shrink-0 bg-white/40 dark:bg-slate-900/40 hidden lg:block">
         <div className="flex flex-col gap-1 w-full">
           {menuItems.map(item => {
             const Icon = item.icon;
@@ -168,6 +229,14 @@ export const Dashboard: React.FC = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 w-full glass p-6 md:p-8 rounded-3xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 min-h-[460px]">
+        {isMobileView && (
+          <button 
+            onClick={() => setSearchParams({})}
+            className="flex items-center gap-1.5 text-xs font-black text-indigo-650 dark:text-indigo-400 mb-6 cursor-pointer hover:underline"
+          >
+            &larr; Back to Account Menu
+          </button>
+        )}
         
         {/* TABS: PROFILE EDITOR */}
         {activeTab === 'profile' && (

@@ -287,7 +287,7 @@ export const HeroSection: React.FC = () => {
             >
               
               {/* LEFT SIDE CONTENT - ORDER 2 ON MOBILE */}
-              <div className="w-full lg:w-[52%] flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-8 lg:py-10 order-2 lg:order-1 select-text">
+              <div className="w-full lg:w-[52%] flex flex-col items-center lg:items-start text-center lg:text-left justify-center px-6 sm:px-10 lg:px-14 py-8 lg:py-10 order-2 lg:order-1 select-text">
                 
                 {/* Badge Pill */}
                 {currentCampaign.badge && (
@@ -298,7 +298,7 @@ export const HeroSection: React.FC = () => {
 
                 {/* Sub-label & Headline */}
                 <div className="mb-2">
-                  <p className="text-[11px] lg:text-xs font-bold text-slate-450 dark:text-slate-500 uppercase tracking-widest mb-0.5">
+                  <p className="text-[11px] lg:text-xs font-bold text-slate-455 dark:text-slate-500 uppercase tracking-widest mb-0.5">
                     {currentCampaign.campaignType || 'Featured'}
                   </p>
                   <h1 className="text-2xl sm:text-3xl lg:text-[38px] font-black text-slate-900 dark:text-white leading-[1.15] tracking-tight">
@@ -315,14 +315,14 @@ export const HeroSection: React.FC = () => {
 
                 {/* Description */}
                 {currentCampaign.description && (
-                  <p className="text-xs text-slate-450 dark:text-slate-550 max-w-[460px] leading-relaxed mb-4">
+                  <p className="text-xs text-slate-450 dark:text-slate-555 max-w-[460px] leading-relaxed mb-4">
                     {currentCampaign.description}
                   </p>
                 )}
 
                 {/* Price Section */}
                 {currentCampaign.pricing?.enablePricing && (
-                  <div className="mb-4">
+                  <div className="mb-4 flex flex-col items-center lg:items-start">
                     <div className="flex items-baseline gap-2.5">
                       <span className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white">
                         {formatCurrency(currentCampaign.pricing.price)}
@@ -357,26 +357,26 @@ export const HeroSection: React.FC = () => {
                 )}
 
                 {/* 3 Inline Features */}
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-1.5 mb-5 border-t border-gray-150/40 dark:border-slate-800/40 pt-4">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 mt-1.5 mb-5 border-t border-gray-150/40 dark:border-slate-800/40 pt-4">
                   {features.map((feat, idx) => (
                     <div key={idx} className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-white/90 dark:bg-slate-800/80 shadow-sm border border-gray-100/40 dark:border-slate-700/40 flex items-center justify-center flex-shrink-0">
                         {getFeatureIcon(feat.label)}
                       </div>
-                      <div className="leading-tight text-[11px]">
+                      <div className="leading-tight text-[11px] text-left">
                         <p className="font-semibold text-[8px] text-slate-400 dark:text-slate-500 tracking-wider uppercase">{feat.label}</p>
-                        <p className="font-bold text-slate-850 dark:text-slate-205">{feat.value}</p>
+                        <p className="font-bold text-slate-850 dark:text-slate-200">{feat.value}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-3 relative z-20">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 relative z-20 w-full sm:w-auto">
                   {currentCampaign.primaryButton?.text && (
                     <Link
                       to={currentCampaign.primaryButton.link || '/products'}
-                      className={`inline-flex items-center gap-1.5 font-bold text-xs px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer ${
+                      className={`w-full sm:w-auto text-center inline-flex items-center justify-center gap-1.5 font-bold text-xs px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer ${
                         currentCampaign.primaryButton.color || 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950'
                       }`}
                     >
@@ -386,7 +386,7 @@ export const HeroSection: React.FC = () => {
                   {currentCampaign.secondaryButton?.text && (
                     <Link
                       to={currentCampaign.secondaryButton.link || '/products'}
-                      className={`inline-flex items-center gap-1 hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-xs px-4 py-2.5 rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer ${
+                      className={`w-full sm:w-auto text-center inline-flex items-center justify-center gap-1 hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-xs px-4 py-2.5 rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer ${
                         currentCampaign.secondaryButton.color || 'text-slate-750 dark:text-slate-300'
                       }`}
                     >
@@ -499,8 +499,8 @@ export const HeroSection: React.FC = () => {
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Carousel Dots Indicator - Bottom Left */}
-        <div className="absolute bottom-5 left-6 sm:left-10 lg:left-14 flex items-center gap-2 z-20">
+        {/* Carousel Dots Indicator - Bottom Center/Left */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 lg:left-14 lg:translate-x-0 flex items-center gap-2 z-20">
           {activeCampaigns.map((_, idx) => (
             <button
               key={idx}

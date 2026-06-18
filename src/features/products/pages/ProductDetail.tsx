@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Sparkles } from 'lucide-react';
+import { Plus, Sparkles, Heart } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { addToCart, toggleCompareProduct, removeCompareProduct } from '../../../redux/cartSlice';
 import { addToWishlist, removeFromWishlist } from '../../../redux/wishlistSlice';
@@ -12,6 +12,7 @@ import { formatCurrency } from '../../../utils/formatters';
 import { ShimmerPDP } from '../../../components/Shimmer';
 import { ProductCard } from '../../../components/ProductCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SmartAddToCart } from '../../../components/SmartAddToCart';
 
 
 // PDP Subcomponents
@@ -195,7 +196,7 @@ export const ProductDetail: React.FC = () => {
   };
 
   return (
-    <div className="space-y-12 pb-16">
+    <div className="space-y-12 pb-28 lg:pb-16">
       
       {/* Product Summary Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -333,6 +334,26 @@ export const ProductDetail: React.FC = () => {
         </motion.div>
       </section>
 
+      {/* Mobile Sticky Bottom Action Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-gray-250/30 dark:border-slate-800/40 px-4 py-3 flex items-center justify-between gap-4 pb-safe-bottom shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+        {/* Wishlist Button */}
+        <button
+          onClick={handleWishlistToggle}
+          className="p-3.5 rounded-2xl border border-gray-250 dark:border-slate-800 text-gray-500 hover:text-rose-500 transition-colors bg-gray-50/50 dark:bg-slate-950/20 active:scale-90 cursor-pointer"
+        >
+          <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-rose-500 text-rose-500' : ''}`} />
+        </button>
+
+        {/* Dynamic Smart Add To Cart Button */}
+        <div className="flex-1">
+          <SmartAddToCart 
+            product={product} 
+            buttonPaddingClass="py-3.5" 
+            colorClass="bg-primary hover:bg-primary-hover text-text-inverted w-full text-center" 
+            iconSize={16} 
+          />
+        </div>
+      </div>
 
     </div>
   );

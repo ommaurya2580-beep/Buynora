@@ -87,7 +87,7 @@ export const Cart: React.FC = () => {
   };
 
   return (
-    <div className="space-y-12 pb-16 text-left">
+    <div className="space-y-12 pb-32 lg:pb-16 text-left">
       <div>
         <h1 className="text-2xl sm:text-3xl font-black text-text-primary flex items-center gap-2">
           <ShoppingBag className="w-6 h-6 text-indigo-500" /> Shopping Cart
@@ -116,65 +116,84 @@ export const Cart: React.FC = () => {
               {cartItems.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 flex flex-col sm:flex-row gap-4 items-center justify-between"
+                  className="glass p-4 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 bg-bg-surface/40 flex flex-row items-start lg:items-center gap-4 relative"
                 >
+                  {/* Product Image */}
                   <img
                     src={item.product.images[0]}
                     alt={item.product.name}
-                    className="w-20 h-20 object-cover rounded-xl"
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl flex-shrink-0"
                   />
-                  <div className="flex-1 text-left space-y-1">
-                    <span className="text-[10px] font-bold text-indigo-500 uppercase">{item.product.brand}</span>
-                    <h4 className="font-bold text-sm text-text-primary line-clamp-1">{item.product.name}</h4>
-                    {item.selectedSize && (
-                      <span className="text-[10px] text-gray-500 bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded-full font-bold">
-                        Size: {item.selectedSize}
-                      </span>
-                    )}
+                  
+                  {/* Product Details & Actions */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-between h-full space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:gap-4">
+                    <div className="text-left space-y-1">
+                      <span className="text-[10px] font-bold text-indigo-500 uppercase">{item.product.brand}</span>
+                      <h4 className="font-bold text-xs sm:text-sm text-text-primary line-clamp-2 pr-12 lg:pr-0 lg:line-clamp-1">{item.product.name}</h4>
+                      <div className="flex flex-wrap gap-1.5 items-center mt-1">
+                        {item.selectedSize && (
+                          <span className="text-[9px] text-gray-500 dark:text-gray-400 bg-gray-150 dark:bg-slate-800 px-2 py-0.5 rounded-full font-bold">
+                            Size: {item.selectedSize}
+                          </span>
+                        )}
+                        {item.selectedColor && (
+                          <span className="text-[9px] text-gray-500 dark:text-gray-400 bg-gray-150 dark:bg-slate-800 px-2 py-0.5 rounded-full font-bold">
+                            Color: {item.selectedColor}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-baseline gap-1.5 pt-1 lg:hidden">
+                        <span className="text-sm font-black text-text-primary">
+                          {formatCurrency(item.product.price)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Quantity Selector & Right side controls */}
+                    <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
+                      {/* Quantity Selector */}
+                      <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl">
+                        <button
+                          onClick={() => dispatch(updateQuantity({ id: item.product.id, quantity: item.quantity - 1, color: item.selectedColor, size: item.selectedSize }))}
+                          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 font-bold px-1.5 py-0.5 cursor-pointer text-xs"
+                        >
+                          -
+                        </button>
+                        <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
+                        <button
+                          onClick={() => dispatch(updateQuantity({ id: item.product.id, quantity: item.quantity + 1, color: item.selectedColor, size: item.selectedSize }))}
+                          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 font-bold px-1.5 py-0.5 cursor-pointer text-xs"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      {/* Subtotal price for item */}
+                      <div className="text-right">
+                        <span className="text-sm lg:text-base font-black text-text-primary block">
+                          {formatCurrency(item.product.price * item.quantity)}
+                        </span>
+                        <span className="text-[9px] text-gray-400 hidden lg:block">({formatCurrency(item.product.price)} each)</span>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Quantity and Prices */}
-                  <div className="flex items-center gap-6 justify-between w-full sm:w-auto">
-                    <div className="flex items-center gap-2 bg-gray-100 dark:bg-slate-800 px-2.5 py-1 rounded-xl">
-                      <button
-                        onClick={() => dispatch(updateQuantity({ id: item.product.id, quantity: item.quantity - 1, color: item.selectedColor, size: item.selectedSize }))}
-                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 font-bold px-1"
-                      >
-                        -
-                      </button>
-                      <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => dispatch(updateQuantity({ id: item.product.id, quantity: item.quantity + 1, color: item.selectedColor, size: item.selectedSize }))}
-                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 font-bold px-1"
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="text-sm font-black text-text-primary">
-                        {formatCurrency(item.product.price * item.quantity)}
-                      </span>
-                      <p className="text-[10px] text-gray-400">({formatCurrency(item.product.price)} each)</p>
-                    </div>
-
-                    {/* Action Panel */}
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => dispatch(saveForLaterItem({ id: item.product.id, color: item.selectedColor, size: item.selectedSize }))}
-                        className="p-2 text-gray-400 hover:text-indigo-500 hover:bg-indigo-500/10 rounded-xl cursor-pointer"
-                        title="Save for Later"
-                      >
-                        <Bookmark className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => dispatch(removeFromCart({ id: item.product.id, color: item.selectedColor, size: item.selectedSize }))}
-                        className="p-2 text-gray-400 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl cursor-pointer"
-                        title="Remove Item"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                  {/* Absolute Top Right Remove / Save for Later buttons on mobile, inline on desktop */}
+                  <div className="absolute top-3 right-3 flex items-center gap-1">
+                    <button
+                      onClick={() => dispatch(saveForLaterItem({ id: item.product.id, color: item.selectedColor, size: item.selectedSize }))}
+                      className="p-1.5 text-gray-400 hover:text-indigo-500 hover:bg-indigo-500/10 rounded-lg cursor-pointer"
+                      title="Save for Later"
+                    >
+                      <Bookmark className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => dispatch(removeFromCart({ id: item.product.id, color: item.selectedColor, size: item.selectedSize }))}
+                      className="p-1.5 text-gray-400 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer"
+                      title="Remove Item"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -226,7 +245,7 @@ export const Cart: React.FC = () => {
                 </h4>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-text-secondary">
-                    You have <span className="font-bold">{user.points}</span> points ($${(user.points * 0.1).toFixed(2)})
+                    You have <span className="font-bold">{user.points}</span> points (${(user.points * 0.1).toFixed(2)})
                   </span>
                   <input
                     type="checkbox"
@@ -293,6 +312,24 @@ export const Cart: React.FC = () => {
         )}
 
       </div>
+
+      {/* Mobile Sticky Checkout Panel */}
+      {cartItems.length > 0 && (
+        <div className="lg:hidden fixed bottom-16 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-gray-250/30 dark:border-slate-800/40 px-4 py-3 flex items-center justify-between pb-safe-bottom shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+          <div className="text-left">
+            <span className="text-[10px] text-gray-400 block uppercase">Total Amount</span>
+            <span className="text-lg font-black text-indigo-600 dark:text-indigo-455">
+              {formatCurrency(orderTotal)}
+            </span>
+          </div>
+          <button
+            onClick={handleCheckoutRedirect}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-6 rounded-xl flex items-center gap-1.5 cursor-pointer shadow active:scale-95 transition-all"
+          >
+            Checkout <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* 4. SAVED FOR LATER SECTION */}
       {savedForLater.length > 0 && (
