@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Plus, Edit3, Trash2, Save, Eye, ArrowUp, ArrowDown, ExternalLink,
-  RefreshCw, Settings, Layout, Move, AlertCircle, Sparkles, Check, Smartphone, Tablet as TabletIcon, Monitor, Menu
+  RefreshCw, Settings, Layout, Move, AlertCircle, Sparkles, Check, Smartphone, Tablet as TabletIcon, Monitor, Menu, Play, Pause
 } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { 
@@ -761,7 +761,7 @@ export const NavigationManager: React.FC = () => {
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
-                    onClick={() => setEditingItem(prev => ({ ...prev, showInDesktop: !prev.showInDesktop }))}
+                    onClick={() => setEditingItem(prev => prev ? { ...prev, showInDesktop: !prev.showInDesktop } : null)}
                     className={`py-1.5 text-[10px] font-black rounded-lg border transition-all cursor-pointer ${
                       editingItem.showInDesktop ? 'border-primary bg-primary/10 text-primary' : 'border-gray-250 dark:border-slate-800 text-gray-400'
                     }`}
@@ -770,7 +770,7 @@ export const NavigationManager: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setEditingItem(prev => ({ ...prev, showInMobile: !prev.showInMobile }))}
+                    onClick={() => setEditingItem(prev => prev ? { ...prev, showInMobile: !prev.showInMobile } : null)}
                     className={`py-1.5 text-[10px] font-black rounded-lg border transition-all cursor-pointer ${
                       editingItem.showInMobile ? 'border-primary bg-primary/10 text-primary' : 'border-gray-250 dark:border-slate-800 text-gray-400'
                     }`}
@@ -779,7 +779,7 @@ export const NavigationManager: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setEditingItem(prev => ({ ...prev, showInSidebar: !prev.showInSidebar }))}
+                    onClick={() => setEditingItem(prev => prev ? { ...prev, showInSidebar: !prev.showInSidebar } : null)}
                     className={`py-1.5 text-[10px] font-black rounded-lg border transition-all cursor-pointer ${
                       editingItem.showInSidebar ? 'border-primary bg-primary/10 text-primary' : 'border-gray-250 dark:border-slate-800 text-gray-400'
                     }`}

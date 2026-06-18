@@ -3,6 +3,7 @@ import { Star, ShoppingCart, Heart, BarChart3, Truck, RefreshCcw } from 'lucide-
 import { Product } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
 import { useToast } from '../../hooks/useToast';
+import { SmartAddToCart } from '../SmartAddToCart';
 
 interface ProductInfoProps {
   product: Product;
@@ -91,12 +92,12 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 
       {/* Action Buttons */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button
-          onClick={handleAddToCart}
-          className="bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold py-3.5 rounded-xl cursor-pointer shadow-lg shadow-indigo-600/10 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
-        >
-          <ShoppingCart className="w-4 h-4" /> Add to Cart
-        </button>
+        <SmartAddToCart 
+          product={product} 
+          buttonPaddingClass="py-3.5" 
+          colorClass="bg-indigo-600 hover:bg-indigo-700 text-text-inverted" 
+          iconSize={16} 
+        />
         <button
           onClick={handleBuyNow}
           className="bg-slate-900 dark:bg-white text-text-inverted dark:text-slate-900 font-bold py-3.5 rounded-xl cursor-pointer shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center"

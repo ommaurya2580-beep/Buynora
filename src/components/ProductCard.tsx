@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Star, ShoppingCart, BarChart3 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { addToCart } from '../redux/cartSlice';
 import { addToWishlist, removeFromWishlist } from '../redux/wishlistSlice';
+import { SmartAddToCart } from './SmartAddToCart';
 import { Product } from '../types';
 import { useToast } from '../hooks/useToast';
 import { formatCurrency } from '../utils/formatters';
@@ -42,16 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (product.stock <= 0) {
-      showToast("Product is out of stock", 'error');
-      return;
-    }
-    dispatch(addToCart({ product, quantity: 1 }));
-    showToast(`${product.name} added to cart!`, 'success');
-  };
+
 
   const handleCompareClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -181,18 +172,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Action Button */}
         <div className="pt-1">
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stock <= 0}
-            className={`w-full py-2 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] ${
-              product.stock <= 0
-                ? 'bg-gray-100 dark:bg-gray-800 text-gray-450 dark:text-gray-500 cursor-not-allowed'
-                : 'bg-accent hover:bg-accent-hover text-text-inverted'
-            }`}
-          >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            <span className="text-xs font-bold">Add to Cart</span>
-          </button>
+          <SmartAddToCart product={product} />
         </div>
       </div>
     </div>
