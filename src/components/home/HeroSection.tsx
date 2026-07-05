@@ -488,10 +488,10 @@ export const HeroSection: React.FC = () => {
               </div>
 
               {/* MOBILE CONTENT - visible on mobile/tablet, hidden on lg */}
-              <div className="lg:hidden w-full h-[250px] xs:h-[270px] sm:h-[285px] flex flex-row relative p-3 sm:p-4 select-text">
+              <div className="lg:hidden w-full h-[190px] xs:h-[210px] sm:h-[225px] flex flex-row relative p-3 sm:p-3 select-text">
                 {/* Left Column (60% width) */}
-                <div className="w-[60%] flex flex-col justify-between h-full pr-2 text-left">
-                  <div className="space-y-1">
+                <div className="w-[60%] flex flex-col justify-between h-full pr-1 text-left">
+                  <div className="space-y-0.5">
                     {/* Badge Pill */}
                     {currentCampaign.badge && (
                       <div className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wider bg-indigo-50/85 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 border border-indigo-100/60 dark:border-indigo-900/30 rounded-full w-fit">
@@ -500,33 +500,33 @@ export const HeroSection: React.FC = () => {
                     )}
 
                     {/* Headline */}
-                    <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight line-clamp-2">
+                    <h1 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight line-clamp-2">
                       {currentCampaign.title || currentCampaign.campaignName}
                     </h1>
 
                     {/* Subtitle / Tagline */}
                     {currentCampaign.subtitle && (
-                      <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                      <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 leading-normal">
                         {currentCampaign.subtitle}
                       </p>
                     )}
                   </div>
 
                   {/* Price & Buttons at the bottom */}
-                  <div className="space-y-2.5">
+                  <div className="space-y-1.5">
                     {/* Pricing Section */}
                     {currentCampaign.pricing?.enablePricing && (
-                      <div className="flex items-baseline gap-1.5 flex-wrap">
-                        <span className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+                      <div className="flex items-baseline gap-1 flex-wrap">
+                        <span className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
                           {formatCurrency(currentCampaign.pricing.price)}
                         </span>
                         {currentCampaign.pricing.oldPrice > 0 && (
-                          <span className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 line-through font-medium">
+                          <span className="text-[9px] sm:text-[10px] text-slate-400 dark:text-slate-500 line-through font-medium">
                             {formatCurrency(currentCampaign.pricing.oldPrice)}
                           </span>
                         )}
                         {currentCampaign.pricing.discount > 0 && (
-                          <span className="text-[8px] sm:text-[9px] font-black bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-1.5 py-0.2 rounded border border-rose-100/50 dark:border-rose-900/30">
+                          <span className="text-[8px] font-black bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-1.5 py-0.2 rounded border border-rose-100/50 dark:border-rose-900/30">
                             {currentCampaign.pricing.discount}% OFF
                           </span>
                         )}
@@ -534,11 +534,11 @@ export const HeroSection: React.FC = () => {
                     )}
 
                     {/* Buttons */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       {currentCampaign.primaryButton?.text && (
                         <Link
                           to={currentCampaign.primaryButton.link || '/products'}
-                          className={`h-9 px-4 inline-flex items-center justify-center font-bold text-[10px] sm:text-xs rounded-full shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer ${
+                          className={`h-7 px-2.5 inline-flex items-center justify-center font-bold text-[9px] sm:text-[10px] rounded-full shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer ${
                             currentCampaign.primaryButton.color || 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950'
                           }`}
                         >
@@ -548,9 +548,9 @@ export const HeroSection: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsDetailsModalOpen(true)}
-                        className="h-9 px-3.5 inline-flex items-center justify-center hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-[10px] sm:text-xs rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer text-slate-750 dark:text-slate-300 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xs"
+                        className="h-7 px-2 inline-flex items-center justify-center hover:bg-slate-200/40 dark:hover:bg-slate-800/40 font-bold text-[9px] sm:text-[10px] rounded-full border border-slate-200/40 dark:border-slate-700/40 transition-all duration-200 cursor-pointer text-slate-750 dark:text-slate-300 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xs"
                       >
-                        View Details
+                        Details
                       </button>
                     </div>
                   </div>
@@ -563,8 +563,8 @@ export const HeroSection: React.FC = () => {
                     <div
                       className="absolute rounded-full border border-indigo-200/10 dark:border-indigo-400/5 blur-[2px] pointer-events-none transition-all duration-500 z-0"
                       style={{
-                        width: '140px',
-                        height: '140px',
+                        width: '100px',
+                        height: '100px',
                         background: `radial-gradient(circle, rgba(165,180,252,${currentCampaign.glowIntensity === 'high' ? 0.2 : 0.1}) 0%, transparent 70%)`,
                       }}
                     />
@@ -573,7 +573,7 @@ export const HeroSection: React.FC = () => {
                   {/* Image Container */}
                   <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
                     {currentCampaign.videoUrl ? (
-                      <div className="w-full h-full max-h-[140px] rounded-xl overflow-hidden shadow bg-slate-950 flex items-center justify-center">
+                      <div className="w-full h-full max-h-[110px] rounded-xl overflow-hidden shadow bg-slate-950 flex items-center justify-center">
                         <video
                           src={currentCampaign.videoUrl}
                           autoPlay={currentCampaign.videoSettings?.videoAutoplay ?? true}
@@ -584,7 +584,7 @@ export const HeroSection: React.FC = () => {
                         />
                       </div>
                     ) : currentCampaign.youtubeUrl ? (
-                      <div className="w-full h-full max-h-[140px] rounded-xl overflow-hidden shadow bg-slate-950 flex items-center justify-center text-[8px] font-bold text-gray-400 p-2 text-center">
+                      <div className="w-full h-full max-h-[110px] rounded-xl overflow-hidden shadow bg-slate-950 flex items-center justify-center text-[8px] font-bold text-gray-400 p-2 text-center">
                         <span>YouTube Video</span>
                       </div>
                     ) : (
@@ -592,9 +592,9 @@ export const HeroSection: React.FC = () => {
                         <CampaignImage
                           src={currentCampaign.heroProductImageUrl || currentCampaign.imageUrl}
                           alt={currentCampaign.title || currentCampaign.campaignName}
-                          className="max-h-[140px] sm:max-h-[160px] w-auto drop-shadow-md select-none z-10 object-contain"
+                          className="max-h-[110px] sm:max-h-[125px] w-auto drop-shadow-md select-none z-10 object-contain"
                         />
-                        <div className="absolute bottom-[10px] w-[60%] h-[8px] bg-black/[0.04] dark:bg-black/[0.2] rounded-[50%] blur-sm pointer-events-none scale-x-90" />
+                        <div className="absolute bottom-[5px] w-[60%] h-[6px] bg-black/[0.04] dark:bg-black/[0.2] rounded-[50%] blur-sm pointer-events-none scale-x-90" />
                       </>
                     )}
                   </div>

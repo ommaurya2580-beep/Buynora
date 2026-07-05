@@ -50,7 +50,7 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
   const showButton = products.length > limit;
 
   return (
-    <section className="glass p-4 md:p-5 rounded-3xl border border-rose-500/15 relative overflow-hidden bg-rose-500/[0.01] w-full max-w-full">
+    <section className="glass p-3 sm:p-4 md:p-5 rounded-3xl border border-rose-500/15 relative overflow-hidden bg-rose-500/[0.01] w-full max-w-full">
       <div className="absolute top-0 right-0 w-[30vw] h-[30vw] bg-rose-500/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 relative z-10">
@@ -59,7 +59,7 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
             <Flame className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <h2 className="text-lg md:text-xl font-black text-text-primary tracking-tight uppercase flex items-center gap-2">
+            <h2 className="text-sm sm:text-base md:text-xl font-bold text-text-primary tracking-tight uppercase flex items-center gap-2">
               Flash Deals
             </h2>
             <p className="text-xs text-text-secondary hidden sm:block">Limited quantities. Offers end soon!</p>
@@ -76,19 +76,20 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           </div>
 
           {showButton && (
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="text-xs font-black text-rose-600 dark:text-rose-450 hover:text-rose-700 dark:hover:text-rose-350 flex items-center gap-1 cursor-pointer transition-colors bg-rose-500/5 hover:bg-rose-500/10 px-3.5 py-1.5 rounded-xl border border-rose-500/10"
-            >
-              {isExpanded ? 'Show Less' : 'Show More'}
-            </button>
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-xs font-black text-rose-600 dark:text-rose-450 hover:text-rose-700 dark:hover:text-rose-350 flex items-center gap-1 cursor-pointer transition-colors px-1 py-1 lg:px-3.5 lg:py-1.5 lg:bg-rose-500/5 lg:hover:bg-rose-500/10 lg:rounded-xl lg:border lg:border-rose-500/10"
+              >
+                <span className="lg:hidden">{isExpanded ? 'Show Less' : 'See All →'}</span>
+                <span className="hidden lg:inline">{isExpanded ? 'Show Less' : 'Show More'}</span>
+              </button>
           )}
         </div>
       </div>
 
       <motion.div 
         layout
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 relative z-10 w-full"
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5 relative z-10 w-full"
       >
         <AnimatePresence mode="popLayout">
           {visibleProducts.map(prod => (

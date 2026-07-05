@@ -21,7 +21,7 @@ export const WomenCollection: React.FC<WomenCollectionProps> = ({
   const hasMore = products.length > displayCount;
 
   return (
-    <section className="space-y-6 w-full max-w-full">
+    <section className="space-y-3 sm:space-y-4 lg:space-y-6 w-full max-w-full">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-1.5 uppercase">
@@ -40,7 +40,7 @@ export const WomenCollection: React.FC<WomenCollectionProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
         {/* Lifestyle Banner Card */}
         <div 
-          className="lg:col-span-1 relative rounded-2xl overflow-hidden min-h-[350px] lg:h-full flex flex-col justify-end p-6 shadow-lg group"
+          className="hidden lg:flex lg:col-span-1 relative rounded-2xl overflow-hidden min-h-[350px] lg:h-full flex flex-col justify-end p-6 shadow-lg group"
           style={{
             backgroundImage: `linear-gradient(to top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.3)), url('https://images.unsplash.com/photo-1524041255139-59c5b74b776f?auto=format&fit=crop&q=80&w=800')`,
             backgroundSize: 'cover',
@@ -68,8 +68,8 @@ export const WomenCollection: React.FC<WomenCollectionProps> = ({
         </div>
 
         {/* Product Cards Grid */}
-        <div className="lg:col-span-3 flex flex-col gap-5 justify-between">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="w-full lg:col-span-3 flex flex-col gap-5 justify-between">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {visibleProducts.map(product => (
               <ProductCard
                 key={product.id}

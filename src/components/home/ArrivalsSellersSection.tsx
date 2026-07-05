@@ -49,10 +49,10 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
+            <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2 uppercase">
               <Sparkles className="w-5 h-5 text-indigo-500 animate-pulse" /> New Arrivals
             </h2>
-            <p className="text-xs text-text-secondary">Explore the latest additions to our store collections</p>
+            <p className="text-xs text-text-secondary hidden lg:block">Explore the latest additions to our store collections</p>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/products?sortBy=newest" className="text-xs text-indigo-500 font-bold hover:underline">
@@ -61,9 +61,10 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
             {showNewArrivalsButton && (
               <button
                 onClick={() => setNewArrivalsExpanded(!newArrivalsExpanded)}
-                className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/10"
+                className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors px-1 py-1 lg:px-3.5 lg:py-1.5 lg:bg-indigo-500/5 lg:hover:bg-indigo-500/10 lg:rounded-xl lg:border lg:border-indigo-500/10"
               >
-                {newArrivalsExpanded ? 'Show Less' : 'Show More'}
+                <span className="lg:hidden">{newArrivalsExpanded ? 'Show Less' : 'See All →'}</span>
+                <span className="hidden lg:inline">{newArrivalsExpanded ? 'Show Less' : 'Show More'}</span>
               </button>
             )}
           </div>
@@ -71,7 +72,7 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
 
         <motion.div 
           layout
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 w-full"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5 w-full"
         >
           <AnimatePresence mode="popLayout">
             {visibleNewArrivals.map(prod => (
@@ -99,10 +100,10 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
+            <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2 uppercase">
               <Award className="w-5 h-5 text-amber-500" /> Best Sellers
             </h2>
-            <p className="text-xs text-text-secondary">Highly-rated and top-performing products by our customers</p>
+            <p className="text-xs text-text-secondary hidden lg:block">Highly-rated and top-performing products by our customers</p>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/products?sortBy=popularity" className="text-xs text-indigo-500 font-bold hover:underline">
@@ -111,9 +112,10 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
             {showBestSellersButton && (
               <button
                 onClick={() => setBestSellersExpanded(!bestSellersExpanded)}
-                className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/10"
+                className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors px-1 py-1 lg:px-3.5 lg:py-1.5 lg:bg-indigo-500/5 lg:hover:bg-indigo-500/10 lg:rounded-xl lg:border lg:border-indigo-500/10"
               >
-                {bestSellersExpanded ? 'Show Less' : 'Show More'}
+                <span className="lg:hidden">{bestSellersExpanded ? 'Show Less' : 'See All →'}</span>
+                <span className="hidden lg:inline">{bestSellersExpanded ? 'Show Less' : 'Show More'}</span>
               </button>
             )}
           </div>
@@ -121,7 +123,7 @@ export const ArrivalsSellersSection: React.FC<ArrivalsSellersSectionProps> = ({
 
         <motion.div 
           layout
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 w-full"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5 w-full"
         >
           <AnimatePresence mode="popLayout">
             {visibleBestSellers.map(prod => (

@@ -133,17 +133,17 @@ export const CategoryStrip: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-bg-surface dark:bg-slate-900/40 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-slate-800/80 overflow-hidden">
-      <div className="flex items-center gap-6 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
+    <div className="w-full bg-bg-surface dark:bg-slate-900/40 rounded-2xl p-2.5 sm:p-4 shadow-sm border border-gray-100 dark:border-slate-800/80 overflow-hidden">
+      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-6 overflow-x-auto pb-1.5 sm:pb-2 scrollbar-none snap-x snap-mandatory">
         {categoriesList.map((cat, idx) => (
           <button
             key={idx}
             onClick={() => handleClick(cat)}
-            className="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer snap-start group outline-none"
+            className="flex flex-col items-center gap-1 sm:gap-2 flex-shrink-0 cursor-pointer snap-start group outline-none"
           >
             <motion.div 
               whileTap={{ scale: 0.9 }}
-              className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden p-0.5 border-2 border-slate-200 dark:border-slate-800 group-hover:border-primary transition-all duration-300 shadow-md"
+              className="w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full overflow-hidden p-0.5 border-2 border-slate-200 dark:border-slate-800 group-hover:border-primary transition-all duration-300 shadow-md"
             >
               <img
                 src={cat.image}
@@ -152,7 +152,7 @@ export const CategoryStrip: React.FC = () => {
                 loading="lazy"
               />
             </motion.div>
-            <span className="text-[10px] md:text-xs font-semibold text-text-primary group-hover:text-primary transition-colors text-center max-w-[80px] truncate">
+            <span className="text-[9px] xs:text-[10px] sm:text-xs font-bold text-text-primary group-hover:text-primary transition-colors text-center max-w-[64px] sm:max-w-[80px] truncate">
               {cat.name}
             </span>
           </button>

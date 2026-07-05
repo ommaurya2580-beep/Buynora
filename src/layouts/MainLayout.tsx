@@ -4,7 +4,7 @@ import {
   ShoppingBag, Heart, Bell, Sun, Moon, 
   Menu, X, Sparkles, Globe, ChevronDown, Check,
   RotateCcw, Truck, Tag, RefreshCcw, HeadphonesIcon,
-  MapPin, Navigation, Plus, Search, Mic
+  MapPin, Navigation, Plus, Search, Mic, Camera
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { logoutUser } from '../redux/authSlice';
@@ -133,6 +133,7 @@ export const MainLayout: React.FC = () => {
   });
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const locationDropdownRef = useRef<HTMLDivElement>(null);
+  const mobileLocationDropdownRef = useRef<HTMLDivElement>(null);
 
   // Sync with default address when loaded
   useEffect(() => {
@@ -146,7 +147,9 @@ export const MainLayout: React.FC = () => {
   // Close on click outside
   useEffect(() => {
     const clickOutside = (e: MouseEvent) => {
-      if (locationDropdownRef.current && !locationDropdownRef.current.contains(e.target as Node)) {
+      const clickedOutsideDesktop = !locationDropdownRef.current || !locationDropdownRef.current.contains(e.target as Node);
+      const clickedOutsideMobile = !mobileLocationDropdownRef.current || !mobileLocationDropdownRef.current.contains(e.target as Node);
+      if (clickedOutsideDesktop && clickedOutsideMobile) {
         setIsLocationDropdownOpen(false);
       }
     };
@@ -612,36 +615,108 @@ export const MainLayout: React.FC = () => {
               <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#1F2937] dark:from-[#131921] to-transparent z-10 pointer-events-none" />
             </div>
           )}
-
           {/* Main Mobile Header Bar */}
           <div className={`px-4 flex items-center justify-between transition-all duration-300 ${isHeaderScrolled ? 'py-1.5' : 'py-2.5'}`}>
-            {/* Hamburger Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              {/* Hamburger Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-1 text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer flex-shrink-0"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-1.5">
-              <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-gradient-to-tr from-[#007A5E] to-[#00D9A6] p-1.5 shadow-[0_0_10px_rgba(0,217,166,0.3)]">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-white">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <path d="M16 10a4 4 0 0 1-8 0" />
-                </svg>
+              {/* Logo */}
+              <Link to="/" className="flex items-center gap-1 flex-shrink-0">
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-gradient-to-tr from-[#007A5E] to-[#00D9A6] p-1 shadow-[0_0_10px_rgba(0,217,166,0.3)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-white">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                  </svg>
+                </div>
+                <span className="text-base font-black bg-gradient-to-r from-[#00D9A6] via-[#38FFD3] to-[#007A5E] bg-clip-text text-transparent tracking-tight">
+                  Buynora
+                </span>
+              </Link>
+
+              {/* Inline Delivery Location Selector */}
+              <div className="relative text-left min-w-0" ref={mobileLocationDropdownRef}>
+                <button 
+                  onClick={() => setIsLocationDropdownOpen(!isLocationDropdownOpen)}
+                  className="flex items-center gap-0.5 text-[10px] font-bold text-text-secondary hover:text-text-primary transition-colors py-1 cursor-pointer select-none text-left min-w-0"
+                >
+                  <span className="mx-1 text-gray-300 dark:text-gray-705 select-none">|</span>
+                  <MapPin className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400 flex-shrink-0" />
+                  <span className="truncate max-w-[80px] xs:max-w-[100px] text-text-primary">
+                    {selectedAddress?.city || 'Varanasi'}
+                  </span>
+                  <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                </button>
+
+                {isLocationDropdownOpen && (
+                  <div className="absolute left-[-50px] mt-1.5 bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-xl p-4 flex flex-col gap-2.5 shadow-2xl z-50 text-left min-w-[280px] w-[88vw] max-w-sm">
+                    <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-900 pb-2">
+                      <span className="font-black text-xs text-text-primary uppercase tracking-wider">
+                        Select Delivery Location
+                      </span>
+                      <button onClick={() => setIsLocationDropdownOpen(false)}>
+                        <X className="w-4 h-4 text-gray-400 hover:text-gray-650" />
+                      </button>
+                    </div>
+                    
+                    {/* Saved Addresses list */}
+                    {addresses.length === 0 ? (
+                      <div className="text-[11px] text-slate-500 py-1.5 italic">No saved addresses found.</div>
+                    ) : (
+                      <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                        {addresses.map((addr: any) => (
+                          <button 
+                            key={addr.id} 
+                            onClick={() => handleSelectAddress(addr)} 
+                            className={`w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer block ${
+                              selectedAddress?.id === addr.id 
+                                ? 'border-indigo-500 bg-indigo-50/10 dark:bg-indigo-950/20' 
+                                : 'border-gray-100 dark:border-slate-900 hover:bg-gray-50 dark:hover:bg-slate-900/50'
+                            }`}
+                          >
+                            <span className="font-bold text-xs text-text-primary block">{addr.name}</span>
+                            <span className="text-[11px] text-text-secondary block mt-0.5 truncate">{addr.line1}, {addr.city}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="border-t border-gray-100 dark:border-slate-900 pt-2.5 flex flex-col gap-2">
+                      <button 
+                        onClick={handleUseCurrentLocation} 
+                        className="flex items-center gap-1.5 text-xs font-black text-indigo-650 dark:text-indigo-400 hover:underline py-1 cursor-pointer text-left"
+                      >
+                        <Navigation className="w-3.5 h-3.5" />
+                        <span>Use Current Location</span>
+                      </button>
+                      
+                      <Link 
+                        to="/dashboard?tab=addresses" 
+                        onClick={() => setIsLocationDropdownOpen(false)}
+                        className="flex items-center gap-1.5 text-xs font-black text-text-primary hover:underline py-1"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Manage Addresses</span>
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
-              <span className="text-lg font-black bg-gradient-to-r from-[#00D9A6] via-[#38FFD3] to-[#007A5E] bg-clip-text text-transparent tracking-tight">
-                Buynora
-              </span>
-            </Link>
+            </div>
 
-            {/* Notification and Cart badges */}
-            <div className="flex items-center gap-1">
+            {/* Notification, Wishlist, Cart, and Profile icons */}
+            <div className="flex items-center gap-0.5">
+              {/* Notification Center Trigger */}
               <button
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="p-2 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
+                className="p-1.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
               >
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
@@ -650,10 +725,24 @@ export const MainLayout: React.FC = () => {
                   </span>
                 )}
               </button>
+
+              {/* Wishlist Link */}
+              <Link
+                to="/wishlist"
+                className="p-1.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
+              >
+                <Heart className="w-5 h-5" />
+                {wishlistItems.length > 0 && (
+                  <span className="absolute top-1 right-1 bg-rose-500 text-text-inverted text-[8px] font-black rounded-full h-3.5 w-3.5 flex items-center justify-center border border-white dark:border-slate-900">
+                    {wishlistItems.length}
+                  </span>
+                )}
+              </Link>
               
+              {/* Cart Link */}
               <Link
                 to="/cart"
-                className="p-2 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
+                className="p-1.5 rounded-xl text-text-secondary hover:bg-gray-100 dark:hover:bg-slate-800 relative cursor-pointer"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {cartCount > 0 && (
@@ -662,10 +751,15 @@ export const MainLayout: React.FC = () => {
                   </span>
                 )}
               </Link>
+
+              {/* Profile Menu Dropdown */}
+              <div className="flex-shrink-0 ml-1">
+                <ProfileMenu user={user} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+              </div>
             </div>
           </div>
 
-          {/* Mobile Search input trigger & Location bar */}
+          {/* Mobile Search input trigger */}
           <div className="px-4 pb-3 flex flex-col gap-2">
             {/* Search Input Trigger */}
             <button 
@@ -676,77 +770,11 @@ export const MainLayout: React.FC = () => {
                 <Search className="w-4 h-4 text-gray-400" />
                 <span>Search premium products...</span>
               </span>
-              <Mic className="w-4 h-4 text-gray-400" />
+              <div className="flex items-center gap-2">
+                <Camera className="w-4 h-4 text-gray-400" />
+                <Mic className="w-4 h-4 text-gray-400" />
+              </div>
             </button>
-
-            {/* Delivery Location bar */}
-            <div className="relative text-left">
-              <button 
-                onClick={() => setIsLocationDropdownOpen(!isLocationDropdownOpen)}
-                className="flex items-center gap-1.5 text-[11px] font-bold text-text-secondary hover:text-text-primary transition-colors py-1 cursor-pointer select-none text-left w-max"
-              >
-                <MapPin className="w-3.5 h-3.5 text-indigo-550 dark:text-indigo-400 flex-shrink-0" />
-                <span className="truncate">
-                  Deliver to <strong className="text-text-primary">{selectedAddress?.city ? `${selectedAddress.city}, ${selectedAddress.state || ''}` : 'Select Location'}</strong>
-                </span>
-                <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-              </button>
-
-              {isLocationDropdownOpen && (
-                <div className="absolute left-0 right-0 mt-1.5 bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-xl p-4 flex flex-col gap-2.5 shadow-2xl z-50 text-left min-w-[280px] w-[88vw] max-w-sm">
-                  <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-900 pb-2">
-                    <span className="font-black text-xs text-text-primary uppercase tracking-wider">
-                      Select Delivery Location
-                    </span>
-                    <button onClick={() => setIsLocationDropdownOpen(false)}>
-                      <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
-                    </button>
-                  </div>
-                  
-                  {/* Saved Addresses list */}
-                  {addresses.length === 0 ? (
-                    <div className="text-[11px] text-slate-500 py-1.5 italic">No saved addresses found.</div>
-                  ) : (
-                    <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
-                      {addresses.map((addr: any) => (
-                        <button 
-                          key={addr.id} 
-                          onClick={() => handleSelectAddress(addr)} 
-                          className={`w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer block ${
-                            selectedAddress?.id === addr.id 
-                              ? 'border-indigo-500 bg-indigo-50/10 dark:bg-indigo-950/20' 
-                              : 'border-gray-100 dark:border-slate-900 hover:bg-gray-50 dark:hover:bg-slate-900/50'
-                          }`}
-                        >
-                          <span className="font-bold text-xs text-text-primary block">{addr.name}</span>
-                          <span className="text-[11px] text-text-secondary block mt-0.5 truncate">{addr.line1}, {addr.city}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className="border-t border-gray-100 dark:border-slate-900 pt-2.5 flex flex-col gap-2">
-                    <button 
-                      onClick={handleUseCurrentLocation} 
-                      className="flex items-center gap-1.5 text-xs font-black text-indigo-600 dark:text-indigo-400 hover:underline py-1 cursor-pointer text-left"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      <span>Use Current Location</span>
-                    </button>
-                    
-                    <Link 
-                      to="/dashboard?tab=addresses" 
-                      onClick={() => setIsLocationDropdownOpen(false)}
-                      className="flex items-center gap-1.5 text-xs font-black text-text-primary hover:underline py-1"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Manage Addresses</span>
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
         </div>
 
@@ -937,7 +965,7 @@ export const MainLayout: React.FC = () => {
       </AnimatePresence>
 
       {/* Main Outlet */}
-      <main className={`flex-1 w-full ${location.pathname === '/' ? 'pt-2 pb-8 px-4 md:px-8 max-w-none w-full' : 'py-6 max-w-7xl mx-auto px-4 md:px-8'} pb-24 lg:pb-8`}>
+      <main className={`flex-1 w-full ${location.pathname === '/' ? 'pt-1.5 lg:pt-2 pb-8 px-4 md:px-8 max-w-none w-full' : 'py-6 max-w-7xl mx-auto px-4 md:px-8'} pb-24 lg:pb-8`}>
         <Outlet />
       </main>
 

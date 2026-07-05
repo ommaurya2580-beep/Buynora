@@ -37,7 +37,7 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   const showButton = products.length > limit;
 
   return (
-    <section className="glass rounded-3xl p-4 md:p-5 border border-indigo-500/15 relative overflow-hidden bg-indigo-500/[0.01] w-full max-w-full">
+    <section className="glass rounded-3xl p-3 sm:p-4 md:p-5 border border-indigo-500/15 relative overflow-hidden bg-indigo-500/[0.01] w-full max-w-full">
       {/* Ambient background glow */}
       <div className="absolute top-0 right-0 w-[25vw] h-[25vw] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
       
@@ -71,9 +71,10 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
           {showButton && (
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 px-3.5 py-1.5 rounded-xl border border-indigo-500/10"
+              className="text-xs font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors px-1 py-1 lg:px-3.5 lg:py-1.5 lg:bg-indigo-500/5 lg:hover:bg-indigo-500/10 lg:rounded-xl lg:border lg:border-indigo-500/10"
             >
-              {isExpanded ? 'Show Less' : 'Show More'}
+              <span className="lg:hidden">{isExpanded ? 'Show Less' : 'See All →'}</span>
+              <span className="hidden lg:inline">{isExpanded ? 'Show Less' : 'Show More'}</span>
             </button>
           )}
         </div>
@@ -81,7 +82,7 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
       <motion.div 
         layout
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 relative z-10 w-full"
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5 relative z-10 w-full"
       >
         <AnimatePresence mode="popLayout">
           {visibleProducts.map(prod => (
