@@ -110,10 +110,10 @@ export const MoreRecommendations: React.FC<MoreRecommendationsProps> = ({
     <section className="space-y-6 w-full max-w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-150 dark:border-slate-800 pb-3">
         <div>
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary uppercase flex items-center gap-2">
+          <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary uppercase flex items-center gap-2">
             Recommended For You
           </h2>
-          <p className="text-xs text-text-secondary">{activeTabConfig.description}</p>
+          <p className="text-xs text-text-secondary hidden lg:block">{activeTabConfig.description}</p>
         </div>
 
         {/* Tab Controls */}

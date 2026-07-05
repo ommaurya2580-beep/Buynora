@@ -44,20 +44,20 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 relative z-10">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
-              <Sparkles className="w-5 h-5 text-indigo-500 animate-pulse" /> Recommended For You
+            <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-1.5 uppercase">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-550 animate-pulse" /> Recommended For You
             </h2>
-            <span className="bg-indigo-600/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-400 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-indigo-500/10">
+            <span className="hidden lg:inline-flex bg-indigo-600/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-400 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-indigo-500/10">
               AI Personalized
             </span>
           </div>
-          <p className="text-xs text-text-secondary">Custom suggestions based on your search history and profile interests</p>
+          <p className="text-xs text-text-secondary hidden lg:block">Custom suggestions based on your search history and profile interests</p>
         </div>
 
         {/* Action Panel: Tooltip + Show More */}
-        <div className="flex items-center gap-3 self-start sm:self-auto relative z-20">
+        <div className="flex items-center gap-3 self-center sm:self-auto relative z-20">
           {/* Why Recommended Tooltip */}
-          <div className="relative group/tooltip">
+          <div className="relative group/tooltip hidden lg:block">
             <button className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 bg-indigo-500/5 px-3 py-1.5 rounded-xl cursor-help transition-all hover:bg-indigo-500/10">
               <HelpCircle className="w-3.5 h-3.5" /> Why Recommended?
             </button>

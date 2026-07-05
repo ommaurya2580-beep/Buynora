@@ -62,7 +62,7 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
             <h2 className="text-lg md:text-xl font-black text-text-primary tracking-tight uppercase flex items-center gap-2">
               Flash Deals
             </h2>
-            <p className="text-xs text-text-secondary">Limited quantities. Offers end soon!</p>
+            <p className="text-xs text-text-secondary hidden sm:block">Limited quantities. Offers end soon!</p>
           </div>
         </div>
 

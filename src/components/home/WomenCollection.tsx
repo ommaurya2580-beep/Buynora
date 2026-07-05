@@ -24,10 +24,10 @@ export const WomenCollection: React.FC<WomenCollectionProps> = ({
     <section className="space-y-6 w-full max-w-full">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
-            <Sparkles className="w-5 h-5 text-indigo-500" /> Women's Collection
+          <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-1.5 uppercase">
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-550" /> Women's Collection
           </h2>
-          <p className="text-xs text-text-secondary">Chic dresses, designer apparel, footwear, and cosmetics for women</p>
+          <p className="text-xs text-text-secondary hidden lg:block">Chic dresses, designer apparel, footwear, and cosmetics for women</p>
         </div>
         <Link
           to="/products?search=Women"

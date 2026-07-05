@@ -24,10 +24,10 @@ export const MenCollection: React.FC<MenCollectionProps> = ({
     <section className="space-y-6 w-full max-w-full">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
-            <Shirt className="w-5 h-5 text-indigo-500" /> Men's Collection
+          <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-1.5 uppercase">
+            <Shirt className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-550" /> Men's Collection
           </h2>
-          <p className="text-xs text-text-secondary">Sleek apparel, footwear, and designer accessories for men</p>
+          <p className="text-xs text-text-secondary hidden lg:block">Sleek apparel, footwear, and designer accessories for men</p>
         </div>
         <Link
           to="/products?search=Men"

@@ -40,10 +40,10 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({
     <section className="space-y-6 w-full max-w-full">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary flex items-center gap-2 uppercase">
-            <Compass className="w-5 h-5 text-indigo-500" /> Hot Trending
+          <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-1.5 uppercase">
+            <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-550" /> Hot Trending
           </h2>
-          <p className="text-xs text-text-secondary">Popular items customers are purchasing right now</p>
+          <p className="text-xs text-text-secondary hidden lg:block">Popular items customers are purchasing right now</p>
         </div>
 
         {showButton && (

@@ -72,7 +72,7 @@ export const ChatWidget: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
+    <div className="fixed bottom-20 lg:bottom-5 right-4 lg:right-5 z-40 flex flex-col items-end">
       
       {/* Chat Window */}
       <AnimatePresence>
