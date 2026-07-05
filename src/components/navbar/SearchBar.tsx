@@ -146,32 +146,32 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onVoiceSearchClick }) => {
           value={searchQuery}
           onFocus={() => setShowSuggestions(true)}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full bg-bg-surface text-text-primary pl-4 pr-24 py-2.5 rounded-lg text-xs border border-gray-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200 shadow-sm"
+          className="w-full h-11 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 pl-4 pr-28 py-2 rounded-[14px] text-xs border border-[#E5E7EB] dark:border-slate-800 focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] focus:shadow-[0_0_10px_rgba(16,185,129,0.25)] outline-none transition-all duration-200 shadow-sm"
         />
         
-        <div className="absolute right-2 top-1.5 flex items-center gap-1.5">
+        <div className="absolute right-3 inset-y-0 flex items-center gap-3">
           <button
             type="button"
             onClick={handleImageSearchClick}
-            className="p-1 text-gray-400 hover:text-primary cursor-pointer transition-colors"
+            className="p-1.5 text-[#10B981] hover:text-[#10B981] hover:scale-105 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] hover:bg-[#ECFDF5] dark:hover:bg-[#10B981]/10 active:bg-[#ECFDF5] dark:active:bg-[#10B981]/25 rounded-[8px] cursor-pointer transition-all duration-200 flex items-center justify-center"
             title="Image Search"
           >
-            <Camera className="w-4 h-4" />
+            <Camera className="w-[18px] h-[18px]" />
           </button>
           <button
             type="button"
             onClick={onVoiceSearchClick}
-            className="p-1 text-gray-400 hover:text-primary cursor-pointer transition-colors"
+            className="p-1.5 text-[#10B981] hover:text-[#10B981] hover:scale-105 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] hover:bg-[#ECFDF5] dark:hover:bg-[#10B981]/10 active:bg-[#ECFDF5] dark:active:bg-[#10B981]/25 rounded-[8px] cursor-pointer transition-all duration-200 flex items-center justify-center"
             title="Voice Search"
           >
-            <Mic className="w-4 h-4" />
+            <Mic className="w-[18px] h-[18px]" />
           </button>
           <button
             type="submit"
-            className="p-2 bg-white/10 dark:bg-slate-800/30 backdrop-blur-md border border-gray-300/30 dark:border-slate-700/30 hover:bg-[#00D9A6]/10 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,217,166,0.45)] hover:scale-105 active:scale-95 group flex items-center justify-center"
+            className="p-1.5 text-[#10B981] hover:text-[#10B981] hover:scale-105 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] hover:bg-[#ECFDF5] dark:hover:bg-[#10B981]/10 active:bg-[#ECFDF5] dark:active:bg-[#10B981]/25 rounded-[8px] cursor-pointer transition-all duration-200 flex items-center justify-center"
             title="Search"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#00D9A6] group-hover:text-[#38FFD3] transition-colors duration-300">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] text-[#10B981]">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 0 1-8 0" />
