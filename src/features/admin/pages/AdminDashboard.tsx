@@ -21,7 +21,7 @@ import {
   useDeleteCouponMutation 
 } from '../../../hooks/useQueries';
 
-type TabType = 'overview' | 'users' | 'sellers' | 'categories' | 'coupons' | 'products' | 'orders' | 'reports';
+type TabType = 'overview' | 'users' | 'sellers' | 'categories' | 'coupons' | 'products' | 'orders' | 'reports' | 'homepage';
 
 export const AdminDashboard: React.FC = () => {
   const { showToast } = useToast();
@@ -32,11 +32,28 @@ export const AdminDashboard: React.FC = () => {
   const activeTab = (
     tabParam === 'activity' ? 'overview' :
     tabParam === 'settings' ? 'overview' :
-    ['overview', 'users', 'sellers', 'categories', 'coupons', 'products', 'orders', 'reports'].includes(tabParam) ? tabParam : 'overview'
+    ['overview', 'users', 'sellers', 'categories', 'coupons', 'products', 'orders', 'reports', 'homepage'].includes(tabParam) ? tabParam : 'overview'
   ) as TabType;
 
   const setActiveTab = (tab: TabType) => {
     setSearchParams({ tab });
+  };
+
+  // Brands Carousel Settings State
+  const [brandSettings, setBrandSettings] = useState(() => {
+    const saved = localStorage.getItem('buynora_brands_settings');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (_) {}
+    }
+    return { autoplay: true, speed: 20 };
+  });
+
+  const saveBrandSettings = (newSettings: { autoplay: boolean; speed: number }) => {
+    setBrandSettings(newSettings);
+    localStorage.setItem('buynora_brands_settings', JSON.stringify(newSettings));
+    window.dispatchEvent(new Event('buynora_brands_settings_changed'));
   };
 
   // Coupon Form
@@ -93,7 +110,7 @@ export const AdminDashboard: React.FC = () => {
       
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-gray-150 dark:border-gray-800 pb-2">
-        {['overview', 'users', 'sellers', 'categories', 'coupons'].map(tab => (
+        {['overview', 'users', 'sellers', 'categories', 'coupons', 'homepage'].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab as TabType)}
@@ -103,7 +120,7 @@ export const AdminDashboard: React.FC = () => {
                 : 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500'
             }`}
           >
-            {tab}
+            {tab === 'homepage' ? 'Homepage Settings' : tab}
           </button>
         ))}
       </div>
@@ -568,6 +585,68 @@ export const AdminDashboard: React.FC = () => {
             <p className="text-xs text-gray-500">
               Monthly earnings trends and category shares charts are aggregated on the main System Overview dashboard view.
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* TABS: HOMEPAGE SETTINGS */}
+      {activeTab === 'homepage' && (
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-base font-bold text-text-primary">Homepage Elements Settings</h3>
+            <p className="text-[11px] text-gray-400">Configure global homepage elements and interactive component states</p>
+          </div>
+
+          <div className="glass p-6 rounded-2xl border border-gray-250/50 dark:border-gray-800/50 bg-white/40 dark:bg-slate-900/40 max-w-xl text-left space-y-6">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Featured Brands Carousel Controls</h4>
+
+            {/* Autoplay Toggle */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-800/30 rounded-xl border border-gray-200/50 dark:border-slate-800/50">
+              <div>
+                <h5 className="text-xs font-bold text-text-primary">Autoplay Carousel</h5>
+                <p className="text-[10px] text-gray-400">Automatically scroll the featured brands infinitely</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={brandSettings.autoplay} 
+                  onChange={e => saveBrandSettings({ ...brandSettings, autoplay: e.target.checked })}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+              </label>
+            </div>
+
+            {/* Speed Range Slider */}
+            <div className="space-y-2.5 p-4 bg-gray-55/2 bg-gray-55/10 bg-gray-50 dark:bg-slate-800/30 rounded-xl border border-gray-200/50 dark:border-slate-800/50">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h5 className="text-xs font-bold text-text-primary">Scrolling Speed Duration</h5>
+                  <p className="text-[10px] text-gray-400">Time taken for the brands to complete one scroll loop (lower is faster)</p>
+                </div>
+                <span className="text-xs font-mono font-bold bg-purple-100 dark:bg-purple-950/45 text-purple-650 dark:text-purple-400 px-2 py-0.5 rounded-md">
+                  {brandSettings.speed}s
+                </span>
+              </div>
+              <input
+                type="range"
+                min="5"
+                max="50"
+                value={brandSettings.speed}
+                onChange={e => saveBrandSettings({ ...brandSettings, speed: parseInt(e.target.value) || 20 })}
+                disabled={!brandSettings.autoplay}
+                className="w-full h-1.5 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-600 disabled:opacity-50"
+              />
+              <div className="flex justify-between text-[9px] font-bold text-gray-400 px-1">
+                <span>Fast (5s)</span>
+                <span>Normal (20s)</span>
+                <span>Slow (50s)</span>
+              </div>
+            </div>
+            
+            <div className="text-[10px] text-gray-400 italic">
+              * Changes to the Featured Brands carousel are persisted locally and applied instantly to the homepage brands view.
+            </div>
           </div>
         </div>
       )}

@@ -4,7 +4,7 @@ import { TESTIMONIALS } from '../../constants';
 
 export const TestimonialsSection: React.FC = () => {
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <div className="text-center space-y-1">
         <h2 className="text-xl md:text-2xl font-black tracking-tight text-text-primary">Customer Reviews</h2>
         <p className="text-xs text-gray-500">Read verified reviews from our client base</p>

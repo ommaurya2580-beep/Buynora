@@ -70,7 +70,7 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 lg:space-y-8 pb-12">
+    <div className="space-y-3 lg:space-y-5 pb-12">
       
       {/* 1. HERO CAROUSEL BANNER */}
       <HeroSection />

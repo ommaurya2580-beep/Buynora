@@ -37,7 +37,7 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({
   const showButton = products.length > limit;
 
   return (
-    <section className="space-y-3 sm:space-y-4 lg:space-y-6 w-full max-w-full">
+    <section className="space-y-2 sm:space-y-3 lg:space-y-4 w-full max-w-full">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-sm sm:text-base md:text-2xl font-bold tracking-tight text-text-primary flex items-center gap-1.5 uppercase">

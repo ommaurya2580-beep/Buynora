@@ -101,19 +101,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         />
         
         {/* Badges */}
-        <div className="absolute bottom-1.5 lg:bottom-2 left-1.5 lg:left-2 flex flex-col gap-0.5 lg:gap-1 pointer-events-none">
+        <div className="absolute bottom-1 lg:bottom-1.5 left-1 lg:left-1.5 flex flex-col gap-0.5 pointer-events-none">
           {product.discountPercentage > 0 && (
-            <span className="bg-rose-550 text-white text-[8px] lg:text-[9px] font-extrabold px-1.5 lg:px-2 py-0.2 lg:py-0.5 rounded-sm lg:rounded shadow">
+            <span className="bg-rose-550 text-white text-[8px] font-extrabold px-1.5 py-0.5 rounded-sm shadow">
               {product.discountPercentage}% OFF
             </span>
           )}
           {product.isTrending && (
-            <span className="bg-amber-500 text-white text-[8px] lg:text-[9px] font-extrabold px-1.5 lg:px-2 py-0.2 lg:py-0.5 rounded-sm lg:rounded shadow">
+            <span className="bg-amber-500 text-white text-[8px] font-extrabold px-1.5 py-0.5 rounded-sm shadow">
               Trending
             </span>
           )}
           {product.isFlashSale && (
-            <span className="bg-purple-600 text-white text-[8px] lg:text-[9px] font-extrabold px-1.5 lg:px-2 py-0.2 lg:py-0.5 rounded-sm lg:rounded shadow">
+            <span className="bg-purple-600 text-white text-[8px] font-extrabold px-1.5 py-0.5 rounded-sm shadow">
               Flash Deal
             </span>
           )}
@@ -121,38 +121,38 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </Link>
 
       {/* Product Information */}
-      <div className="p-2 lg:p-3 flex-1 flex flex-col justify-between gap-1 lg:gap-2">
-        <div className="space-y-0.5 lg:space-y-1 text-left">
-          <div className="flex items-center justify-between gap-1.5 lg:gap-2">
-            <span className="text-[10px] lg:text-[11px] font-medium lg:font-semibold text-primary tracking-wide uppercase truncate">
+      <div className="p-3 lg:p-4 flex-1 flex flex-col justify-between gap-1.5">
+        <div className="space-y-0.5 text-left">
+          <div className="flex items-center justify-between gap-1">
+            <span className="text-[9px] lg:text-[10px] font-semibold text-primary tracking-wide uppercase truncate">
               {product.brand}
             </span>
             {/* Rating */}
-            <div className="flex items-center gap-0.5 lg:gap-1">
-              <span className="inline-flex items-center gap-0.5 bg-emerald-600 dark:bg-emerald-700 text-white text-[8px] lg:text-[9px] font-bold px-1 lg:px-1.5 py-0.2 lg:py-0.5 rounded-sm lg:rounded">
-                {product.rating} <Star className="w-2 h-2 lg:w-2.5 lg:h-2.5 fill-current" />
+            <div className="flex items-center gap-0.5">
+              <span className="inline-flex items-center gap-0.5 bg-emerald-600 dark:bg-emerald-700 text-white text-[8px] lg:text-[9px] font-bold px-1 py-0.2 rounded-sm lg:rounded">
+                {product.rating} <Star className="w-2 h-2 fill-current" />
               </span>
               <span className="text-[8px] lg:text-[9px] text-text-secondary font-medium">({product.ratingCount})</span>
             </div>
           </div>
           
           <Link to={`/product/${product.id}`} className="block">
-            <h4 className="font-semibold lg:font-bold text-[13px] lg:text-sm text-text-primary hover:text-primary line-clamp-2 lg:line-clamp-1 transition-colors">
+            <h4 className="font-semibold lg:font-bold text-[13px] lg:text-sm text-text-primary hover:text-primary line-clamp-2 transition-colors">
               {product.name}
             </h4>
           </Link>
           
           {/* Price Hierarchy on One Line */}
           <div className="flex items-baseline flex-wrap gap-1 pt-0.5 whitespace-nowrap">
-            <span className="text-xs lg:text-base font-extrabold text-text-primary">
+            <span className="text-xs lg:text-[15px] font-extrabold text-text-primary">
               {formatCurrency(product.price)}
             </span>
             {product.discountPercentage > 0 && (
               <>
-                <span className="text-[9px] lg:text-[10px] text-gray-400 dark:text-gray-500 line-through">
+                <span className="text-[8px] lg:text-[9px] text-gray-400 dark:text-gray-500 line-through">
                   {formatCurrency(product.originalPrice)}
                 </span>
-                <span className="text-[9px] lg:text-[10px] font-bold text-emerald-600 dark:text-emerald-500">
+                <span className="text-[8px] lg:text-[9px] font-bold text-emerald-600 dark:text-emerald-500">
                   ({product.discountPercentage}% off)
                 </span>
               </>
@@ -161,7 +161,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Delivery & Stock Info (Responsive) */}
           {/* Mobile Delivery & Stock Info (One Row) */}
-          <div className="lg:hidden flex items-center flex-wrap gap-1 pt-1.5 border-t border-gray-150 dark:border-gray-800/40 text-[9px] text-text-secondary">
+          <div className="lg:hidden flex items-center flex-wrap gap-1 pt-1 border-t border-gray-150 dark:border-gray-800/40 text-[12px] text-text-secondary">
             <span>🚚 {getCompactDeliveryString(product.deliveryDays)}</span>
             <span className="text-gray-300 dark:text-gray-700 select-none">|</span>
             <span>
@@ -177,11 +177,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Desktop Delivery & Stock Info (Two Rows) */}
           <div className="hidden lg:flex flex-col gap-0.5 pt-1 border-t border-gray-100 dark:border-gray-800/50">
-            <div className="text-[10px] text-text-secondary">
+            <div className="text-[12px] text-text-secondary leading-none">
               Get it by <span className="font-semibold text-text-primary">{getDeliveryDateString(product.deliveryDays)}</span>
             </div>
             
-            <div className="text-[10px] font-semibold">
+            <div className="text-[12px] font-semibold leading-none mt-0.5">
               {product.stock <= 0 ? (
                 <span className="text-red-500">Out of Stock</span>
               ) : product.stock <= 5 ? (
@@ -194,8 +194,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Action Button */}
-        <div className="pt-0.5 lg:pt-1">
-          <SmartAddToCart product={product} buttonPaddingClass="h-[38px] lg:h-[44px]" />
+        <div className="pt-0.5">
+          <SmartAddToCart product={product} buttonPaddingClass="h-[42px] py-0 flex items-center justify-center" />
         </div>
       </div>
     </div>
