@@ -43,7 +43,7 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
       
       <div className="flex flex-wrap items-center justify-between gap-3 pt-4 pb-3 mb-3 relative z-10 w-full border-b border-indigo-500/10">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="text-[20px] lg:text-[30px] font-bold tracking-tight text-text-primary flex items-center gap-1.5 leading-none">
+          <h2 className="text-[18px] lg:text-[24px] font-bold tracking-tight text-text-primary flex items-center gap-1.5 leading-none">
             <Sparkles className="w-5 h-5 lg:w-7 lg:h-7 text-indigo-550 animate-pulse" /> Recommended For You
           </h2>
           <span className="bg-indigo-600/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-400 text-[12px] font-bold px-2.5 py-0.5 rounded-full border border-indigo-500/10 leading-none">

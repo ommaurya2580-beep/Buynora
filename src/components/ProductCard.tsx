@@ -121,7 +121,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </Link>
 
       {/* Product Information */}
-      <div className="p-3 lg:p-4 flex-1 flex flex-col justify-between gap-1.5">
+      <div className="p-2.5 lg:p-3 flex-1 flex flex-col justify-between gap-1">
         <div className="space-y-0.5 text-left">
           <div className="flex items-center justify-between gap-1">
             <span className="text-[9px] lg:text-[10px] font-semibold text-primary tracking-wide uppercase truncate">
@@ -137,14 +137,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
           
           <Link to={`/product/${product.id}`} className="block">
-            <h4 className="font-semibold lg:font-bold text-[13px] lg:text-sm text-text-primary hover:text-primary line-clamp-2 transition-colors">
+            <h4 className="font-semibold text-[12px] lg:text-[13px] text-text-primary hover:text-primary line-clamp-2 leading-tight transition-colors">
               {product.name}
             </h4>
           </Link>
           
           {/* Price Hierarchy on One Line */}
           <div className="flex items-baseline flex-wrap gap-1 pt-0.5 whitespace-nowrap">
-            <span className="text-xs lg:text-[15px] font-extrabold text-text-primary">
+            <span className="text-xs lg:text-[14px] font-extrabold text-text-primary">
               {formatCurrency(product.price)}
             </span>
             {product.discountPercentage > 0 && (
@@ -159,9 +159,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             )}
           </div>
 
-          {/* Delivery & Stock Info (Responsive) */}
-          {/* Mobile Delivery & Stock Info (One Row) */}
-          <div className="lg:hidden flex items-center flex-wrap gap-1 pt-1 border-t border-gray-150 dark:border-gray-800/40 text-[12px] text-text-secondary">
+          {/* Delivery & Stock Info (Single Row) */}
+          <div className="flex items-center flex-wrap gap-x-1.5 gap-y-0.5 pt-1 border-t border-gray-150 dark:border-gray-800/40 text-[11px] text-text-secondary leading-none w-full">
             <span>🚚 {getCompactDeliveryString(product.deliveryDays)}</span>
             <span className="text-gray-300 dark:text-gray-700 select-none">|</span>
             <span>
@@ -170,33 +169,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               ) : product.stock <= 5 ? (
                 <span className="text-amber-600 dark:text-amber-500 font-semibold">🔥 Only {product.stock} Left</span>
               ) : (
-                <span className="text-emerald-600 dark:text-emerald-500 font-semibold">✅ In Stock</span>
+                <span className="text-emerald-600 dark:text-emerald-500 font-semibold">In Stock</span>
               )}
             </span>
-          </div>
-          
-          {/* Desktop Delivery & Stock Info (Two Rows) */}
-          <div className="hidden lg:flex flex-col gap-0.5 pt-1 border-t border-gray-100 dark:border-gray-800/50">
-            <div className="text-[12px] text-text-secondary leading-none">
-              Get it by <span className="font-semibold text-text-primary">{getDeliveryDateString(product.deliveryDays)}</span>
-            </div>
-            
-            <div className="text-[12px] font-semibold leading-none mt-0.5">
-              {product.stock <= 0 ? (
-                <span className="text-red-500">Out of Stock</span>
-              ) : product.stock <= 5 ? (
-                <span className="text-amber-600 dark:text-amber-500">Only {product.stock} left!</span>
-              ) : (
-                <span className="text-emerald-600 dark:text-emerald-500">In Stock</span>
-              )}
-            </div>
           </div>
         </div>
 
         {/* Action Button */}
-        <div className="pt-0.5">
-          <SmartAddToCart product={product} buttonPaddingClass="h-[42px] py-0 flex items-center justify-center" />
-        </div>
+        <SmartAddToCart product={product} buttonPaddingClass="h-[38px] lg:h-[40px] py-0 flex items-center justify-center" />
       </div>
     </div>
   );

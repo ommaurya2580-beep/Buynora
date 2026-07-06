@@ -110,7 +110,7 @@ export const MoreRecommendations: React.FC<MoreRecommendationsProps> = ({
     <section className="space-y-4 w-full max-w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 pb-3 border-b border-gray-150 dark:border-slate-800 w-full">
         <div>
-          <h2 className="text-[20px] lg:text-[30px] font-bold tracking-tight text-text-primary uppercase flex items-center gap-2 leading-none">
+          <h2 className="text-[18px] lg:text-[24px] font-bold tracking-tight text-text-primary uppercase flex items-center gap-2 leading-none">
             Recommended For You
           </h2>
         </div>
