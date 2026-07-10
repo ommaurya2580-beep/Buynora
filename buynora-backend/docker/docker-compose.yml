@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Relational Database for Structured Data (Products, Users, Orders, Payments, etc.)
+  postgres:
+    image: postgres:16-alpine
+    container_name: buynora-postgres
+    environment:
+      POSTGRES_DB: buynora_db
+      POSTGRES_USER: buynora_user
+      POSTGRES_PASSWORD: buynora_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - buynora-network
+
+  # NoSQL Document Database for Carts, Reviews, and Support Tickets
+  mongodb:
+    image: mongo:7.0
+    container_name: buynora-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - buynora-network
+
+  # Cache and Session Store
+  redis:
+    image: redis:7.2-alpine
+    container_name: buynora-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - buynora-network
+
+  # Zookeeper (for Kafka orchestration)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: buynora-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - buynora-network
+
+  # Kafka Event Bus for Async Messaging (Notifications, Analytics, Order Events)
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: buynora-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - buynora-network
+
+  # Elasticsearch for Catalog and Fuzzy Searches
+  elasticsearch:
+    image: elasticsearch:8.13.2
+    container_name: buynora-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - buynora-network
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:
+  elasticsearch_data:
+
+networks:
+  buynora-network:
+    driver: bridge
