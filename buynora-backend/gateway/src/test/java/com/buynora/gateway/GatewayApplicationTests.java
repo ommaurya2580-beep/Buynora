@@ -1,4 +1,4 @@
-﻿package com.buynora.gateway;
+package com.buynora.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

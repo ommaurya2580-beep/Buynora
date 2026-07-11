@@ -1,4 +1,4 @@
-﻿package com.buynora.notification;
+package com.buynora.notification;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

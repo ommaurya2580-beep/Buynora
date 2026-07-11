@@ -1,4 +1,4 @@
-﻿package com.buynora.review;
+package com.buynora.review;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

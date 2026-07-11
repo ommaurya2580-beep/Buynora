@@ -1,4 +1,4 @@
-﻿package com.buynora.config;
+package com.buynora.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

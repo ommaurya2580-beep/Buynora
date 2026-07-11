@@ -1,4 +1,4 @@
-﻿package com.buynora.delivery;
+package com.buynora.delivery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

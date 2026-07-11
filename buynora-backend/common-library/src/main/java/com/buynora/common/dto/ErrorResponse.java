@@ -1,4 +1,4 @@
-﻿package com.buynora.common.dto;
+package com.buynora.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

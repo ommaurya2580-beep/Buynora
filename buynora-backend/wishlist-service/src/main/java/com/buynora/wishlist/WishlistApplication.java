@@ -1,4 +1,4 @@
-﻿package com.buynora.wishlist;
+package com.buynora.wishlist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

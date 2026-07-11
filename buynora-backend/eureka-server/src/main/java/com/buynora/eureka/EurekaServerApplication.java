@@ -1,4 +1,4 @@
-﻿package com.buynora.eureka;
+package com.buynora.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

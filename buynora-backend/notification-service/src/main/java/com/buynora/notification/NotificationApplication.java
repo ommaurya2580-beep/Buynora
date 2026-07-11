@@ -1,4 +1,4 @@
-﻿package com.buynora.notification;
+package com.buynora.notification;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

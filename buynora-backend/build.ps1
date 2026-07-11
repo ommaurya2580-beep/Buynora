@@ -14,11 +14,14 @@ if (-not (Test-Path $JdkHome) -or -not (Test-Path $MvnHome)) {
 $env:JAVA_HOME = $JdkHome
 $env:PATH = "$JdkHome\bin;$MvnHome\bin;" + $env:PATH
 
+# Define Maven properties for stable downloads on unstable connections
+$MvnOpts = @("-Dhttp.keepAlive=false", "-Dmaven.wagon.http.pool=false", "-Dmaven.wagon.http.retryHandler.count=5")
+
 # Execute maven with provided arguments
 if ($args.Count -eq 0) {
-    Write-Host "Running default build: mvn clean install"
-    mvn clean install
+    Write-Host "Running default build: mvn clean install with network optimizations"
+    mvn @MvnOpts clean install
 } else {
-    Write-Host "Running: mvn $args"
-    mvn @args
+    Write-Host "Running: mvn with network optimizations and args: $args"
+    mvn @MvnOpts @args
 }

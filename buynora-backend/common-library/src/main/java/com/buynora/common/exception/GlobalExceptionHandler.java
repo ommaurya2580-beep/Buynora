@@ -1,4 +1,4 @@
-﻿package com.buynora.common.exception;
+package com.buynora.common.exception;
 
 import com.buynora.common.dto.ErrorResponse;
 import org.slf4j.Logger;

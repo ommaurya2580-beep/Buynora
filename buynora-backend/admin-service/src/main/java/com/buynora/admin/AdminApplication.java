@@ -1,4 +1,4 @@
-﻿package com.buynora.admin;
+package com.buynora.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

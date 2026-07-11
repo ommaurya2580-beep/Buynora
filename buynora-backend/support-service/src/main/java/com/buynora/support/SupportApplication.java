@@ -1,4 +1,4 @@
-﻿package com.buynora.support;
+package com.buynora.support;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

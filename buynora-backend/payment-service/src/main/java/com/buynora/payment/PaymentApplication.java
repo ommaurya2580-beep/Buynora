@@ -1,4 +1,4 @@
-﻿package com.buynora.payment;
+package com.buynora.payment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

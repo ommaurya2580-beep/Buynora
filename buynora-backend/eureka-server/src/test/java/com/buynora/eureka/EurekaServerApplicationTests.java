@@ -1,4 +1,4 @@
-﻿package com.buynora.eureka;
+package com.buynora.eureka;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

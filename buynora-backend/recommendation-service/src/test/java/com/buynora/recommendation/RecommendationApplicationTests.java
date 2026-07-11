@@ -1,4 +1,4 @@
-﻿package com.buynora.recommendation;
+package com.buynora.recommendation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

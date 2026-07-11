@@ -1,4 +1,4 @@
-﻿package com.buynora.authentication;
+package com.buynora.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

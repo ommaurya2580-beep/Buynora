@@ -1,4 +1,4 @@
-﻿package com.buynora.coupon;
+package com.buynora.coupon;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

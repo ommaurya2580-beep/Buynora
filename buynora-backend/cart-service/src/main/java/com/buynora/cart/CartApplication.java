@@ -1,4 +1,4 @@
-﻿package com.buynora.cart;
+package com.buynora.cart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
