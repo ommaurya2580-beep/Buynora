@@ -1,6 +1,6 @@
 package com.buynora.common.exception;
 
-import com.buynora.common.dto.ErrorResponse;
+import com.buynora.common.response.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
