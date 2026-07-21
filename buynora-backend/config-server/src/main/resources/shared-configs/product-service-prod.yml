@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db-prod:5432/buynora_product
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-prod:8761/eureka/
+
+logging:
+  level:
+    root: WARN

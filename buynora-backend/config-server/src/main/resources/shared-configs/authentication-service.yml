@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  datasource:
+    url: jdbc:postgresql://pg-129d92ab-ommaurya2580-d113.f.aivencloud.com:28760/defaultdb?sslmode=require
+    username: avnadmin
+    password: ${AIVEN_DB_PASSWORD:YOUR_PASSWORD_HERE}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: 4d284f15d2f7823f990a4dfb7b1328905b38f8303f269a259c402179f8268494

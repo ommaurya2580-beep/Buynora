@@ -1,0 +1,16 @@
+server:
+  port: 8082
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/buynora_user
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
