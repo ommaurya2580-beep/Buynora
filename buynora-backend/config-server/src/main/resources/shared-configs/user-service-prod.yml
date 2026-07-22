@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db-prod:5432/buynora_user
+    url: jdbc:mysql://mysql-prod:3306/buynora_user
   jpa:
     hibernate:
       ddl-auto: validate

@@ -8,9 +8,9 @@ eureka:
 
 spring:
   datasource:
-    url: jdbc:postgresql://pg-129d92ab-ommaurya2580-d113.f.aivencloud.com:28760/defaultdb?sslmode=require
-    username: avnadmin
-    password: ${AIVEN_DB_PASSWORD:YOUR_PASSWORD_HERE}
+    url: jdbc:mysql://mysql:3306/buynora_user
+    username: root
+    password: ${MYSQL_PASSWORD:password}
   jpa:
     hibernate:
       ddl-auto: update

@@ -8,9 +8,9 @@ eureka:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/buynora_product
-    username: postgres
-    password: password
+    url: jdbc:mysql://mysql:3306/buynora_product
+    username: root
+    password: ${MYSQL_PASSWORD:password}
   jpa:
     hibernate:
       ddl-auto: update

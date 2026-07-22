@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db-test:5432/buynora_user_test
+    url: jdbc:mysql://mysql-test:3306/buynora_user_test
   jpa:
     hibernate:
       ddl-auto: create-drop
