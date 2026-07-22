@@ -125,3 +125,15 @@ spring:
           uri: lb://SUPPORT-SERVICE
           predicates:
             - Path=/api/support/**
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Product Service
+        url: /api/products/v3/api-docs
+      - name: Authentication Service
+        url: /api/auth/v3/api-docs
+      - name: User Service
+        url: /api/users/v3/api-docs
+      # Other services can be added here identically.
