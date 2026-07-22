@@ -27,6 +27,11 @@ spring:
               - OPTIONS
               - PATCH
             allowedHeaders: "*"
+      default-filters:
+        - name: CircuitBreaker
+          args:
+            name: gatewayCircuitBreaker
+            fallbackUri: forward:/fallback
       routes:
         - id: authentication-service
           uri: lb://AUTHENTICATION-SERVICE
