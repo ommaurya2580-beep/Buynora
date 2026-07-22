@@ -1,10 +1,13 @@
 version: '3.8'
 
 services:
-  # Infrastructure placeholders
+  # ------------------------------------
+  # LAYER 1: DATA & INFRASTRUCTURE
+  # ------------------------------------
   mysql:
     image: mysql:8.0
     container_name: mysql
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: buynora
@@ -14,38 +17,78 @@ services:
       - buynora-network
     volumes:
       - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   redis:
     image: redis:7-alpine
     container_name: redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
     networks:
       - buynora-network
     volumes:
       - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
+    restart: unless-stopped
     ports:
       - "9411:9411"
     networks:
       - buynora-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9411/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    restart: unless-stopped
     ports:
       - "9090:9090"
     networks:
       - buynora-network
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9090/-/healthy || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   grafana:
     image: grafana/grafana
     container_name: grafana
+    restart: unless-stopped
     ports:
       - "3000:3000"
     networks:
@@ -53,28 +96,55 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
-  # Core Microservices
+  # ------------------------------------
+  # LAYER 2: CONFIGURATION SERVER
+  # ------------------------------------
   config-server:
     build:
       context: .
       dockerfile: config-server/Dockerfile
     container_name: config-server
+    restart: on-failure
     ports:
       - "8888:8888"
     networks:
       - buynora-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      zipkin:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
+  # ------------------------------------
+  # LAYER 3: SERVICE DISCOVERY
+  # ------------------------------------
   eureka-server:
     build:
       context: .
       dockerfile: eureka-server/Dockerfile
     container_name: eureka-server
+    restart: on-failure
     ports:
       - "8761:8761"
     networks:
@@ -89,12 +159,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
+  # ------------------------------------
+  # LAYER 4: MICROSERVICES & GATEWAY
+  # ------------------------------------
   gateway:
     build:
       context: .
       dockerfile: gateway/Dockerfile
     container_name: gateway
+    restart: on-failure
     ports:
       - "8080:8080"
     networks:
@@ -105,12 +183,22 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   authentication-service:
     build:
       context: .
       dockerfile: authentication-service/Dockerfile
     container_name: authentication-service
+    restart: on-failure
     ports:
       - "8081:8081"
     networks:
@@ -121,12 +209,22 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   user-service:
     build:
       context: .
       dockerfile: user-service/Dockerfile
     container_name: user-service
+    restart: on-failure
     ports:
       - "8082:8082"
     networks:
@@ -137,13 +235,26 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   product-service:
     build:
       context: .
       dockerfile: product-service/Dockerfile
+    restart: on-failure
     deploy:
       replicas: 3
+      resources:
+        limits:
+          memory: 512M
     networks:
       - buynora-network
     depends_on:
@@ -152,6 +263,11 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
 
 networks:
   buynora-network:
