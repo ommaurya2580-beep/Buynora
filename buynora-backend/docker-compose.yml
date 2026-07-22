@@ -137,9 +137,8 @@ services:
     build:
       context: .
       dockerfile: product-service/Dockerfile
-    container_name: product-service
-    ports:
-      - "8083:8083"
+    deploy:
+      replicas: 3
     networks:
       - buynora-network
     depends_on:

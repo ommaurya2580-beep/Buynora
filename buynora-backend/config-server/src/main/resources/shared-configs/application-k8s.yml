@@ -1,0 +1,17 @@
+# Kubernetes specific configuration
+# When running inside a Kubernetes cluster, Spring Cloud will rely on Kubernetes 
+# native services (CoreDNS) for service discovery instead of Eureka.
+
+eureka:
+  client:
+    enabled: false # Disable Eureka client on k8s
+    fetch-registry: false
+    register-with-eureka: false
+
+spring:
+  cloud:
+    loadbalancer:
+      # Optional: In K8s, load balancing is natively handled by Kube-Proxy/Service.
+      # If you still want client-side load balancing via Spring, K8s discovery must be enabled.
+      ribbon:
+        enabled: false # Ribbon is deprecated, explicitly disabled just in case.
