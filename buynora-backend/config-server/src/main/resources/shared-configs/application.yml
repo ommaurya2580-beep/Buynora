@@ -8,3 +8,19 @@ eureka:
     instance-id: ${spring.application.name}:${random.value}
     lease-renewal-interval-in-seconds: 30
     lease-expiration-duration-in-seconds: 90
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+      idle-timeout: 300000
+      validation-timeout: 5000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    baseline-on-migrate: true

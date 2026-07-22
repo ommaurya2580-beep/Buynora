@@ -2,19 +2,18 @@ version: '3.8'
 
 services:
   # Infrastructure placeholders
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: buynora_db
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: buynora
     ports:
-      - "5432:5432"
+      - "3306:3306"
     networks:
       - buynora-network
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
 
   redis:
     image: redis:7-alpine
@@ -139,5 +138,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres-data:
+  mysql-data:
   redis-data:

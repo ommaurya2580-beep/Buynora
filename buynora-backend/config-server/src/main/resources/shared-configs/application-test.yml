@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-test:3306/buynora_test
+    username: root
+    password: ${MYSQL_PASSWORD:testpassword}
+    hikari:
+      maximum-pool-size: 5
