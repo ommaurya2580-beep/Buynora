@@ -3,6 +3,16 @@
 -- Version: V1__init_identity_schema.sql
 -- =========================================================
 
+-- 0. USER_CREDENTIALS TABLE
+CREATE TABLE IF NOT EXISTS user_credentials (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'ROLE_USER',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- 1. USERS TABLE
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
