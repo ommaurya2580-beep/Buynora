@@ -3,6 +3,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY common-library ./common-library
 COPY authentication-service ./authentication-service
+RUN mvn clean install -N -DskipTests
 RUN mvn clean install -f common-library/pom.xml -DskipTests
 RUN mvn clean package -f authentication-service/pom.xml -DskipTests
 
