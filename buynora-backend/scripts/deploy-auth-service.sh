@@ -37,6 +37,8 @@ docker rm auth-service || true
 echo "🟢 Running Authentication Service container on port 8081..."
 docker run -d \
   --name auth-service \
+  --dns 8.8.8.8 \
+  --dns 1.1.1.1 \
   --restart always \
   -p 8081:8081 \
   -e SPRING_DATASOURCE_URL="$SPRING_DATASOURCE_URL" \
