@@ -15,7 +15,7 @@ fi
 
 # 2. Copy the Nginx configuration file
 echo "⚙️ Configuring Nginx..."
-sudo cp nginx/nginx.conf /etc/nginx/conf.d/buynora.conf
+sudo cp buynora-backend/nginx/nginx.conf /etc/nginx/conf.d/buynora.conf
 
 # 3. Test and Restart Nginx
 echo "🔄 Restarting Nginx..."
