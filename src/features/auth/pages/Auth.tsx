@@ -271,9 +271,10 @@ export const Auth: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-text-inverted font-bold text-xs py-3 rounded-xl cursor-pointer shadow transition-all hover:scale-[1.02] active:scale-95"
+            disabled={loading}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl cursor-pointer shadow transition-all hover:scale-[1.02] active:scale-95"
           >
-            Send Verification Code
+            {loading ? "Creating Account..." : "Sign Up"}
           </button>
 
           <p className="text-[10px] text-gray-400 text-center">
