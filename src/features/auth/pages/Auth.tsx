@@ -6,6 +6,7 @@ import {
 import { useAppDispatch } from '../../../redux/store';
 import { loginUser } from '../../../redux/authSlice';
 import { useToast } from '../../../hooks/useToast';
+import { environment } from '../../../config/environment';
 
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
@@ -26,42 +27,72 @@ export const Auth: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       showToast("Please enter email and password", "error");
       return;
     }
-    // Dispatch mock login using selected role
-    const role = selectedRole;
-    dispatch(loginUser({
-      name: role === 'ADMIN' ? 'Alice Admin' : (role === 'SELLER' ? 'Bob Seller' : 'John Doe'),
-      email: email,
-      phone: "+1 (555) 019-2834",
-      avatar: role === 'ADMIN' 
-        ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" 
-        : (role === 'SELLER' 
-          ? "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" 
-          : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100"),
-      referralCode: role === 'ADMIN' ? 'NORA-ADMIN' : (role === 'SELLER' ? 'NORA-SELLER' : 'NORA-JD99'),
-      points: 350,
-      role
-    }));
-    showToast("Logged in successfully!", "success");
-    
-    if (role === 'ADMIN') navigate('/admin');
-    else if (role === 'SELLER') navigate('/seller');
-    else navigate('/dashboard');
+    setLoading(true);
+    try {
+      const response = await fetch(`${environment.authUrl}/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (response.ok) {
+        const token = await response.text();
+        const role = selectedRole;
+        dispatch(loginUser({
+          name: email.split('@')[0],
+          email: email,
+          phone: "+1 (555) 019-2834",
+          avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100",
+          referralCode: 'NORA-USER',
+          points: 100,
+          role
+        }));
+        showToast("Logged in successfully!", "success");
+        if (role === 'ADMIN') navigate('/admin');
+        else if (role === 'SELLER') navigate('/seller');
+        else navigate('/dashboard');
+      } else {
+        showToast("Invalid credentials or server error", "error");
+      }
+    } catch (err) {
+      showToast("Network error connecting to auth service", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !password || !phone) {
+    if (!name || !email || !password) {
       showToast("Please fill in all registration fields", "error");
       return;
     }
-    showToast("Registration successful! Code sent to your phone.", "success");
-    navigate('/auth/verify');
+    setLoading(true);
+    try {
+      const response = await fetch(`${environment.authUrl}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+      if (response.ok) {
+        showToast("Registration successful! Account created.", "success");
+        navigate('/auth/login');
+      } else {
+        const errText = await response.text();
+        showToast(errText || "Registration failed on server", "error");
+      }
+    } catch (err) {
+      showToast("Network error connecting to auth service", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgotSubmit = (e: React.FormEvent) => {
@@ -77,14 +108,13 @@ export const Auth: React.FC = () => {
       showToast("Please enter 4 digit code", "error");
       return;
     }
-    // Complete signup process
     dispatch(loginUser({
       name,
       email,
       phone,
       avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100",
       referralCode: `NORA-${name.slice(0, 2).toUpperCase()}${Math.floor(10 + Math.random() * 90)}`,
-      points: 100, // Welcome points!
+      points: 100,
       role: 'CUSTOMER'
     }));
     showToast("OTP Verified! Welcome to Buynora.", "success");
