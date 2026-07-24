@@ -86,7 +86,11 @@ export const Auth: React.FC = () => {
         navigate('/auth/login');
       } else {
         const errText = await response.text();
-        showToast(errText || "Registration failed on server", "error");
+        if (errText.includes("Duplicate entry") || errText.includes("user_credentials.email")) {
+          showToast("Email already registered! Please log in with this email.", "error");
+        } else {
+          showToast("Registration failed. Please check your details.", "error");
+        }
       }
     } catch (err) {
       showToast("Network error connecting to auth service", "error");
