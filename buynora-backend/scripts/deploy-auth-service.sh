@@ -24,7 +24,7 @@ fi
 # 3. Set environment variables for Aiven MySQL
 export SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL:-"jdbc:mysql://mysql-ddd8872-ommaurya2580-d113.e.aivencloud.com:28760/defaultdb?sslMode=REQUIRED"}
 export SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-"avnadmin"}
-export JWT_SECRET=${JWT_SECRET:-"super_secret_jwt_key_buynora_enterprise_2026_auth_service_secure"}
+export JWT_SECRET=${JWT_SECRET:-"c3VwZXJzZWNyZXRqd3RzZWNyZXRrZXlmb3JidXlub3JhYXV0aGVudGljYXRpb25zZXJ2aWNlMjAyNg=="}
 
 # 4. Build & Run Docker Container for Auth Service
 echo "🔨 Building Docker image for authentication-service..."
