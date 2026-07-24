@@ -14,6 +14,7 @@ import java.io.IOException;
  * Handles OAuth2 SSO token delegation and validation once OAuth integration is enabled in Phase 2.
  */
 @Component
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "buynora.common.security.enabled", havingValue = "true", matchIfMissing = false)
 public class OAuth2PlaceholderFilter extends OncePerRequestFilter {
 
     @Override

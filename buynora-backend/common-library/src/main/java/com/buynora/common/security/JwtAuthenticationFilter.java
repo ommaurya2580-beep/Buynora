@@ -14,6 +14,7 @@ import java.io.IOException;
  * Handles token extraction and validation once authentication logic is implemented in Phase 2.
  */
 @Component
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "buynora.common.security.enabled", havingValue = "true", matchIfMissing = false)
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override

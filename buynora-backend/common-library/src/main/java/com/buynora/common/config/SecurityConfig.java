@@ -28,6 +28,7 @@ import java.util.List;
 @EnableWebSecurity
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(SecurityFilterChain.class)
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "buynora.common.security.enabled", havingValue = "true", matchIfMissing = false)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
