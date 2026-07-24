@@ -32,7 +32,7 @@ spring:
     locations: classpath:db/migration
 
 jwt:
-  secret: ${JWT_SECRET:9a4f2c8d7e1b5a3c6f8e0d2c4b6a8f1e3c5d7b9a2f4e6c8b0d2e4f6a8c0b2d4e}
+  secret: ${JWT_SECRET:c3VwZXJzZWNyZXRqd3RzZWNyZXRrZXlmb3JidXlub3JhYXV0aGVudGljYXRpb25zZXJ2aWNlMjAyNg==}
   expiration: ${JWT_EXPIRATION:86400000}
 
 eureka:
