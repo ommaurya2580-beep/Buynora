@@ -137,8 +137,19 @@ services:
           memory: 512M
 
   # ------------------------------------
-  # LAYER 3: SERVICE DISCOVERY
+  # LAYER 3: SERVICE DISCOVERY & DB
   # ------------------------------------
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    networks:
+      - buynora-network
+    volumes:
+      - mongodb-data:/data/db
+
   eureka-server:
     build:
       context: .
@@ -263,6 +274,10 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - MONGO_URI=mongodb://mongodb:27017/product_db
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
       interval: 15s
@@ -276,3 +291,4 @@ networks:
 volumes:
   mysql-data:
   redis-data:
+  mongodb-data:
