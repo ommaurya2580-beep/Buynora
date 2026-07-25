@@ -51,6 +51,7 @@ export const SellerDashboard: React.FC = () => {
   const [prodOrig, setProdOrig] = useState(0);
   const [prodStock, setProdStock] = useState(10);
   const [prodImg, setProdImg] = useState('');
+  const [prodImgFile, setProdImgFile] = useState<File | null>(null);
   const [prodDesc, setProdDesc] = useState('');
 
   // React Query hooks
@@ -75,6 +76,7 @@ export const SellerDashboard: React.FC = () => {
     setProdOrig(0);
     setProdStock(10);
     setProdImg('');
+    setProdImgFile(null);
     setProdDesc('');
     setShowProductModal(true);
   };
@@ -88,7 +90,8 @@ export const SellerDashboard: React.FC = () => {
     setProdPrice(p.price);
     setProdOrig(p.originalPrice);
     setProdStock(p.stock);
-    setProdImg(p.images[0]);
+    setProdImg(p.images[0] || '');
+    setProdImgFile(null);
     setProdDesc(p.description);
     setShowProductModal(true);
   };
@@ -108,8 +111,8 @@ export const SellerDashboard: React.FC = () => {
 
   const handleProductSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!prodName || !prodBrand || !prodSub || !prodImg) {
-      showToast("Please fill in all required fields", "error");
+    if (!prodName || !prodBrand || !prodSub || (!prodImg && !prodImgFile)) {
+      showToast("Please fill in all required fields including image", "error");
       return;
     }
 
@@ -167,7 +170,7 @@ export const SellerDashboard: React.FC = () => {
         returnPolicy: "30-day standard return policy.",
         deliveryDays: 3
       };
-      addProductMutation.mutate(newProd, {
+      addProductMutation.mutate({ product: newProd, imageFile: prodImgFile }, {
         onSuccess: () => {
           showToast("New product added to catalog!", "success");
           setShowProductModal(false);
@@ -494,15 +497,23 @@ export const SellerDashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-[10px] font-bold text-gray-400 uppercase">Image URL *</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase">Product Image *</label>
             <input
-              type="url"
-              required
-              placeholder="Unsplash image URL address"
-              value={prodImg}
-              onChange={e => setProdImg(e.target.value)}
-              className="bg-gray-100 dark:bg-slate-800 text-xs px-3.5 py-2 rounded-xl outline-none focus:border-indigo-500 border border-transparent"
+              type="file"
+              accept="image/*"
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setProdImgFile(file);
+                  // Create a local preview URL
+                  setProdImg(URL.createObjectURL(file));
+                }
+              }}
+              className="bg-gray-100 dark:bg-slate-800 text-xs px-3.5 py-2 rounded-xl outline-none focus:border-indigo-500 border border-transparent file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
             />
+            {prodImg && (
+              <img src={prodImg} alt="Preview" className="h-20 w-20 object-cover rounded-lg mt-2 border border-gray-200 dark:border-gray-700" />
+            )}
           </div>
 
           <div className="flex flex-col gap-1">

@@ -6,8 +6,8 @@ export const SellerRepository = {
     return sellerService.getAnalytics();
   },
 
-  async createProduct(product: Omit<Product, 'id' | 'reviews' | 'qna'>): Promise<Product> {
-    return sellerService.createProduct(product);
+  async createProduct(product: Omit<Product, 'id' | 'reviews' | 'qna'>, imageFile: File | null): Promise<Product> {
+    return sellerService.createProduct(product, imageFile);
   },
 
   async updateProduct(id: string, product: Partial<Product>): Promise<Product> {

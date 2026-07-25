@@ -13,7 +13,7 @@ export const useSellerAnalytics = () => {
 export const useAddProductMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (product: Omit<Product, 'id' | 'reviews' | 'qna'>) => SellerRepository.createProduct(product),
+    mutationFn: (data: { product: Omit<Product, 'id' | 'reviews' | 'qna'>, imageFile: File | null }) => SellerRepository.createProduct(data.product, data.imageFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
     }
