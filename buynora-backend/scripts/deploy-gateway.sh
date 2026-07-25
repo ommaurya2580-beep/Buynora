@@ -5,6 +5,10 @@
 
 echo "🚀 Starting API Gateway Deployment on AWS EC2..."
 
+# Change to the buynora-backend directory where the services are
+cd "$(dirname "$0")/.."
+
+
 # 1. Update system & install Docker if not present
 if ! command -v docker &> /dev/null; then
     echo "📦 Installing Docker..."

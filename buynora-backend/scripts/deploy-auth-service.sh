@@ -5,6 +5,9 @@
 
 echo "🚀 Starting Authentication Service Deployment on AWS EC2..."
 
+# Change to the buynora-backend directory where the services are
+cd "$(dirname "$0")/.."
+
 # 1. Ensure SPRING_DATASOURCE_PASSWORD is set
 if [ -z "$SPRING_DATASOURCE_PASSWORD" ]; then
     echo "❌ Error: SPRING_DATASOURCE_PASSWORD environment variable is not set."
