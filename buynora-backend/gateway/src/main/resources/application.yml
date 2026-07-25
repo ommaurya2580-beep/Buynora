@@ -4,5 +4,14 @@ server:
 spring:
   application:
     name: gateway
-  config:
-    import: "optional:configserver:http://localhost:8888"
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: http://auth-service:8081
+          predicates:
+            - Path=/api/auth/**
+      
+eureka:
+  client:
+    enabled: false

@@ -34,9 +34,13 @@ echo "🔥 Stopping old container instance if running..."
 docker stop auth-service || true
 docker rm auth-service || true
 
+echo "🌐 Ensuring 'buynora-network' exists..."
+docker network inspect buynora-network >/dev/null 2>&1 || docker network create buynora-network
+
 echo "🟢 Running Authentication Service container on port 8081..."
 docker run -d \
   --name auth-service \
+  --network buynora-network \
   --dns 8.8.8.8 \
   --dns 1.1.1.1 \
   --restart always \
