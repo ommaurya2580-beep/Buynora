@@ -29,8 +29,8 @@ export const sellerService = {
       brand: product.brand,
     };
 
-    // Append JSON payload as string (Spring Boot will parse this using Jackson)
-    formData.append('product', JSON.stringify(backendProduct));
+    // Append JSON payload as Blob so it gets Content-Type: application/json
+    formData.append('product', new Blob([JSON.stringify(backendProduct)], { type: 'application/json' }));
 
     // Append File if exists
     if (imageFile) {
