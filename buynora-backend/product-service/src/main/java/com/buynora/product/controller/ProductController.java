@@ -53,4 +53,14 @@ public class ProductController {
     public Product getProductById(@PathVariable String id) {
         return productService.getProductById(id);
     }
+
+    @Operation(summary = "Delete product by ID", description = "Deletes a specific product by its unique identifier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product deleted"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable String id) {
+        productService.deleteProduct(id);
+    }
 }

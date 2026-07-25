@@ -36,10 +36,15 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAll(org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt"));
     }
 
     public Product getProductById(String id) {
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+    }
+
+    public void deleteProduct(String id) {
+        Product product = getProductById(id);
+        productRepository.delete(product);
     }
 }
