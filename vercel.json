@@ -1,12 +1,16 @@
 {
   "rewrites": [
     {
-      "source": "/api/auth/:path*",
-      "destination": "http://3.95.240.195/api/auth/:path*"
+      "source": "/api/auth/:path(.*)",
+      "destination": "http://3.95.240.195/api/auth/:path"
     },
     {
-      "source": "/api/products/:path*",
-      "destination": "http://3.95.240.195/api/products/:path*"
+      "source": "/api/products/:path(.*)",
+      "destination": "http://3.95.240.195/api/products/:path"
+    },
+    {
+      "source": "/api/products",
+      "destination": "http://3.95.240.195/api/products"
     },
     {
       "source": "/(.*)",
