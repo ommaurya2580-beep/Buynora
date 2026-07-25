@@ -1,15 +1,16 @@
 package com.buynora.product.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
-@Table(name = "products")
+@Document(collection = "products")
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,34 +18,16 @@ import java.time.LocalDateTime;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false)
     private String name;
-
-    @Column(columnDefinition = "TEXT")
     private String description;
-
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
-    @Column(nullable = false)
     private Integer stockQuantity;
+    private String category;
+    private String brand;
+    private List<String> imageUrls; // Cloudinary CDN links
 
-    @Column(updatable = false)
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }

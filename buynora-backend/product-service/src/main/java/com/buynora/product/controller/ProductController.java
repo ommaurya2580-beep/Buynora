@@ -3,13 +3,15 @@ package com.buynora.product.controller;
 import com.buynora.product.entity.Product;
 import com.buynora.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,15 +22,16 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Operation(summary = "Add a new product", description = "Creates a new product in the database")
+    @Operation(summary = "Add a new product with images", description = "Creates a new product and uploads images to Cloudinary")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid product data provided")
     })
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PostMapping
-    public Product addProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Product addProduct(
+            @RequestPart("product") Product product,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
+        return productService.addProduct(product, images);
     }
 
     @Operation(summary = "Get all products", description = "Retrieves a list of all products in the catalog")
@@ -44,7 +47,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public Product getProductById(@PathVariable String id) {
         return productService.getProductById(id);
     }
 }

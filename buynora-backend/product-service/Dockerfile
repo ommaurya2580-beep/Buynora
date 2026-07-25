@@ -3,10 +3,12 @@ WORKDIR /app
 COPY pom.xml .
 COPY common-library ./common-library
 COPY product-service ./product-service
-RUN mvn clean package -pl product-service -am -DskipTests
+RUN mvn clean install -N -DskipTests
+RUN mvn clean install -f common-library/pom.xml -DskipTests
+RUN mvn clean package -f product-service/pom.xml -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/product-service/target/*.jar app.jar
-EXPOSE 8083
+EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "app.jar"]
