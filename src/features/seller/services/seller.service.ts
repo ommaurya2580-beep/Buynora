@@ -30,7 +30,7 @@ export const sellerService = {
     };
 
     // Append JSON payload
-    formData.append('product', new Blob([JSON.stringify(backendProduct)], { type: 'application/json' }));
+    formData.append('product', JSON.stringify(backendProduct));
 
     // Append File if exists
     if (imageFile) {
