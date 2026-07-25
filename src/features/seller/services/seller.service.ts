@@ -29,7 +29,7 @@ export const sellerService = {
       brand: product.brand,
     };
 
-    // Append JSON payload
+    // Append JSON payload as string (Spring Boot will parse this using Jackson)
     formData.append('product', JSON.stringify(backendProduct));
 
     // Append File if exists
@@ -37,17 +37,20 @@ export const sellerService = {
       formData.append('images', imageFile);
     }
 
-    // Send multipart/form-data to the real backend
-    const res = await realProductApi.post('', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    // Use fetch instead of axios to avoid multipart boundary bugs on Vercel
+    const response = await fetch(environment.productUrl, {
+      method: 'POST',
+      body: formData,
     });
 
-    // The backend returns a simple product, but the UI might need the full frontend Product format.
-    // In this case, `useAddProductMutation` invalidates the 'products' query, so the UI will re-fetch
-    // the whole list using the `product.service.ts` adapter, which works perfectly.
-    return res.data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to add product:', errorText);
+      throw new Error(`Failed to add product: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
   },
 
   async updateProduct(id: string, product: Partial<Product>): Promise<Product> {
