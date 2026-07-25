@@ -15,6 +15,11 @@ docker run -d \
   -e CLOUDINARY_CLOUD_NAME="${CLOUDINARY_CLOUD_NAME}" \
   -e CLOUDINARY_API_KEY="${CLOUDINARY_API_KEY}" \
   -e CLOUDINARY_API_SECRET="${CLOUDINARY_API_SECRET}" \
+  -e REDIS_HOST="${REDIS_HOST}" \
+  -e REDIS_PORT="${REDIS_PORT}" \
+  -e REDIS_USERNAME="${REDIS_USERNAME}" \
+  -e REDIS_PASSWORD="${REDIS_PASSWORD}" \
+  -e REDIS_SSL="${REDIS_SSL}" \
   buynora-product-service
 
 echo "✅ Product Service deployed successfully!"

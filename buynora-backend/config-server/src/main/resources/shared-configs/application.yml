@@ -26,8 +26,11 @@ spring:
     baseline-on-migrate: true
   data:
     redis:
-      host: redis
-      port: 6379
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+      username: ${REDIS_USERNAME:default}
+      password: ${REDIS_PASSWORD:}
+      ssl: ${REDIS_SSL:false}
 management:
   tracing:
     sampling:
