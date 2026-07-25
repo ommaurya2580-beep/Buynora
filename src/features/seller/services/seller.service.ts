@@ -29,8 +29,8 @@ export const sellerService = {
       brand: product.brand,
     };
 
-    // Append JSON payload as Blob so it gets Content-Type: application/json
-    formData.append('product', new Blob([JSON.stringify(backendProduct)], { type: 'application/json' }));
+    // Append JSON payload as string
+    formData.append('product', JSON.stringify(backendProduct));
 
     // Append File if exists
     if (imageFile) {
@@ -60,9 +60,8 @@ export const sellerService = {
   },
 
   async deleteProduct(id: string): Promise<Product> {
-    // Assuming backend might not have DELETE yet, using mock.
-    // If backend has DELETE /products/{id}, use realProductApi.delete(`/${id}`)
-    const res = await api.delete(`/products/${id}`);
+    // Delete product from real backend API
+    const res = await realProductApi.delete(`/${id}`);
     return res.data;
   }
 };
