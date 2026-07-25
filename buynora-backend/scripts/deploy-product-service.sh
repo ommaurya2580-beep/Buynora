@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "🚀 Building Product Service Docker Image..."
-docker build -t buynora-product-service -f buynora-backend/product-service/Dockerfile .
+docker build -t buynora-product-service -f buynora-backend/product-service/Dockerfile buynora-backend
 
 echo "🔥 Stopping old container instance if running..."
 docker stop product-service || true
