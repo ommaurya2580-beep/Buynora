@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
@@ -29,8 +30,10 @@ public class ProductController {
     })
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product addProduct(
-            @RequestPart("product") Product product,
+            @RequestPart("product") String productStr,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Product product = objectMapper.readValue(productStr, Product.class);
         return productService.addProduct(product, images);
     }
 
