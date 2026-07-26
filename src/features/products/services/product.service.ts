@@ -72,29 +72,39 @@ const mapBackendProduct = (backendProduct: any): Product => {
 export const productService = {
   async getProducts(params: FetchProductsParams): Promise<ProductsResponse> {
     try {
+      // Pass pagination and filter parameters to the backend
+      const backendParams: any = {};
+      if (params.search) backendParams.name = params.search;
+      if (params.category) backendParams.category = params.category;
+      if (params.page) backendParams.page = params.page - 1; // Spring uses 0-based pagination
+      if (params.limit) backendParams.size = params.limit;
+      if (params.sortBy) backendParams.sortBy = params.sortBy;
+
       // Use real API to fetch products
-      const res = await realProductApi.get('');
-      const backendProducts = res.data || [];
+      const res = await realProductApi.get('', { params: backendParams });
+      
+      let backendProducts = [];
+      let totalElements = 0;
+      let totalPages = 1;
+      
+      // Support both Spring Data Page object ({ content: [...] }) and flat array structures
+      if (res.data && Array.isArray(res.data.content)) {
+        backendProducts = res.data.content;
+        totalElements = res.data.totalElements || backendProducts.length;
+        totalPages = res.data.totalPages || 1;
+      } else if (Array.isArray(res.data)) {
+        backendProducts = res.data;
+        totalElements = backendProducts.length;
+      }
+      
       const mappedProducts = backendProducts.map(mapBackendProduct);
-      
-      // Implement basic client-side filtering if needed, or just return all
-      let filtered = mappedProducts;
-      
-      if (params.category) {
-        filtered = filtered.filter((p: Product) => p.category.toLowerCase() === params.category?.toLowerCase());
-      }
-      
-      if (params.search) {
-        const query = params.search.toLowerCase();
-        filtered = filtered.filter((p: Product) => p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query));
-      }
 
       return {
-        products: filtered,
-        totalCount: filtered.length,
-        page: 1,
-        totalPages: 1,
-        hasMore: false,
+        products: mappedProducts,
+        totalCount: totalElements,
+        page: params.page || 1,
+        totalPages: totalPages,
+        hasMore: (params.page || 1) < totalPages,
       };
     } catch (error) {
       console.error("Failed to fetch products from real API:", error);
