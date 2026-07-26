@@ -7,6 +7,7 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_URI:mongodb://localhost:27017/product_db}
+      auto-index-creation: true
 
 eureka:
   client:

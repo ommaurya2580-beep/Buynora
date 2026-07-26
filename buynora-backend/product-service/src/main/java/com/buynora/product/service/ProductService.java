@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +33,23 @@ public class ProductService {
 
     public Product addProduct(Product product, List<MultipartFile> images) throws IOException {
         List<String> imageUrls = new ArrayList<>();
-        if (images != null) {
-            for (MultipartFile file : images) {
-                if (!file.isEmpty()) {
-                    String url = cloudinaryService.uploadImage(file);
-                    imageUrls.add(url);
-                }
+        if (images != null && !images.isEmpty()) {
+            try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+                List<CompletableFuture<String>> uploadFutures = images.stream()
+                        .filter(file -> !file.isEmpty())
+                        .map(file -> CompletableFuture.supplyAsync(() -> {
+                            try {
+                                return cloudinaryService.uploadImage(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException("Failed to upload image", e);
+                            }
+                        }, executor))
+                        .collect(Collectors.toList());
+
+                imageUrls = uploadFutures.stream()
+                        .map(CompletableFuture::join)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
             }
         }
         product.setImageUrls(imageUrls);
@@ -75,11 +91,25 @@ public class ProductService {
         
         if (newImages != null && !newImages.isEmpty()) {
             List<String> imageUrls = existingProduct.getImageUrls() != null ? new ArrayList<>(existingProduct.getImageUrls()) : new ArrayList<>();
-            for (MultipartFile file : newImages) {
-                if (!file.isEmpty()) {
-                    String url = cloudinaryService.uploadImage(file);
-                    imageUrls.add(url);
-                }
+            
+            try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+                List<CompletableFuture<String>> uploadFutures = newImages.stream()
+                        .filter(file -> !file.isEmpty())
+                        .map(file -> CompletableFuture.supplyAsync(() -> {
+                            try {
+                                return cloudinaryService.uploadImage(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException("Failed to upload image", e);
+                            }
+                        }, executor))
+                        .collect(Collectors.toList());
+
+                List<String> newUrls = uploadFutures.stream()
+                        .map(CompletableFuture::join)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+                        
+                imageUrls.addAll(newUrls);
             }
             existingProduct.setImageUrls(imageUrls);
         }

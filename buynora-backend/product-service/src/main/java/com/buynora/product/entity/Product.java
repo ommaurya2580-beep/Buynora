@@ -20,11 +20,17 @@ public class Product {
     @Id
     private String id;
 
+    @org.springframework.data.mongodb.core.index.TextIndexed
     private String name;
+    
     private String description;
     private BigDecimal price;
     private Integer stockQuantity;
+    
+    @org.springframework.data.mongodb.core.index.Indexed
     private String category;
+    
+    @org.springframework.data.mongodb.core.index.Indexed
     private String brand;
     private List<String> imageUrls; // Cloudinary CDN links
 
