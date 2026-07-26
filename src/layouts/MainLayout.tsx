@@ -112,13 +112,6 @@ export const MainLayout: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Fetch live User Profile from AWS Backend
-  useEffect(() => {
-    if (isAuthenticated && user?.email) {
-      dispatch(fetchUserProfile(user.email));
-    }
-  }, [isAuthenticated, user?.email, dispatch]);
-
   const toggleFooterTab = (tab: string) => {
     setOpenFooterTab(openFooterTab === tab ? null : tab);
   };
@@ -130,6 +123,13 @@ export const MainLayout: React.FC = () => {
   const notifications = useAppSelector(state => state.notification.notifications);
   const unreadCount = notifications.filter((n: UserNotification) => !n.isRead).length;
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+  // Fetch live User Profile from AWS Backend
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      dispatch(fetchUserProfile(user.email));
+    }
+  }, [isAuthenticated, user?.email, dispatch]);
 
   // Delivery Location Selector States
   const defaultAddress = addresses.find((a: any) => a.isDefault) || addresses[0];
