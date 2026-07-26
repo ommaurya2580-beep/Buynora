@@ -13,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.CacheEvict;
 
 @Service
 public class ProductService {
@@ -59,6 +62,7 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
+    @CachePut(value = "products", key = "#id")
     public Product updateProduct(String id, Product updatedProduct, List<MultipartFile> newImages) throws IOException {
         Product existingProduct = getProductById(id);
         
@@ -84,12 +88,14 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
+    @Cacheable(value = "products", key = "#id")
     public Product getProductById(String id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
 
+    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(String id) {
-        Product product = getProductById(id);
-        productRepository.delete(product);
+        productRepository.deleteById(id);
     }
 }
