@@ -1,32 +1,46 @@
 package com.buynora.user.service;
 
+import com.buynora.user.dto.UserProfileRequest;
+import com.buynora.user.dto.UserProfileResponse;
 import com.buynora.user.entity.UserProfile;
+import com.buynora.user.exception.ResourceNotFoundException;
+import com.buynora.user.mapper.UserProfileMapper;
 import com.buynora.user.repository.UserProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserProfileRepository repository;
+    private final UserProfileRepository repository;
+    private final UserProfileMapper mapper;
 
-    public UserProfile createProfile(UserProfile profile) {
-        return repository.save(profile);
+    @Transactional
+    public UserProfileResponse createProfile(UserProfileRequest request) {
+        if (repository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email is already registered");
+        }
+        UserProfile entity = mapper.toEntity(request);
+        UserProfile savedEntity = repository.save(entity);
+        return mapper.toResponse(savedEntity);
     }
 
-    public UserProfile getProfileByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(() -> new RuntimeException("User profile not found for email: " + email));
+    @Transactional(readOnly = true)
+    public UserProfileResponse getProfileByEmail(String email) {
+        UserProfile profile = repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User profile not found for email: " + email));
+        return mapper.toResponse(profile);
     }
 
-    public UserProfile updateProfile(String email, UserProfile updatedProfile) {
-        UserProfile existingProfile = getProfileByEmail(email);
-        existingProfile.setFirstName(updatedProfile.getFirstName());
-        existingProfile.setLastName(updatedProfile.getLastName());
-        existingProfile.setPhone(updatedProfile.getPhone());
-        existingProfile.setAddress(updatedProfile.getAddress());
-        return repository.save(existingProfile);
+    @Transactional
+    public UserProfileResponse updateProfile(String email, UserProfileRequest request) {
+        UserProfile existingProfile = repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User profile not found for email: " + email));
+        
+        mapper.updateEntityFromRequest(request, existingProfile);
+        UserProfile savedProfile = repository.save(existingProfile);
+        return mapper.toResponse(savedProfile);
     }
 }

@@ -7,7 +7,7 @@ import {
   MapPin, Navigation, Plus, Search, Mic, Camera
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { logoutUser } from '../redux/authSlice';
+import { logoutUser, fetchUserProfile } from '../features/auth/redux/authSlice';
 import { useTheme } from '../hooks/useTheme';
 import { useToast } from '../hooks/useToast';
 import { VoiceSearch } from '../components/VoiceSearch';
@@ -111,6 +111,13 @@ export const MainLayout: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Fetch live User Profile from AWS Backend
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      dispatch(fetchUserProfile(user.email));
+    }
+  }, [isAuthenticated, user?.email, dispatch]);
 
   const toggleFooterTab = (tab: string) => {
     setOpenFooterTab(openFooterTab === tab ? null : tab);

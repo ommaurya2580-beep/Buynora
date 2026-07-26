@@ -1,5 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Address, PaymentMethod, UserProfile } from '../../../types';
+import { userService } from '../../user/services/user.service';
+
+export const fetchUserProfile = createAsyncThunk(
+  'auth/fetchUserProfile',
+  async (email: string) => {
+    return await userService.getProfileByEmail(email);
+  }
+);
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -126,6 +134,24 @@ const authSlice = createSlice({
         state.user.points = Math.max(0, state.user.points - action.payload);
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUserProfile.fulfilled, (state, action) => {
+      if (state.user) {
+        // Merge the remote profile into the local user state
+        state.user = { ...state.user, ...action.payload };
+      } else {
+        // If no user exists locally, but we fetched one, initialize it
+        state.user = {
+          ...action.payload,
+          avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150",
+          referralCode: "NEW-USER",
+          points: 0,
+          role: "CUSTOMER"
+        };
+        state.isAuthenticated = true;
+      }
+    });
   }
 });
 
