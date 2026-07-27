@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
-    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    @org.springframework.data.mongodb.repository.Query("{ $text: { $search: ?0 } }")
+    Page<Product> searchProducts(String name, Pageable pageable);
+    
     Page<Product> findByCategory(String category, Pageable pageable);
 }
