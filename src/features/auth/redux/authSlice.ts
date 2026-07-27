@@ -61,6 +61,7 @@ const initialPayments: PaymentMethod[] = [
 const initialState: AuthState = {
   isAuthenticated: true,
   user: {
+    id: "usr_initial",
     name: "John Doe",
     email: "john.doe@buynora.com",
     phone: "+1 (555) 019-2834",

@@ -46,6 +46,7 @@ export const Auth: React.FC = () => {
         const token = await response.text();
         const role = selectedRole;
         dispatch(loginUser({
+          id: 'usr_' + Date.now().toString(),
           name: email.split('@')[0],
           email: email,
           phone: "+1 (555) 019-2834",
@@ -113,6 +114,7 @@ export const Auth: React.FC = () => {
       return;
     }
     dispatch(loginUser({
+      id: 'usr_' + Date.now().toString(),
       name,
       email,
       phone,
