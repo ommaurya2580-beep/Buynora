@@ -19,6 +19,10 @@ spring:
           uri: http://user-service:8083
           predicates:
             - Path=/api/users/**
+        - id: cart-service
+          uri: http://cart-service:8089
+          predicates:
+            - Path=/api/cart/**
 eureka:
   client:
     enabled: false
