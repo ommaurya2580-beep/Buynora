@@ -8,6 +8,7 @@ spring:
     import: "optional:configserver:http://localhost:8888"
   flyway:
     table: user_flyway_history
+    baseline-on-migrate: true
 
 eureka:
   client:
