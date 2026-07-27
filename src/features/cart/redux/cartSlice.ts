@@ -122,6 +122,9 @@ const cartSlice = createSlice({
     },
     clearCompareProducts(state) {
       state.comparedItems = [];
+    },
+    setCartItems(state, action: PayloadAction<CartItem[]>) {
+      state.cartItems = action.payload;
     }
   }
 });
@@ -140,7 +143,8 @@ export const {
   clearCart,
   toggleCompareProduct,
   removeCompareProduct,
-  clearCompareProducts
+  clearCompareProducts,
+  setCartItems
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -19,6 +19,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.auth.user);
 
+  React.useEffect(() => {
+    if (user) {
+      import('../../cart/services/cart.service').then(({ cartService }) => {
+        cartService.getCart(user.id).then(cart => {
+          import('../../../redux/cartSlice').then(({ setCartItems }) => {
+            dispatch(setCartItems(cart.items));
+          });
+        }).catch(console.error);
+      });
+    }
+  }, [user?.id, dispatch]);
+
   const login = useCallback((userData: UserProfile, token: string) => {
     TokenManager.setAccessToken(token);
     dispatch(loginUser(userData));
