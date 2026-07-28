@@ -258,7 +258,7 @@ services:
       dockerfile: product-service/Dockerfile
     restart: on-failure
     deploy:
-      replicas: 3
+      replicas: 1
       resources:
         limits:
           memory: 512M
